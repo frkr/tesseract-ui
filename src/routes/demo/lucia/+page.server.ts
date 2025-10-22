@@ -4,7 +4,7 @@ import { getRequestEvent } from '$app/server';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
-	const user = requireLogin()
+	const user = requireLogin();
 	return { user };
 };
 
