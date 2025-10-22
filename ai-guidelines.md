@@ -3,6 +3,7 @@
 ## Project Structure
 
 - [routes](src/routes) - This is where all pages and CRUDs are created!
+- Database Schema - [schema.md](src/lib/server/db/schema.md) - [schema.ts](src/lib/server/db/schema.ts)
 - [e2e](e2e) - End-to-end testing directory — put all user journeys in this directory.
 - Unit tests should stay alongside their pages named ".spec.ts", following this example: [demo.spec.ts](src/demo.spec.ts)
 - [messages](messages) - Put all text messages in multiple languages here.

@@ -8,6 +8,7 @@ maximizing the coding experience while maintaining thorough code review practice
 > **Important**: All AI assistants must review these guidelines before starting any development:
 
 - [AI Development Guidelines](./ai-guidelines.md)
+- Database Schema - [schema.md](src/lib/server/db/schema.md) - [schema.ts](src/lib/server/db/schema.ts)
 
 ## TODO
 - wrangler.jsonc - Documentar aqui coisas importantes
