@@ -1,3 +1,12 @@
+/*
+
+TODO Usar JWT para não ter mais interação com o banco de dados
+O metodo abaixo é muito eficiente mas além de não ser um padrão de mercado
+consulta toda vez no banco de dados
+e depende do banco de dados para saber quais papeis o usuário tem
+
+ */
+
 import type { RequestEvent } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { sha256 } from '@oslojs/crypto/sha2';
@@ -5,8 +14,10 @@ import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
 import { db } from '$lib/server/db';
 import * as table from '$lib/server/db/schema';
 
-const DAY_IN_MS = 1000 * 60 * 60 * 24;
+// TODO Put this on enviroment variables in hours. Ex: 6 hours
+const HOUR_IN_MS = 1000 * 60 * 60 * 6;
 
+// TODO Put this on enviroment variables and use Authentication as default
 export const sessionCookieName = 'auth-session';
 
 export function generateSessionToken() {
@@ -20,7 +31,7 @@ export async function createSession(token: string, userId: string) {
 	const session: table.Session = {
 		id: sessionId,
 		userId,
-		expiresAt: new Date(Date.now() + DAY_IN_MS * 30)
+		expiresAt: new Date(Date.now() + HOUR_IN_MS)
 	};
 	await db.insert(table.session).values(session);
 	return session;
@@ -49,9 +60,9 @@ export async function validateSessionToken(token: string) {
 		return { session: null, user: null };
 	}
 
-	const renewSession = Date.now() >= session.expiresAt.getTime() - DAY_IN_MS * 15;
+	const renewSession = Date.now() >= session.expiresAt.getTime() - HOUR_IN_MS / 2;
 	if (renewSession) {
-		session.expiresAt = new Date(Date.now() + DAY_IN_MS * 30);
+		session.expiresAt = new Date(Date.now() + HOUR_IN_MS);
 		await db
 			.update(table.session)
 			.set({ expiresAt: session.expiresAt })
