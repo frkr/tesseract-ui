@@ -17,6 +17,10 @@
 
 - [worker-configuration.d.ts](src/worker-configuration.d.ts) - This file is owned by Cloudflare. It must not be changed.
 
+- [security.txt](static/security.txt) - This file should contain the administrator's email. Replace it when you discover it.
+
+- [schema.ts](src/lib/server/db/schema.ts) - This file contains the data structure. Also keep the data structure in this file using mermaidjs: "src/lib/server/db/schema.md"
+
 # Security:
 
 SvelteKit offers native protection against leaking sensitive information through server-only modules. Any file placed in the src/lib/server/ folder or with a .server.js extension is never sent to the client.
