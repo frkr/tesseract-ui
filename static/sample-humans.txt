@@ -1,0 +1,32 @@
+/* TEAM */
+Your title: Your name
+Site: email, link to a contact form, etc.
+Twitter: your Twitter username
+Location: City, Country
+
+Designer: Jane Smith
+Contact: jane [at] example.com
+Twitter: @janesmith
+From: São Paulo, Brazil
+
+Developer: Carlos Silva
+Contact: carlos [at] example.com
+LinkedIn: linkedin.com/in/carlossilva
+From: Rio de Janeiro, Brazil
+
+/* THANKS */
+Name: name or url
+
+Framework: React
+Plugin: WordPress Security Plugin
+Inspiration: humanstxt.org
+
+/* SITE */
+Last update: 2025/10/22
+Standards: HTML5, CSS3
+Components: React, Tailwind CSS
+Software: Visual Studio Code, Docker
+IDE: Cursor
+Language: English, Portuguese
+Doctype: HTML5
+Technologies: TypeScript, Node.js

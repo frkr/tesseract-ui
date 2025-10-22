@@ -21,3 +21,6 @@ maximizing the coding experience while maintaining thorough code review practice
 - https://vercel.com/frkrs-projects/tesseract
 - https://www.perplexity.ai/search/svelte-com-eu-vou-saber-se-as-d9FbN_a7SLWyEPW3kcfU4w
 - https://lucia-auth.com/tutorials/google-oauth/sveltekit
+- static - manifest.json - Arrumar todos os detalhes da aplicacao.
+- static - documentar no ai-guidelines.md o que cada arquivo faz
+- 

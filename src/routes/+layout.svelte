@@ -7,6 +7,7 @@
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
+	<link rel="manifest" href="/manifest.json" />
 </svelte:head>
 
 {@render children?.()}
