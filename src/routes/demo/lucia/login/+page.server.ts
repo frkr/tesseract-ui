@@ -35,8 +35,12 @@ export const actions: Actions = {
 			return fail(400, { message: 'Incorrect username or password' });
 		}
 
-		const validPassword = await verifyPassword(password, existingUser.passwordHash, existingUser.username);
-		
+		const validPassword = await verifyPassword(
+			password,
+			existingUser.passwordHash,
+			existingUser.username
+		);
+
 		if (!validPassword) {
 			return fail(400, { message: 'Incorrect username or password' });
 		}
@@ -99,15 +103,11 @@ async function hashPassword(password: string, salt: string): Promise<string> {
 	const encoder = new TextEncoder();
 	const passwordData = encoder.encode(password);
 	const saltData = encoder.encode(salt);
-	
-	const keyMaterial = await crypto.subtle.importKey(
-		'raw',
-		passwordData,
-		'PBKDF2',
-		false,
-		['deriveBits']
-	);
-	
+
+	const keyMaterial = await crypto.subtle.importKey('raw', passwordData, 'PBKDF2', false, [
+		'deriveBits'
+	]);
+
 	const derivedBits = await crypto.subtle.deriveBits(
 		{
 			name: 'PBKDF2',
@@ -118,7 +118,7 @@ async function hashPassword(password: string, salt: string): Promise<string> {
 		keyMaterial,
 		256
 	);
-	
+
 	return encodeHexLowerCase(new Uint8Array(derivedBits));
 }
 

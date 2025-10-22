@@ -1,7 +1,7 @@
 {
-  "buildCommand": "pnpm build",
-  "devCommand": "pnpm dev",
-  "installCommand": "pnpm install",
-  "framework": "sveltekit",
-  "outputDirectory": ".vercel/output"
+	"buildCommand": "pnpm build",
+	"devCommand": "pnpm dev",
+	"installCommand": "pnpm install",
+	"framework": "sveltekit",
+	"outputDirectory": ".vercel/output"
 }

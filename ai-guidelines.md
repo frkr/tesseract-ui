@@ -82,11 +82,12 @@ It's important that sensitive data doesn't accidentally end up being sent to the
 SvelteKit makes it easy to prevent this from happening. Notice what happens if we try to import `PASSPHRASE` into `src/routes/+page.svelte`:
 
 ```svelte
-/// file: src/routes/+page.svelte
 <script>
 	+++import { PASSPHRASE } from '$env/static/private';+++
 	let { form } = $props();
 </script>
+
+/// file: src/routes/+page.svelte
 ```
 
 An error overlay pops up, telling us that `$env/static/private` cannot be imported into client-side code. It can only be imported into server modules:

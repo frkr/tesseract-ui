@@ -21,6 +21,7 @@ erDiagram
 ```
 
 Details and constraints
+
 - session.user_id → user.id (foreign key, required)
 - user.username is UNIQUE and NOT NULL
 - session.expires_at uses a timestamp with timezone (mode: date) and is NOT NULL

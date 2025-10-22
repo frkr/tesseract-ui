@@ -11,9 +11,10 @@ maximizing the coding experience while maintaining thorough code review practice
 - Database Schema - [schema.md](src/lib/server/db/schema.md) - [schema.ts](src/lib/server/db/schema.ts)
 
 ## TODO
+
 - wrangler.jsonc - Documentar aqui coisas importantes
 - observability - Estudar
-- static - documentar - colocar o security e o AI 
+- static - documentar - colocar o security e o AI
 - estudar entre wrangler file ou .env
 - https://developers.cloudflare.com/pages/framework-guides/deploy-a-svelte-kit-site/
 - https://github.com/frkr/tesseract-ui
