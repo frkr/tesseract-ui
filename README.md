@@ -23,4 +23,5 @@ maximizing the coding experience while maintaining thorough code review practice
 - https://lucia-auth.com/tutorials/google-oauth/sveltekit
 - static - manifest.json - Arrumar todos os detalhes da aplicacao.
 - static - documentar no ai-guidelines.md o que cada arquivo faz
+- docuentar - db:generate gera os arquivos de schema do banco de dados
 - 
