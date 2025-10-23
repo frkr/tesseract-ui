@@ -17,7 +17,7 @@
 - [assets](src/lib/assets) - Directory where the server will store raw files. Probably no AI will use this directory.
 - [paraglide](src/lib/paraglide) - Ignore this directory.
 
-- [worker-configuration.d.ts](src/worker-configuration.d.ts) - This file is owned by Cloudflare. It must not be changed.
+- [worker-configuration.d.ts](src/worker-configuration.d.ts) - This file is owned by Cloudflare. It must not be changed. The "pnpm cf-typegen" creates that.
 
 - [security.txt](static/security.txt) - This file should contain the administrator's email. Replace it when you discover it.
 
