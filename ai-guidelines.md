@@ -9,7 +9,7 @@
 - [Dictionary of Terminology](./terminology.md)
 - [e2e](e2e) - End-to-end testing directory — put all user journeys in this directory.
 - [cleanup_chrome.sh](cleanup_chrome.sh) - This script ensures all Chrome instances are closed after running the end-to-end tests.
-- Unit tests should stay alongside their pages, named ".spec.ts", following this example: [demo.spec.ts](src/demo.spec.ts).
+- Unit tests should stay alongside their pages, named ".spec.ts", following this example: [demo.spec.ts](src/routes/home/demo.spec.ts).
 - [messages](messages) - All text messages in multiple languages should be placed here.
 - [settings.json](project.inlang/settings.json) - Configuration for which languages the project supports and the number of languages.
 - [static](static) - Static files; no AI should modify this directory.

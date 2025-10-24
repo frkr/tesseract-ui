@@ -9,7 +9,7 @@
 - static - documentar no ai-guidelines.md o que cada arquivo faz
 - docuentar - db:generate gera os arquivos de schema do banco de dados
 - package-lock - nunca confiar. Sempre gerar um novo.
--
+- Vercel api - https://vercel.com/docs/rest-api/reference/endpoints/access-groups/reads-an-access-group
 
 ```text
 sempre testar o que foi feito, perguntar antes de executar os testes, se der um erro procure na internet a solucao e teste novamente.
