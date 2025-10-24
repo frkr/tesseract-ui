@@ -13,6 +13,7 @@
 - static - documentar no ai-guidelines.md o que cada arquivo faz
 - docuentar - db:generate gera os arquivos de schema do banco de dados
 - package-lock - nunca confiar. Sempre gerar um novo.
+-
 
 #### Texto livre TODO (AI ignore this text below)
 

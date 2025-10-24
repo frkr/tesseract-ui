@@ -20,13 +20,14 @@
 - [worker-configuration.d.ts](src/worker-configuration.d.ts) - This file is owned by Cloudflare. It must not be changed. The "pnpm cf-typegen" creates that.
 
 - [security.txt](static/security.txt) - This file should contain the administrator's email. Replace it when you discover it.
+- running lint "pnpm lint" - the expected result is: All matched files use Prettier code style!
 
 # Layout and Components
 
 - aceternity port to svelte - https://aceternity.sveltekit.io/components/animated-tooltip
 - implemented example "src/lib/components/ui/AnimatedTooltip"
 - based on original aceternity - https://ui.aceternity.com/components/animated-tooltip
-- 
+-
 
 # Security:
 

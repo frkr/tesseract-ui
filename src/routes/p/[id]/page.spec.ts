@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { load } from './+page';
+import { load } from './+page.server';
 
 describe('/p/[id]/+page.ts', () => {
 	it('should return the id from params', () => {
