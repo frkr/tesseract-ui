@@ -12,9 +12,10 @@
 - static - manifest.json - Arrumar todos os detalhes da aplicacao.
 - static - documentar no ai-guidelines.md o que cada arquivo faz
 - docuentar - db:generate gera os arquivos de schema do banco de dados
-
+- package-lock - nunca confiar. Sempre gerar um novo.
 
 #### Texto livre TODO (AI ignore this text below)
+
 ```text
 sempre testar o que foi feito, perguntar antes de executar os testes, se der um erro procure na internet a solucao e teste novamente.
 
@@ -27,10 +28,10 @@ corrigir erros de ortografia
 deixar tudo em ingles mas os arquivos XPTO sao arquivos para tradução multi lingue do software
 ```
 
-
 #### Samples guidelines
 
 ## Coding Standards
+
 - Use **constructor injection** without @Autowired
 - Make Service classes transactional boundaries
 - Use @Transactional(readOnly=true) for read operations
@@ -39,11 +40,13 @@ deixar tudo em ingles mas os arquivos XPTO sao arquivos para tradução multi li
 - Don't use Lombok in production code
 
 ## Database
+
 - Use Flyway for migrations in src/main/resources/db/migration/
-- Name migrations: V{version}__{description}.sql
+- Name migrations: V{version}\_\_{description}.sql
 - Configure Hibernate with ddl-auto=validate
 
 ## Testing
+
 - Unit tests: Test components in isolation
 - Integration tests: Use Testcontainers for real dependencies
 - Use AssertJ for assertions
@@ -51,6 +54,7 @@ deixar tudo em ingles mas os arquivos XPTO sao arquivos para tradução multi li
 - Aim for 80% code coverage minimum
 
 ## Technology Stack
+
 - Java 21
 - Spring Boot 3.2+
 - Spring Data JPA
@@ -60,6 +64,7 @@ deixar tudo em ingles mas os arquivos XPTO sao arquivos para tradução multi li
 - Testcontainers for integration tests
 
 ## Avoid These Patterns
+
 - Don't use field injection (@Autowired on fields)
 - Don't expose JPA entities directly in REST APIs
 - Don't use System.out.println() for logging

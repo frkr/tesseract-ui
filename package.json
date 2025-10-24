@@ -63,6 +63,9 @@
 	},
 	"dependencies": {
 		"@node-rs/argon2": "^2.0.x",
-		"postgres": "^3.4.x"
+		"clsx": "^2.1.x",
+		"postgres": "^3.4.x",
+		"svelte-motion": "^0.12.x",
+		"tailwind-merge": "^3.3.x"
 	}
 }

@@ -3,7 +3,7 @@
 ## Project Structure
 
 - [routes](src/routes) - This is where all pages and CRUDs are created!
-- Database Schema - [schema.md](src/lib/server/db/schema.md) - [schema.ts](src/lib/server/db/schema.ts)
+- Database Schema - [schema.md](src/lib/server/db/schema.md) - [schema.ts](src/lib/server/db/schema.ts)- This file contains the data structure. Also keep the data structure in this file using mermaidjs.
 - [e2e](e2e) - End-to-end testing directory — put all user journeys in this directory.
 - [cleanup_chrome.sh](cleanup_chrome.sh) - this script its for ensure to close all chrome instances after running the End-to-End testing
 - Unit tests should stay alongside their pages named ".spec.ts", following this example: [demo.spec.ts](src/demo.spec.ts)
@@ -21,7 +21,12 @@
 
 - [security.txt](static/security.txt) - This file should contain the administrator's email. Replace it when you discover it.
 
-- [schema.ts](src/lib/server/db/schema.ts) - This file contains the data structure. Also keep the data structure in this file using mermaidjs: "src/lib/server/db/schema.md"
+# Layout and Components
+
+- aceternity port to svelte - https://aceternity.sveltekit.io/components/animated-tooltip
+- implemented example "src/lib/components/ui/AnimatedTooltip"
+- based on original aceternity - https://ui.aceternity.com/components/animated-tooltip
+- 
 
 # Security:
 
