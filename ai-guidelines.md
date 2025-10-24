@@ -5,6 +5,7 @@
 - [routes](src/routes) - This is where all pages and CRUDs are created.
 - Database Schema - [schema.md](src/lib/server/db/schema.md) - [schema.ts](src/lib/server/db/schema.ts) - These files contain the data structure. Also maintain the data structure documentation using Mermaid.js.
 - Maintain [All Project Documentation and Specifications](./SPEC.md).
+- [Dictionary of Terminology](./terminology.md)
 - [e2e](e2e) - End-to-end testing directory — put all user journeys in this directory.
 - [cleanup_chrome.sh](cleanup_chrome.sh) - This script ensures all Chrome instances are closed after running the end-to-end tests.
 - Unit tests should stay alongside their pages, named ".spec.ts", following this example: [demo.spec.ts](src/demo.spec.ts).
