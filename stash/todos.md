@@ -1,5 +1,7 @@
 ## TODO
 
+-https://shadcn-svelte.com/docs/components/sidebar
+-https://ui.aceternity.com/components/sidebar
 - wrangler.jsonc - Documentar aqui coisas importantes
 - observability - Estudar
 - static - documentar - colocar o security e o AI

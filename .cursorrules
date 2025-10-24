@@ -1,4 +1,3 @@
 # The guidelines are in:
 
-/README.md
 /ai-guidelines.md

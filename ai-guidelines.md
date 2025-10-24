@@ -2,13 +2,14 @@
 
 ## Project Structure
 
-- [routes](src/routes) - This is where all pages and CRUDs are created!
-- Database Schema - [schema.md](src/lib/server/db/schema.md) - [schema.ts](src/lib/server/db/schema.ts)- This file contains the data structure. Also keep the data structure in this file using mermaidjs.
+- [routes](src/routes) - This is where all pages and CRUDs are created.
+- Database Schema - [schema.md](src/lib/server/db/schema.md) - [schema.ts](src/lib/server/db/schema.ts) - These files contain the data structure. Also maintain the data structure documentation using Mermaid.js.
+- Maintain [All Project Documentation and Specifications](./SPEC.md).
 - [e2e](e2e) - End-to-end testing directory — put all user journeys in this directory.
-- [cleanup_chrome.sh](cleanup_chrome.sh) - this script its for ensure to close all chrome instances after running the End-to-End testing
-- Unit tests should stay alongside their pages named ".spec.ts", following this example: [demo.spec.ts](src/demo.spec.ts)
-- [messages](messages) - Put all text messages in multiple languages here.
-- [settings.json](project.inlang/settings.json) - Configuration of which languages the project supports and how many.
+- [cleanup_chrome.sh](cleanup_chrome.sh) - This script ensures all Chrome instances are closed after running the end-to-end tests.
+- Unit tests should stay alongside their pages, named ".spec.ts", following this example: [demo.spec.ts](src/demo.spec.ts).
+- [messages](messages) - All text messages in multiple languages should be placed here.
+- [settings.json](project.inlang/settings.json) - Configuration for which languages the project supports and the number of languages.
 - [static](static) - Static files; no AI should modify this directory.
 - [.env](.env) [.env.example](.env.example) - Always keep the ".env" and ".env.example" files in sync with the same content, but mask the values in the example.
 
@@ -17,17 +18,15 @@
 - [assets](src/lib/assets) - Directory where the server will store raw files. Probably no AI will use this directory.
 - [paraglide](src/lib/paraglide) - Ignore this directory.
 
-- [worker-configuration.d.ts](src/worker-configuration.d.ts) - This file is owned by Cloudflare. It must not be changed. The "pnpm cf-typegen" creates that.
+- [worker-configuration.d.ts](src/worker-configuration.d.ts) - This file is owned by Cloudflare. It must not be changed. It is created by "pnpm cf-typegen".
 
 - [security.txt](static/security.txt) - This file should contain the administrator's email. Replace it when you discover it.
-- running lint "pnpm lint" - the expected result is: All matched files use Prettier code style!
+- Running lint "pnpm lint" - The expected result is: "All matched files use Prettier code style!"
 
 # Layout and Components
 
-- aceternity port to svelte - https://aceternity.sveltekit.io/components/animated-tooltip
-- implemented example "src/lib/components/ui/AnimatedTooltip"
-- based on original aceternity - https://ui.aceternity.com/components/animated-tooltip
--
+- https://shadcn-svelte.com/docs/components/sidebar
+- [All Frontend Designs directory](src/lib/components)
 
 # Security:
 
@@ -109,7 +108,7 @@ In turn, these modules can only be imported by _other_ server modules.
 
 ## Static vs dynamic
 
-The `static` in `$env/static/private` indicates that these values are known at build time, and can be _statically replaced_. This enables useful optimisations:
+The `static` in `$env/static/private` indicates that these values are known at build time, and can be _statically replaced_. This enables useful optimizations:
 
 ```js
 import { FEATURE_FLAG_X } from '$env/static/private';
