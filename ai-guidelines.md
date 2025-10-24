@@ -2,6 +2,7 @@
 
 ## Project Structure
 
+- Should ignore this directory: "/stash"
 - [routes](src/routes) - This is where all pages and CRUDs are created.
 - Database Schema - [schema.md](src/lib/server/db/schema.md) - [schema.ts](src/lib/server/db/schema.ts) - These files contain the data structure. Also maintain the data structure documentation using Mermaid.js.
 - Maintain [All Project Documentation and Specifications](./SPEC.md).

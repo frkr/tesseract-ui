@@ -1,4 +1,5 @@
 # Tesseract UI
+
 - [All Project Documentation and Specifications](./SPEC.md)
 
 > Tesseract UI is a rapid template for building AI-powered applications.
@@ -11,7 +12,8 @@ maximizing the coding experience while maintaining thorough code review practice
 - [AI Development Guidelines](./ai-guidelines.md)
 - [All Project Documentation and Specifications](./SPEC.md)
 
-----
+---
 
 # Doc and how to use this repo
-> Remember to keep the ***Important** and those links for AI
+
+> Remember to keep the **\*Important** and those links for AI

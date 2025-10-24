@@ -1,23 +1,15 @@
 ## TODO
 
--https://shadcn-svelte.com/docs/components/sidebar
--https://ui.aceternity.com/components/sidebar
 - wrangler.jsonc - Documentar aqui coisas importantes
-- observability - Estudar
+- Vercel observability - Estudar
 - static - documentar - colocar o security e o AI
 - estudar entre wrangler file ou .env
-- https://developers.cloudflare.com/pages/framework-guides/deploy-a-svelte-kit-site/
-- https://github.com/frkr/tesseract-ui
-- https://vercel.com/frkrs-projects/tesseract
-- https://www.perplexity.ai/search/svelte-com-eu-vou-saber-se-as-d9FbN_a7SLWyEPW3kcfU4w
 - https://lucia-auth.com/tutorials/google-oauth/sveltekit
 - static - manifest.json - Arrumar todos os detalhes da aplicacao.
 - static - documentar no ai-guidelines.md o que cada arquivo faz
 - docuentar - db:generate gera os arquivos de schema do banco de dados
 - package-lock - nunca confiar. Sempre gerar um novo.
 -
-
-#### Texto livre TODO (AI ignore this text below)
 
 ```text
 sempre testar o que foi feito, perguntar antes de executar os testes, se der um erro procure na internet a solucao e teste novamente.
