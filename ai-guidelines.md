@@ -2,10 +2,12 @@
 
 ## Project Structure
 
+- [routes](src/routes) - In that directory must reside all modules, crud, backend and frontend.
+- Each module must be in a group. Like this example "src/routes/user". Everything about the User module must be in that directory, including unit tests and SSR (server side rendering) and backend functions. Everything! In the same directory. The only exception is End-to-End tests, which must be in "/e2e/".
 - Should ignore this directory: "/stash"
-- [routes](src/routes) - This is where all pages and CRUDs are created.
 - Database Schema - [schema.md](src/lib/server/db/schema.md) - [schema.ts](src/lib/server/db/schema.ts) - These files contain the data structure. Also maintain the data structure documentation using Mermaid.js.
 - Maintain [All Project Documentation and Specifications](./SPEC.md).
+- The utility directory to avoid code repetition is "src/lib"
 - [Dictionary of Terminology](./terminology.md)
 - [e2e](e2e) - End-to-end testing directory — put all user journeys in this directory.
 - [cleanup_chrome.sh](cleanup_chrome.sh) - This script ensures all Chrome instances are closed after running the end-to-end tests.

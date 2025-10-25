@@ -23,7 +23,7 @@
 		</div>
 	</div>
 	<div class="bg-muted relative hidden lg:block">
-		<!-- TODO Usar uma variavel de ambiente para configurar esse placeholder (colocar no guideline) -->
+		<!-- TODO Usar uma variavel de ambiente para configurar esse placeholder.svg (colocar no guideline) -->
 		<img
 			src="/placeholder.svg"
 			alt={m.company()}
