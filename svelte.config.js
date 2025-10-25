@@ -1,5 +1,4 @@
 import { mdsvex } from 'mdsvex';
-import adapterAuto from '@sveltejs/adapter-auto';
 import adapterVercel from '@sveltejs/adapter-vercel';
 import adapterCloudflare from '@sveltejs/adapter-cloudflare';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
@@ -11,14 +10,7 @@ function getAdapter() {
 	if (process.env.VERCEL || process.env.VERCEL_ENV) {
 		return adapterVercel();
 	}
-	
-	// Check for Cloudflare environment variables
-	if (process.env.CF_PAGES || process.env.CLOUDFLARE_PAGES || process.env.WORKERS) {
 		return adapterCloudflare();
-	}
-	
-	// Default to auto adapter for other environments
-	return adapterAuto();
 }
 
 /** @type {import('@sveltejs/kit').Config} */
