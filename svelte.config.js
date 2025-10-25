@@ -1,17 +1,17 @@
 import { mdsvex } from 'mdsvex';
-// import adapterVercel from '@sveltejs/adapter-vercel';
-import adapter from '@sveltejs/adapter-auto';
+import adapterVercel from '@sveltejs/adapter-vercel';
+import adapterCF from '@sveltejs/adapter-cloudflare';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import mdsvexConfig from './mdsvex.config.ts';
 
 // Function to detect deployment environment and return appropriate adapter
-// function getAdapter() {
-// 	// Check for Vercel environment variables
-// 	if (process.env.VERCEL || process.env.VERCEL_ENV) {
-// 		return adapterVercel();
-// 	}
-// 		return adapterCloudflare();
-// }
+function getAdapter() {
+	// Check for Vercel environment variables
+	if (process.env.VERCEL || process.env.VERCEL_ENV) {
+		return adapterVercel();
+	}
+	return adapterCF();
+}
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -21,10 +21,10 @@ const config = {
 	kit: {
 		// Automatically select adapter based on deployment environment:
 		// - Vercel: uses @sveltejs/adapter-vercel
-		// - Cloudflare: uses @sveltejs/adapter-cloudflare  
+		// - Cloudflare: uses @sveltejs/adapter-cloudflare
 		// - Other environments: uses @sveltejs/adapter-auto
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
-		adapter: adapter()
+		adapter: getAdapter()
 	},
 	extensions: ['.svelte', '.svx', '.md']
 };
