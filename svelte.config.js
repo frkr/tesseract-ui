@@ -1,21 +1,21 @@
 import { mdsvex } from 'mdsvex';
 import adapterVercel from '@sveltejs/adapter-vercel';
-import adapterCF from '@sveltejs/adapter-cloudflare';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import mdsvexConfig from './mdsvex.config.ts';
 
+// TODO Retry cloudflare workers
 // Function to detect deployment environment and return appropriate adapter
 function getAdapter() {
 	// Check for Vercel environment variables
-	if (process.env.VERCEL || process.env.VERCEL_ENV) {
+	// if (process.env.VERCEL || process.env.VERCEL_ENV) {
 		return adapterVercel();
-	}
+	// }
 
 	// Use Cloudflare adapter with explicit configuration to avoid transport issues
-	return adapterCF({
-		// Explicitly disable platform proxy to avoid transport issues
-		platformProxy: false
-	});
+	// return adapterCF({
+	// 	Explicitly disable platform proxy to avoid transport issues
+		// platformProxy: false
+	// });
 }
 
 /** @type {import('@sveltejs/kit').Config} */
