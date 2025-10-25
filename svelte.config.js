@@ -1,4 +1,5 @@
 import { mdsvex } from 'mdsvex';
+import adapterAuto from '@sveltejs/adapter-auto';
 import adapterVercel from '@sveltejs/adapter-vercel';
 import adapterCF from '@sveltejs/adapter-cloudflare';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
@@ -10,7 +11,19 @@ function getAdapter() {
 	if (process.env.VERCEL || process.env.VERCEL_ENV) {
 		return adapterVercel();
 	}
-	return adapterCF();
+	
+	// Check for Cloudflare environment variables
+	if (process.env.CF_PAGES || process.env.CLOUDFLARE_PAGES || process.env.WORKERS) {
+		return adapterCF({
+			// Cloudflare adapter configuration to fix transport issues
+			platformProxy: {
+				configPath: './wrangler.jsonc'
+			}
+		});
+	}
+	
+	// Default to auto adapter for other environments
+	return adapterAuto();
 }
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -21,7 +34,7 @@ const config = {
 	kit: {
 		// Automatically select adapter based on deployment environment:
 		// - Vercel: uses @sveltejs/adapter-vercel
-		// - Cloudflare: uses @sveltejs/adapter-cloudflare
+		// - Cloudflare: uses @sveltejs/adapter-cloudflare with proper configuration
 		// - Other environments: uses @sveltejs/adapter-auto
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		adapter: getAdapter()
