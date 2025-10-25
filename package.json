@@ -1,7 +1,7 @@
 {
 	"name": "tesseract-ui",
 	"private": true,
-	"version": "0.0.x",
+	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
@@ -60,6 +60,7 @@
 		"prettier": "3.6.x",
 		"prettier-plugin-svelte": "3.4.x",
 		"prettier-plugin-tailwindcss": "0.6.x",
+		"shiki": "3.13.x",
 		"svelte": "5.39.x",
 		"svelte-check": "4.3.x",
 		"svelte-sonner": "1.0.x",
@@ -80,7 +81,6 @@
 	"dependencies": {
 		"@node-rs/argon2": "2.0.x",
 		"mermaid": "11.12.x",
-		"postgres": "3.4.x",
-		"shiki": "3.13.x"
+		"postgres": "3.4.x"
 	}
 }
