@@ -79,6 +79,8 @@
 	},
 	"dependencies": {
 		"@node-rs/argon2": "2.0.x",
-		"postgres": "3.4.x"
+		"mermaid": "11.12.x",
+		"postgres": "3.4.x",
+		"shiki": "3.13.x"
 	}
 }

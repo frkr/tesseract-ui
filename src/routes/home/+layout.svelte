@@ -1,4 +1,7 @@
 <script lang="ts">
+	import '$lib/app.css';
+	import favicon from '$lib/assets/favicon.svg';
+
 	import AppSidebar from '$lib/components/app-sidebar.svelte';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
 	import { Separator } from '$lib/components/ui/separator/index.js';
@@ -8,6 +11,11 @@
 
 	let open = $state(false);
 </script>
+
+<svelte:head>
+	<link rel="icon" href={favicon} />
+	<link rel="manifest" href="/manifest.json" />
+</svelte:head>
 
 <Sidebar.Provider {open}>
 	<AppSidebar onmouseenter={() => (open = true)} onmouseleave={() => (open = false)} />

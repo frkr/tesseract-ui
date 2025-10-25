@@ -4,7 +4,6 @@
 	import ChevronRightIcon from '@lucide/svelte/icons/chevron-right';
 
 	// TODO traduzir mensagens dessa pagina
-	import { m } from '$lib/paraglide/messages.js';
 
 	let {
 		items
