@@ -14,6 +14,13 @@ export default defineConfig({
 			outdir: './src/lib/paraglide'
 		})
 	],
+	define: {
+		// Fix for Cloudflare Workers transport issues
+		global: 'globalThis'
+	},
+	optimizeDeps: {
+		exclude: ['@sveltejs/adapter-cloudflare']
+	},
 	test: {
 		expect: { requireAssertions: true },
 		projects: [
