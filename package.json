@@ -76,7 +76,7 @@
 		"vite-plugin-devtools-json": "1.0.x",
 		"vitest": "3.2.x",
 		"vitest-browser-svelte": "1.1.x",
-		"wrangler": "4.44.x"
+		"wrangler": "4"
 	},
 	"dependencies": {
 		"@node-rs/argon2": "2.0.x",
