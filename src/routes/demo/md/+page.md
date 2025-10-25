@@ -9,3 +9,16 @@
 flowchart TB
   A & B --> C & D
 ```
+
+```json
+{
+  "teste": "Ok"
+}
+```
+
+```java
+public class Teste {
+    public static void main(String... args) {
+    }
+}
+```
