@@ -28,6 +28,3 @@ src/lib/paraglide
 
 .dev.vars*
 !.dev.vars.example
-
-# Packager will be updated with tests.
-pnpm-lock.yaml
