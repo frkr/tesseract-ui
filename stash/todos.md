@@ -1,5 +1,8 @@
 ## TODO
 
+https://www.perplexity.ai/search/lucia-svelte-passkey-ax9ZlbDlTa2T0TGI2ApkvA
+https://www.perplexity.ai/search/lucia-svelte-google-integratio-0htRStUTRfqTIBvz3VrV3Q
+
 - wrangler.jsonc - Documentar aqui coisas importantes
 - Vercel observability - Estudar
 - static - documentar - colocar o security e o AI
