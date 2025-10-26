@@ -3,7 +3,7 @@
 	import mermaid from 'mermaid';
 
 	/*
-This file its configured in: ./svelte.config.js
+This file could be configured in: ./svelte.config.js
 
 But does not work as a default template.
  */

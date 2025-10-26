@@ -8,13 +8,13 @@ import mdsvexConfig from './mdsvex.config.ts';
 function getAdapter() {
 	// Check for Vercel environment variables
 	// if (process.env.VERCEL || process.env.VERCEL_ENV) {
-		return adapterVercel();
+	return adapterVercel();
 	// }
 
 	// Use Cloudflare adapter with explicit configuration to avoid transport issues
 	// return adapterCF({
 	// 	Explicitly disable platform proxy to avoid transport issues
-		// platformProxy: false
+	// platformProxy: false
 	// });
 }
 

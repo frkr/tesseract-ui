@@ -15,7 +15,7 @@
 		"test:unit": "vitest",
 		"test": "npm run test:unit -- --run && npm run test:e2e",
 		"test:e2e": "playwright test",
-		"db:push": "drizzle-kit push",
+		"db:push": "drizzle-kit push --strict",
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
 		"db:studio": "drizzle-kit studio",
@@ -80,6 +80,7 @@
 	},
 	"dependencies": {
 		"@node-rs/argon2": "2.0.x",
+		"arctic": "^3.7.x",
 		"mermaid": "11.12.x",
 		"postgres": "3.4.x"
 	}

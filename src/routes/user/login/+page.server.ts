@@ -1,14 +1,16 @@
 import { encodeBase32LowerCase, encodeHexLowerCase } from '@oslojs/encoding';
 import { fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
-import * as auth from '$lib/server/auth';
-import { db } from '$lib/server/db';
-import * as table from '$lib/server/db/schema';
+import * as auth from '$lib/auth';
+import { db } from '$lib/db';
+import * as table from '$lib/db/schema';
 import type { Actions, PageServerLoad } from './$types';
+
+import { m } from '$lib/paraglide/messages.js';
 
 export const load: PageServerLoad = async (event) => {
 	if (event.locals.user) {
-		return redirect(302, '/demo/lucia');
+		return redirect(302, '/user/profile');
 	}
 	return {};
 };
@@ -21,17 +23,18 @@ export const actions: Actions = {
 
 		if (!validateUsername(username)) {
 			return fail(400, {
-				message: 'Invalid username (min 3, max 31 characters, alphanumeric only)'
+				message: m.emailInvalid()
 			});
 		}
 		if (!validatePassword(password)) {
-			return fail(400, { message: 'Invalid password (min 6, max 255 characters)' });
+			return fail(400, { message: m.passwordInvalid() });
 		}
 
 		const results = await db.select().from(table.user).where(eq(table.user.username, username));
 
 		const existingUser = results.at(0);
 		if (!existingUser) {
+			// FIXME translate
 			return fail(400, { message: 'Incorrect username or password' });
 		}
 
@@ -42,6 +45,7 @@ export const actions: Actions = {
 		);
 
 		if (!validPassword) {
+			// FIXME translate
 			return fail(400, { message: 'Incorrect username or password' });
 		}
 
@@ -49,7 +53,7 @@ export const actions: Actions = {
 		const session = await auth.createSession(sessionToken, existingUser.id);
 		auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 
-		return redirect(302, '/demo/lucia');
+		return redirect(302, '/home');
 	},
 	register: async (event) => {
 		const formData = await event.request.formData();
@@ -57,9 +61,11 @@ export const actions: Actions = {
 		const password = formData.get('password');
 
 		if (!validateUsername(username)) {
+			// FIXME translate
 			return fail(400, { message: 'Invalid username' });
 		}
 		if (!validatePassword(password)) {
+			// FIXME translate
 			return fail(400, { message: 'Invalid password' });
 		}
 
@@ -73,9 +79,10 @@ export const actions: Actions = {
 			const session = await auth.createSession(sessionToken, userId);
 			auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 		} catch {
+			// <!-- FIXME translate -->
 			return fail(500, { message: 'An error has occurred' });
 		}
-		return redirect(302, '/demo/lucia');
+		return redirect(302, '/user/login');
 	}
 };
 
@@ -88,10 +95,9 @@ function generateUserId() {
 
 function validateUsername(username: unknown): username is string {
 	return (
-		typeof username === 'string' &&
-		username.length >= 3 &&
-		username.length <= 31 &&
-		/^[a-z0-9_-]+$/.test(username)
+		typeof username === 'string'
+		&& username.length >= 3
+		&& /^\S+@\S+\.\S+$/.test(username)
 	);
 }
 

@@ -5,7 +5,7 @@
 	import ChevronsUpDownIcon from '@lucide/svelte/icons/chevrons-up-down';
 	import PlusIcon from '@lucide/svelte/icons/plus';
 
-	// TODO traduzir mensagens dessa pagina
+	// FIXME traduzir mensagens dessa pagina
 	import { m } from '$lib/paraglide/messages.js';
 
 	// This should be `Component` after @lucide/svelte updates types

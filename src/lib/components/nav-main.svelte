@@ -3,8 +3,6 @@
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import ChevronRightIcon from '@lucide/svelte/icons/chevron-right';
 
-	// TODO traduzir mensagens dessa pagina
-
 	let {
 		items
 	}: {
@@ -22,7 +20,7 @@
 		}[];
 	} = $props();
 
-	// TODO traduzir mensagens dessa pagina
+	// FIXME traduzir mensagens dessa pagina
 	import { m } from '$lib/paraglide/messages.js';
 </script>
 

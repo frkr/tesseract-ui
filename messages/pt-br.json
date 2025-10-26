@@ -1,5 +1,7 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
-	"company": "Casa Das Idéias",
-	"hello": "Olá, {name}"
+	"hello": "Olá, {name}",
+	"product": "Casa Das Idéias",
+	"emailInvalid": "Digite seu email como esse exemplo: davi@gmail.com",
+	"passwordInvalid": "Senha Invalida (min 6, max 255 caracteres)"
 }

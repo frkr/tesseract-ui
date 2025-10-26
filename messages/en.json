@@ -1,5 +1,3 @@
 {
-	"$schema": "https://inlang.com/schema/inlang-message-format",
-	"company": "Casa Das Idéias",
-	"hello": "Hello, {name}"
+	"$schema": "https://inlang.com/schema/inlang-message-format"
 }

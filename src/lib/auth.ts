@@ -1,23 +1,14 @@
-/*
-
-TODO Usar JWT para não ter mais interação com o banco de dados
-O metodo abaixo é muito eficiente mas além de não ser um padrão de mercado
-consulta toda vez no banco de dados
-e depende do banco de dados para saber quais papeis o usuário tem
-
- */
-
 import type { RequestEvent } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { sha256 } from '@oslojs/crypto/sha2';
 import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
-import { db } from '$lib/server/db';
-import * as table from '$lib/server/db/schema';
+import { db } from '$lib/db';
+import * as table from '$lib/db/schema';
 
-// TODO Put this on enviroment variables in hours. Ex: 6 hours
+// FIXME Put this on enviroment variables in hours. Ex: 6 hours
 const HOUR_IN_MS = 1000 * 60 * 60 * 6;
 
-// TODO Put this on enviroment variables and use Authentication as default
+// FIXME Put this on enviroment variables and use Authentication as default
 export const sessionCookieName = 'auth-session';
 
 export function generateSessionToken() {

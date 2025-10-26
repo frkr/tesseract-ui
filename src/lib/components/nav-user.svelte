@@ -10,7 +10,7 @@
 	import LogOutIcon from '@lucide/svelte/icons/log-out';
 	import SparklesIcon from '@lucide/svelte/icons/sparkles';
 
-	// TODO traduzir mensagens dessa pagina
+	// FIXME traduzir mensagens dessa pagina
 	import { m } from '$lib/paraglide/messages.js';
 
 	let { user }: { user: { name: string; email: string; avatar: string } } = $props();

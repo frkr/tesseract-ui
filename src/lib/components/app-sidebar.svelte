@@ -10,7 +10,7 @@
 	import Settings2Icon from '@lucide/svelte/icons/settings-2';
 	import SquareTerminalIcon from '@lucide/svelte/icons/square-terminal';
 
-	// TODO traduzir mensagens dessa pagina
+	// FIXME traduzir mensagens dessa pagina
 	import { m } from '$lib/paraglide/messages.js';
 
 	// This is sample data.
