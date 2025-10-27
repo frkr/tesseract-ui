@@ -23,101 +23,101 @@
 			{
 				name: 'Acme Inc',
 				logo: GalleryVerticalEndIcon,
-				plan: 'Enterprise'
+				plan: m.enterprise()
 			},
 			{
 				name: 'Acme Corp.',
 				logo: AudioWaveformIcon,
-				plan: 'Startup'
+				plan: m.startup()
 			},
 			{
 				name: 'Evil Corp.',
 				logo: CommandIcon,
-				plan: 'Free'
+				plan: m.free()
 			}
 		],
 		navMain: [
 			{
-				title: 'Playground',
+				title: m.playground(),
 				url: '#',
 				icon: SquareTerminalIcon,
 				isActive: true,
 				items: [
 					{
-						title: 'History',
+						title: m.history(),
 						url: '#'
 					},
 					{
-						title: 'Starred',
+						title: m.starred(),
 						url: '#'
 					},
 					{
-						title: 'Settings',
+						title: m.settings(),
 						url: '#'
 					}
 				]
 			},
 			{
-				title: 'Models',
+				title: m.models(),
 				url: '#',
 				icon: BotIcon,
 				items: [
 					{
-						title: 'Genesis',
+						title: m.genesis(),
 						url: '#'
 					},
 					{
-						title: 'Explorer',
+						title: m.explorer(),
 						url: '#'
 					},
 					{
-						title: 'Quantum',
+						title: m.quantum(),
 						url: '#'
 					}
 				]
 			},
 			{
-				title: 'Documentation',
+				title: m.documentation(),
 				url: '#',
 				icon: BookOpenIcon,
 				items: [
 					{
-						title: 'Introduction',
+						title: m.introduction(),
 						url: '#'
 					},
 					{
-						title: 'Get Started',
+						title: m.getStarted(),
 						url: '#'
 					},
 					{
-						title: 'Tutorials',
+						title: m.tutorials(),
 						url: '#'
 					},
 					{
-						title: 'Changelog',
+						title: m.changelog(),
 						url: '#'
 					}
 				]
 			},
 			{
-				title: 'Settings',
+				title: m.settings(),
 				url: '#',
 				icon: Settings2Icon,
 				items: [
 					{
-						title: 'General',
+						title: m.general(),
 						url: '#'
 					},
 					{
-						title: 'Team',
+						title: m.teams(),
 						url: '#'
 					},
 					{
-						title: 'Billing',
+						title: m.billing(),
 						url: '#'
 					},
 					{
-						title: 'Limits',
+						title: m.limits(),
 						url: '#'
 					}
 				]
@@ -125,17 +125,17 @@
 		],
 		projects: [
 			{
-				name: 'Design Engineering',
+				name: m.designEngineering(),
 				url: '#',
 				icon: FrameIcon
 			},
 			{
-				name: 'Sales & Marketing',
+				name: m.salesMarketing(),
 				url: '#',
 				icon: ChartPieIcon
 			},
 			{
-				name: 'Travel',
+				name: m.travel(),
 				url: '#',
 				icon: MapIcon
 			}
