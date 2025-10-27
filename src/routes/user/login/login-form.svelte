@@ -88,6 +88,7 @@
 	</Card.Root>
 	<FieldDescription class="px-6 text-center">
 		<span style="color: red">{form?.message ?? ''}</span>
-		{m.termsOfService()} <a href="##">{m.termsOfServiceLink()}</a> e <a href="##">{m.privacyPolicy()}</a>.
+		{m.termsOfService()} <a href="##">{m.termsOfServiceLink()}</a> e
+		<a href="##">{m.privacyPolicy()}</a>.
 	</FieldDescription>
 </div>

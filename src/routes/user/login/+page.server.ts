@@ -89,11 +89,7 @@ function generateUserId() {
 }
 
 function validateUsername(username: unknown): username is string {
-	return (
-		typeof username === 'string'
-		&& username.length >= 3
-		&& /^\S+@\S+\.\S+$/.test(username)
-	);
+	return typeof username === 'string' && username.length >= 3 && /^\S+@\S+\.\S+$/.test(username);
 }
 
 function validatePassword(password: unknown): password is string {

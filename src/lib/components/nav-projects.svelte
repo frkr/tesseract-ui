@@ -39,12 +39,12 @@
 				</Sidebar.MenuButton>
 				<DropdownMenu.Root>
 					<DropdownMenu.Trigger>
-											{#snippet child({ props })}
-						<Sidebar.MenuAction showOnHover {...props}>
-							<EllipsisIcon />
-							<span class="sr-only">{m.more()}</span>
-						</Sidebar.MenuAction>
-					{/snippet}
+						{#snippet child({ props })}
+							<Sidebar.MenuAction showOnHover {...props}>
+								<EllipsisIcon />
+								<span class="sr-only">{m.more()}</span>
+							</Sidebar.MenuAction>
+						{/snippet}
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content
 						class="w-48 rounded-lg"

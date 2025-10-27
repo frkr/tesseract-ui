@@ -10,7 +10,6 @@
 	import { Button } from '$lib/components/ui/button';
 
 	let { data }: { data: PageServerData } = $props();
-
 </script>
 
 <svelte:head>
@@ -32,9 +31,7 @@
 				<Button variant="outline" onclick={() => setLocale('pt-br')} title="Português (Brasil)">
 					🇧🇷
 				</Button>
-				<Button variant="outline" onclick={() => setLocale('en')} title="English">
-					🇺🇸
-				</Button>
+				<Button variant="outline" onclick={() => setLocale('en')} title="English">🇺🇸</Button>
 			</div>
 			<form method="post" action="?/logout" use:enhance>
 				<Button type="submit">{m.signOut()}</Button>
