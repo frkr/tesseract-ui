@@ -23,13 +23,18 @@
 		<Card.Header>
 			<Card.Title>{m.hello({ name: data.user.username })}</Card.Title>
 			<Card.Description>
+				<!-- TODO colocar algo melhor ai no futuro -->
 				ID: {data.user.id}
 			</Card.Description>
 		</Card.Header>
 		<Card.Content>
-			<div class="mb-4">
-				<Button variant="outline" onclick={() => setLocale('pt-br')}>pt-br</Button>
-				<Button variant="outline" onclick={() => setLocale('en')}>en</Button>
+			<div class="mb-4 flex gap-2">
+				<Button variant="outline" onclick={() => setLocale('pt-br')} title="Português (Brasil)">
+					🇧🇷
+				</Button>
+				<Button variant="outline" onclick={() => setLocale('en')} title="English">
+					🇺🇸
+				</Button>
 			</div>
 			<form method="post" action="?/logout" use:enhance>
 				<Button type="submit">{m.signOut()}</Button>
