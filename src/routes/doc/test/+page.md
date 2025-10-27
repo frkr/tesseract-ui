@@ -1,5 +1,5 @@
 # Here’s a chart
-
+- [Back](/doc)
 ---
 
 - **The chart is rendered inside our MDsveX document.**
