@@ -34,8 +34,7 @@ export const actions: Actions = {
 
 		const existingUser = results.at(0);
 		if (!existingUser) {
-			// FIXME translate
-			return fail(400, { message: 'Incorrect username or password' });
+			return fail(400, { message: m.incorrectCredentials() });
 		}
 
 		const validPassword = await verifyPassword(
@@ -45,8 +44,7 @@ export const actions: Actions = {
 		);
 
 		if (!validPassword) {
-			// FIXME translate
-			return fail(400, { message: 'Incorrect username or password' });
+			return fail(400, { message: m.incorrectCredentials() });
 		}
 
 		const sessionToken = auth.generateSessionToken();
@@ -61,12 +59,10 @@ export const actions: Actions = {
 		const password = formData.get('password');
 
 		if (!validateUsername(username)) {
-			// FIXME translate
-			return fail(400, { message: 'Invalid username' });
+			return fail(400, { message: m.invalidUsername() });
 		}
 		if (!validatePassword(password)) {
-			// FIXME translate
-			return fail(400, { message: 'Invalid password' });
+			return fail(400, { message: m.invalidPassword() });
 		}
 
 		const userId = generateUserId();
@@ -79,8 +75,7 @@ export const actions: Actions = {
 			const session = await auth.createSession(sessionToken, userId);
 			auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 		} catch {
-			// <!-- FIXME translate -->
-			return fail(500, { message: 'An error has occurred' });
+			return fail(500, { message: m.errorOccurred() });
 		}
 		return redirect(302, '/user/login');
 	}

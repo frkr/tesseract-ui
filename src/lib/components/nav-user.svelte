@@ -10,7 +10,6 @@
 	import LogOutIcon from '@lucide/svelte/icons/log-out';
 	import SparklesIcon from '@lucide/svelte/icons/sparkles';
 
-	// FIXME traduzir mensagens dessa pagina
 	import { m } from '$lib/paraglide/messages.js';
 
 	let { user }: { user: { name: string; email: string; avatar: string } } = $props();
@@ -61,28 +60,28 @@
 				<DropdownMenu.Group>
 					<DropdownMenu.Item>
 						<SparklesIcon />
-						Upgrade to Pro
+						{m.upgradeToPro()}
 					</DropdownMenu.Item>
 				</DropdownMenu.Group>
 				<DropdownMenu.Separator />
 				<DropdownMenu.Group>
 					<DropdownMenu.Item>
 						<BadgeCheckIcon />
-						Account
+						{m.account()}
 					</DropdownMenu.Item>
 					<DropdownMenu.Item>
 						<CreditCardIcon />
-						Billing
+						{m.billing()}
 					</DropdownMenu.Item>
 					<DropdownMenu.Item>
 						<BellIcon />
-						Notifications
+						{m.notifications()}
 					</DropdownMenu.Item>
 				</DropdownMenu.Group>
 				<DropdownMenu.Separator />
 				<DropdownMenu.Item>
 					<LogOutIcon />
-					Log out
+					{m.logOut()}
 				</DropdownMenu.Item>
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>

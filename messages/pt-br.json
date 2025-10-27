@@ -20,5 +20,22 @@
 	"termsOfService": "Ao clicar em continuar, você concorda com nossos",
 	"termsOfServiceLink": "Termos de Serviço",
 	"privacyPolicy": "Política de Privacidade",
-	"loginWithSocial": "Entre com sua conta Apple ou Google"
+	"loginWithSocial": "Entre com sua conta Apple ou Google",
+	"upgradeToPro": "Atualizar para Pro",
+	"account": "Conta",
+	"billing": "Faturamento",
+	"notifications": "Notificações",
+	"logOut": "Sair",
+	"projects": "Projetos",
+	"more": "Mais",
+	"viewProject": "Ver Projeto",
+	"shareProject": "Compartilhar Projeto",
+	"deleteProject": "Excluir Projeto",
+	"platform": "Plataforma",
+	"teams": "Times",
+	"addTeam": "Adicionar time",
+	"incorrectCredentials": "Nome de usuário ou senha incorretos",
+	"invalidUsername": "Nome de usuário inválido",
+	"invalidPassword": "Senha inválida",
+	"errorOccurred": "Ocorreu um erro"
 }

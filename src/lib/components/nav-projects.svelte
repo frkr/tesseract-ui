@@ -7,7 +7,6 @@
 	import ForwardIcon from '@lucide/svelte/icons/forward';
 	import Trash2Icon from '@lucide/svelte/icons/trash-2';
 
-	// FIXME traduzir mensagens dessa pagina
 	import { m } from '$lib/paraglide/messages.js';
 
 	let {
@@ -26,7 +25,7 @@
 </script>
 
 <Sidebar.Group class="group-data-[collapsible=icon]:hidden">
-	<Sidebar.GroupLabel>Projects</Sidebar.GroupLabel>
+	<Sidebar.GroupLabel>{m.projects()}</Sidebar.GroupLabel>
 	<Sidebar.Menu>
 		{#each projects as item (item.name)}
 			<Sidebar.MenuItem>
@@ -40,12 +39,12 @@
 				</Sidebar.MenuButton>
 				<DropdownMenu.Root>
 					<DropdownMenu.Trigger>
-						{#snippet child({ props })}
-							<Sidebar.MenuAction showOnHover {...props}>
-								<EllipsisIcon />
-								<span class="sr-only">More</span>
-							</Sidebar.MenuAction>
-						{/snippet}
+											{#snippet child({ props })}
+						<Sidebar.MenuAction showOnHover {...props}>
+							<EllipsisIcon />
+							<span class="sr-only">{m.more()}</span>
+						</Sidebar.MenuAction>
+					{/snippet}
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content
 						class="w-48 rounded-lg"
@@ -54,16 +53,16 @@
 					>
 						<DropdownMenu.Item>
 							<FolderIcon class="text-muted-foreground" />
-							<span>View Project</span>
+							<span>{m.viewProject()}</span>
 						</DropdownMenu.Item>
 						<DropdownMenu.Item>
 							<ForwardIcon class="text-muted-foreground" />
-							<span>Share Project</span>
+							<span>{m.shareProject()}</span>
 						</DropdownMenu.Item>
 						<DropdownMenu.Separator />
 						<DropdownMenu.Item>
 							<Trash2Icon class="text-muted-foreground" />
-							<span>Delete Project</span>
+							<span>{m.deleteProject()}</span>
 						</DropdownMenu.Item>
 					</DropdownMenu.Content>
 				</DropdownMenu.Root>
@@ -72,7 +71,7 @@
 		<Sidebar.MenuItem>
 			<Sidebar.MenuButton class="text-sidebar-foreground/70">
 				<EllipsisIcon class="text-sidebar-foreground/70" />
-				<span>More</span>
+				<span>{m.more()}</span>
 			</Sidebar.MenuButton>
 		</Sidebar.MenuItem>
 	</Sidebar.Menu>
