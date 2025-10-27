@@ -23,9 +23,8 @@
 <div class={cn('flex flex-col gap-6')}>
 	<Card.Root>
 		<Card.Header class="text-center">
-			<!-- FIXME translate -->
-			<Card.Title class="text-xl">Welcome back</Card.Title>
-			<Card.Description>Login with your Apple or Google account</Card.Description>
+			<Card.Title class="text-xl">{m.welcomeBack()}</Card.Title>
+			<Card.Description>{m.loginWithSocial()}</Card.Description>
 		</Card.Header>
 		<Card.Content>
 			<form method="post" action="?/login" use:enhance>
@@ -39,8 +38,7 @@
 									fill="currentColor"
 								/>
 							</svg>
-							<!-- FIXME translate -->
-							Login with Apple
+							{m.loginWithApple()}
 						</Button>
 						<Button variant="outline" type="button">
 							<!-- FIXME put this svg on "src/lib/assets/google.svg" -->
@@ -50,16 +48,14 @@
 									fill="currentColor"
 								/>
 							</svg>
-							<!-- FIXME translate -->
-							Login with Google
+							{m.loginWithGoogle()}
 						</Button>
 					</Field>
 					<FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">
-						<!-- FIXME translate -->
-						Or continue with
+						{m.orContinueWith()}
 					</FieldSeparator>
 					<Field>
-						<FieldLabel for="email-{idform}">Email</FieldLabel>
+						<FieldLabel for="email-{idform}">{m.email()}</FieldLabel>
 						<Input
 							name="username"
 							id="email-{idform}"
@@ -70,19 +66,18 @@
 					</Field>
 					<Field>
 						<div class="flex items-center">
-							<FieldLabel for="password-{idform}">Password</FieldLabel>
+							<FieldLabel for="password-{idform}">{m.password()}</FieldLabel>
 							<a href="##" class="ml-auto text-sm underline-offset-4 hover:underline">
-								Forgot your password?
+								{m.forgotPassword()}
 							</a>
 						</div>
 						<Input name="password" id="password-{idform}" type="password" required />
 					</Field>
 					<Field>
-						<Button type="submit">Login</Button>
+						<Button type="submit">{m.login()}</Button>
 						<FieldDescription class="text-center">
-							<!-- FIXME translate -->
-							Don't have an account?
-							<button class="rounded-md" formaction="?/register">Register</button>
+							{m.dontHaveAccount()}
+							<button class="rounded-md" formaction="?/register">{m.register()}</button>
 							<!-- class="rounded-md bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700"-->
 							<!-- <a href="##">Sign up</a>-->
 						</FieldDescription>
@@ -93,8 +88,6 @@
 	</Card.Root>
 	<FieldDescription class="px-6 text-center">
 		<span style="color: red">{form?.message ?? ''}</span>
-		<!-- FIXME translate -->
-		By clicking continue, you agree to our <a href="##">Terms of Service</a>
-		and <a href="##">Privacy Policy</a>.
+		{m.termsOfService()} <a href="##">{m.termsOfServiceLink()}</a> e <a href="##">{m.privacyPolicy()}</a>.
 	</FieldDescription>
 </div>

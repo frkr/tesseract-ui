@@ -2,9 +2,12 @@
 	import '$lib/app.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import { m } from '$lib/paraglide/messages.js';
+	import { setLocale } from '$lib/paraglide/runtime';
 
 	import { enhance } from '$app/forms';
 	import type { PageServerData } from './$types';
+	import * as Card from '$lib/components/ui/card';
+	import { Button } from '$lib/components/ui/button';
 
 	let { data }: { data: PageServerData } = $props();
 
@@ -16,13 +19,21 @@
 </svelte:head>
 
 <div class="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min">
-
-	<!-- FIXME convert this code below in a Card component -->
-<h1>{m.hello(data.user.username)}</h1>
-<p>ID: {data.user.id}.</p>
-<form method="post" action="?/logout" use:enhance>
-	<!-- FIXME translate this -->
-	<button>Sign out</button>
-</form>
-
+	<Card.Root>
+		<Card.Header>
+			<Card.Title>{m.hello({ name: data.user.username })}</Card.Title>
+			<Card.Description>
+				ID: {data.user.id}
+			</Card.Description>
+		</Card.Header>
+		<Card.Content>
+			<div class="mb-4">
+				<Button variant="outline" onclick={() => setLocale('pt-br')}>pt-br</Button>
+				<Button variant="outline" onclick={() => setLocale('en')}>en</Button>
+			</div>
+			<form method="post" action="?/logout" use:enhance>
+				<Button type="submit">{m.signOut()}</Button>
+			</form>
+		</Card.Content>
+	</Card.Root>
 </div>

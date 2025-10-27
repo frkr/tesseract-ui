@@ -3,5 +3,22 @@
 	"hello": "Olá, {name}",
 	"product": "Casa Das Idéias",
 	"emailInvalid": "Digite seu email como esse exemplo: davi@gmail.com",
-	"passwordInvalid": "Senha Invalida (min 6, max 255 caracteres)"
+	"passwordInvalid": "Senha Invalida (min 6, max 255 caracteres)",
+	"user": "Usuário",
+	"profile": "Perfil",
+	"signOut": "Sair",
+	"welcomeBack": "Bem-vindo de volta",
+	"loginWithApple": "Entrar com Apple",
+	"loginWithGoogle": "Entrar com Google",
+	"orContinueWith": "Ou continuar com",
+	"email": "Email",
+	"password": "Senha",
+	"forgotPassword": "Esqueceu sua senha?",
+	"login": "Entrar",
+	"dontHaveAccount": "Não tem uma conta?",
+	"register": "Cadastrar",
+	"termsOfService": "Ao clicar em continuar, você concorda com nossos",
+	"termsOfServiceLink": "Termos de Serviço",
+	"privacyPolicy": "Política de Privacidade",
+	"loginWithSocial": "Entre com sua conta Apple ou Google"
 }

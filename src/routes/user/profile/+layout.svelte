@@ -6,6 +6,7 @@
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
 	import { Separator } from '$lib/components/ui/separator/index.js';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
+	import { m } from '$lib/paraglide/messages.js';
 
 	let { children } = $props();
 
@@ -27,13 +28,11 @@
 				<Breadcrumb.Root>
 					<Breadcrumb.List>
 						<Breadcrumb.Item class="hidden md:block">
-							<!-- FIXME translate this -->
-							<Breadcrumb.Link href="##">User</Breadcrumb.Link>
+							<Breadcrumb.Link href="##">{m.user()}</Breadcrumb.Link>
 						</Breadcrumb.Item>
 						<Breadcrumb.Separator class="hidden md:block" />
 						<Breadcrumb.Item>
-							<!-- FIXME translate this -->
-							<Breadcrumb.Page>Profile</Breadcrumb.Page>
+							<Breadcrumb.Page>{m.profile()}</Breadcrumb.Page>
 						</Breadcrumb.Item>
 					</Breadcrumb.List>
 				</Breadcrumb.Root>
