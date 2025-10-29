@@ -1,12 +1,12 @@
 <script lang="ts">
-	import DotsIcon from "@tabler/icons-svelte/icons/dots";
-	import FolderIcon from "@tabler/icons-svelte/icons/folder";
-	import Share3Icon from "@tabler/icons-svelte/icons/share-3";
-	import TrashIcon from "@tabler/icons-svelte/icons/trash";
-	import type { Icon } from "@tabler/icons-svelte";
+	import DotsIcon from '@tabler/icons-svelte/icons/dots';
+	import FolderIcon from '@tabler/icons-svelte/icons/folder';
+	import Share3Icon from '@tabler/icons-svelte/icons/share-3';
+	import TrashIcon from '@tabler/icons-svelte/icons/trash';
+	import type { Icon } from '@tabler/icons-svelte';
 
-	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-	import * as Sidebar from "$lib/components/ui/sidebar";
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import * as Sidebar from '$lib/components/ui/sidebar';
 
 	let { items }: { items: { name: string; url: string; icon: Icon }[] } = $props();
 
@@ -41,8 +41,8 @@
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content
 						class="w-24 rounded-lg"
-						side={sidebar.isMobile ? "bottom" : "right"}
-						align={sidebar.isMobile ? "end" : "start"}
+						side={sidebar.isMobile ? 'bottom' : 'right'}
+						align={sidebar.isMobile ? 'end' : 'start'}
 					>
 						<DropdownMenu.Item>
 							<FolderIcon />

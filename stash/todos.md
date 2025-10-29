@@ -1,7 +1,7 @@
 ## TODO
 
 - https://www.shadcn-svelte.com/blocks/sidebar
-- 
+-
 - colocar o conceito Tesseract para geração de aplicacao
 - começar a criar o aplicativo principal.
 - aplicativo principal vai preparar o ambiente, git, vercel, postgres

@@ -20,7 +20,7 @@
 <div class="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min">
 	<Card.Root>
 		<Card.Header>
-			<Card.Title>{m.hello({ name: (data.user.name || data.user.username) })}</Card.Title>
+			<Card.Title>{m.hello({ name: data.user.name || data.user.username })}</Card.Title>
 			<Card.Description>
 				<!-- TODO colocar algo melhor ai no futuro -->
 				ID: {data.user.id}

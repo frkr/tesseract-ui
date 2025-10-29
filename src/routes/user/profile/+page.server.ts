@@ -6,16 +6,15 @@ import { db } from '$lib/db';
 import * as table from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
 
-
 export const load: PageServerLoad = async () => {
 	const user = requireLogin();
 	const results = await db.select().from(table.user).where(eq(table.user.username, user.username));
 
 	const existingUser = results.at(0);
 	if (existingUser) {
-		return {user: existingUser};
+		return { user: existingUser };
 	}
-	return {user}
+	return { user };
 };
 
 export const actions: Actions = {

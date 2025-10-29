@@ -5,7 +5,6 @@
 
 	import type { ActionData } from './$types';
 	let { form }: { form: ActionData } = $props();
-
 </script>
 
 <div class="grid min-h-svh lg:grid-cols-2">

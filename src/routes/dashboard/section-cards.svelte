@@ -1,8 +1,8 @@
 <script lang="ts">
-	import TrendingDownIcon from "@tabler/icons-svelte/icons/trending-down";
-	import TrendingUpIcon from "@tabler/icons-svelte/icons/trending-up";
-	import { Badge } from "$lib/components/ui/badge";
-	import * as Card from "$lib/components/ui/card";
+	import TrendingDownIcon from '@tabler/icons-svelte/icons/trending-down';
+	import TrendingUpIcon from '@tabler/icons-svelte/icons/trending-up';
+	import { Badge } from '$lib/components/ui/badge';
+	import * as Card from '$lib/components/ui/card';
 </script>
 
 <div

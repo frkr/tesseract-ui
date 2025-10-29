@@ -1,12 +1,12 @@
 <script lang="ts">
-	import CreditCardIcon from "@tabler/icons-svelte/icons/credit-card";
-	import DotsVerticalIcon from "@tabler/icons-svelte/icons/dots-vertical";
-	import LogoutIcon from "@tabler/icons-svelte/icons/logout";
-	import NotificationIcon from "@tabler/icons-svelte/icons/notification";
-	import UserCircleIcon from "@tabler/icons-svelte/icons/user-circle";
-	import * as Avatar from "$lib/components/ui/avatar";
-	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-	import * as Sidebar from "$lib/components/ui/sidebar";
+	import CreditCardIcon from '@tabler/icons-svelte/icons/credit-card';
+	import DotsVerticalIcon from '@tabler/icons-svelte/icons/dots-vertical';
+	import LogoutIcon from '@tabler/icons-svelte/icons/logout';
+	import NotificationIcon from '@tabler/icons-svelte/icons/notification';
+	import UserCircleIcon from '@tabler/icons-svelte/icons/user-circle';
+	import * as Avatar from '$lib/components/ui/avatar';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import * as Sidebar from '$lib/components/ui/sidebar';
 
 	let { user }: { user: { name: string; email: string; avatar: string } } = $props();
 
@@ -39,7 +39,7 @@
 			</DropdownMenu.Trigger>
 			<DropdownMenu.Content
 				class="w-(--bits-dropdown-menu-anchor-width) min-w-56 rounded-lg"
-				side={sidebar.isMobile ? "bottom" : "right"}
+				side={sidebar.isMobile ? 'bottom' : 'right'}
 				align="end"
 				sideOffset={4}
 			>

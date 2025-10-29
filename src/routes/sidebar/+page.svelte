@@ -2,14 +2,13 @@
 	import '$lib/app.css';
 	import favicon from '$lib/assets/favicon.svg';
 
-	import AppSidebar from "./app-sidebar.svelte";
-	import NavActions from "./nav-actions.svelte";
-	import * as Breadcrumb from "$lib/components/ui/breadcrumb/index.js";
-	import { Separator } from "$lib/components/ui/separator/index.js";
-	import * as Sidebar from "$lib/components/ui/sidebar/index.js";
+	import AppSidebar from './app-sidebar.svelte';
+	import NavActions from './nav-actions.svelte';
+	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
+	import { Separator } from '$lib/components/ui/separator/index.js';
+	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 
 	let open = $state(true);
-
 </script>
 
 <svelte:head>
@@ -17,9 +16,9 @@
 	<link rel="manifest" href="/manifest.json" />
 </svelte:head>
 
-<Sidebar.Provider  open={open}>
+<Sidebar.Provider {open}>
 	<AppSidebar />
-	<Sidebar.Inset  onmouseenter={() => (open = false)} onmouseleave={() => (open = true)}>
+	<Sidebar.Inset onmouseenter={() => (open = false)} onmouseleave={() => (open = true)}>
 		<header class="flex h-14 shrink-0 items-center gap-2">
 			<div class="flex flex-1 items-center gap-2 px-3">
 				<Sidebar.Trigger />

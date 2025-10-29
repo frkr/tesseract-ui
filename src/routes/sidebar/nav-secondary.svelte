@@ -1,6 +1,6 @@
 <script lang="ts">
-	import * as Sidebar from "$lib/components/ui/sidebar";
-	import type { Component, ComponentProps } from "svelte";
+	import * as Sidebar from '$lib/components/ui/sidebar';
+	import type { Component, ComponentProps } from 'svelte';
 
 	let {
 		ref = $bindable(null),
