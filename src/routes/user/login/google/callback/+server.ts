@@ -8,7 +8,6 @@ import { eq } from 'drizzle-orm';
 import * as auth from '$lib/auth';
 import { generateUserId } from '$lib/auth';
 
-// TODO callback generico ou trocar URL de callback no google gcp
 export async function GET(event: RequestEvent): Promise<Response> {
 	const code = event.url.searchParams.get("code");
 	const state = event.url.searchParams.get("state");

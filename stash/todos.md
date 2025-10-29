@@ -1,16 +1,14 @@
 ## TODO
 
-https://www.perplexity.ai/search/lucia-svelte-passkey-ax9ZlbDlTa2T0TGI2ApkvA
-https://www.perplexity.ai/search/lucia-svelte-google-integratio-0htRStUTRfqTIBvz3VrV3Q
+- colocar o conceito Tesseract para geração de aplicacao
+- começar a criar o aplicativo principal.
+- aplicativo principal vai preparar o ambiente, git, vercel, postgres
+- começar os outros apps - Salao, Foto e Ticket.
 
 - wrangler.jsonc - Documentar aqui coisas importantes
-- Vercel observability - Estudar
-- static - documentar - colocar o security e o AI
-- estudar entre wrangler file ou .env
-- https://lucia-auth.com/tutorials/google-oauth/sveltekit
+- static - colocar o llms.txt
 - static - manifest.json - Arrumar todos os detalhes da aplicacao.
 - static - documentar no ai-guidelines.md o que cada arquivo faz
-- docuentar - db:generate gera os arquivos de schema do banco de dados
 - package-lock - nunca confiar. Sempre gerar um novo.
 - Vercel api - https://vercel.com/docs/rest-api/reference/endpoints/access-groups/reads-an-access-group
 

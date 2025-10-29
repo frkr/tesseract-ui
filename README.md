@@ -16,4 +16,4 @@ maximizing the coding experience while maintaining thorough code review practice
 
 # Doc and how to use this repo
 
-> Remember to keep the **\*Important** and those links for AI
+> Remember to keep the **Important** and those links for AI
