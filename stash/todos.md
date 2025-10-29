@@ -3,7 +3,7 @@
 - colocar o conceito Tesseract para geração de aplicacao
 - começar a criar o aplicativo principal.
 - aplicativo principal vai preparar o ambiente, git, vercel, postgres
-- começar os outros apps - Salao, Foto e Ticket.
+- começar os outros apps - Beleza, Foto e Ticket.
 
 - wrangler.jsonc - Documentar aqui coisas importantes
 - static - colocar o llms.txt
