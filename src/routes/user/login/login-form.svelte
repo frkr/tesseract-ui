@@ -89,6 +89,7 @@ import { enhance } from '$app/forms';
 	</Card.Root>
 	<FieldDescription class="px-6 text-center">
 		<span style="color: red">{form?.message ?? ''}</span>
+		<!-- TODO colocar de outra forma, uma variavel ou ate mesmo um link para /docs. Pensar direito sobre isso para os clientes -->
 		{m.termsOfService()} <a href="/license.pdf" target="_blank">{m.termsOfServiceLink()} e {m.privacyPolicy()}</a>.
 	</FieldDescription>
 </div>
