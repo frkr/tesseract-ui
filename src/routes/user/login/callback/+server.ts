@@ -30,6 +30,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	}
 
 	const claims:any = decodeIdToken(tokens.idToken());
+	// TODO OAuth2 do google nao esta retornando o email do usuario
 	let googleUserId = claims?.sub;
 	const username = claims?.name;
 	if (!googleUserId || !googleUserId.includes("@")) {
