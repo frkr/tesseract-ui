@@ -11,7 +11,8 @@
 	import { Input } from '$lib/components/ui/input';
 	import { cn } from '$lib/utils.js';
 	import type { ActionData } from './$types';
-	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
+import { enhance } from '$app/forms';
 
 	import { m } from '$lib/paraglide/messages.js';
 
@@ -29,7 +30,7 @@
 		<Card.Content>
 			<form method="post" action="?/login" use:enhance>
 				<FieldGroup>
-					<Field>
+					<Field class="text-center">
 						<Button variant="outline" type="button">
 							<!-- FIXME put this svg on "src/lib/assets/apple.svg" -->
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -40,7 +41,7 @@
 							</svg>
 							{m.loginWithApple()}
 						</Button>
-						<Button variant="outline" type="button">
+						<Button variant="outline" type="button" onclick={() => goto('login/google')}>
 							<!-- FIXME put this svg on "src/lib/assets/google.svg" -->
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 								<path
@@ -48,7 +49,7 @@
 									fill="currentColor"
 								/>
 							</svg>
-							{m.loginWithGoogle()}
+						{m.loginWithGoogle()}
 						</Button>
 					</Field>
 					<FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">

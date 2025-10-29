@@ -7,6 +7,7 @@ import * as table from '$lib/db/schema';
 import type { Actions, PageServerLoad } from './$types';
 
 import { m } from '$lib/paraglide/messages.js';
+import { generateUserId } from '$lib/auth';
 
 export const load: PageServerLoad = async (event) => {
 	if (event.locals.user) {
@@ -80,13 +81,6 @@ export const actions: Actions = {
 		return redirect(302, '/user/login');
 	}
 };
-
-function generateUserId() {
-	// ID with 120 bits of entropy, or about the same as UUID v4.
-	const bytes = crypto.getRandomValues(new Uint8Array(15));
-	const id = encodeBase32LowerCase(bytes);
-	return id;
-}
 
 function validateUsername(username: unknown): username is string {
 	return typeof username === 'string' && username.length >= 3 && /^\S+@\S+\.\S+$/.test(username);

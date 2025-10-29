@@ -1,11 +1,11 @@
 <script lang="ts">
 	import GalleryVerticalEndIcon from '@lucide/svelte/icons/gallery-vertical-end';
 	import LoginForm from './login-form.svelte';
+	import { m } from '$lib/paraglide/messages.js';
 
-	import type { ActionData, PageServerData } from './$types';
+	import type { ActionData } from './$types';
 	let { form }: { form: ActionData } = $props();
 
-	import { m } from '$lib/paraglide/messages.js';
 </script>
 
 <div class="grid min-h-svh lg:grid-cols-2">
