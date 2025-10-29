@@ -32,6 +32,7 @@
 					🇧🇷
 				</Button>
 				<Button variant="outline" onclick={() => setLocale('en')} title="English">🇺🇸</Button>
+				<Button variant="outline" onclick={() => setLocale('es')} title="Español">🇪🇸</Button>
 			</div>
 			<form method="post" action="?/logout" use:enhance>
 				<Button type="submit">{m.signOut()}</Button>
