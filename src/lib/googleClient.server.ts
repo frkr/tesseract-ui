@@ -22,7 +22,7 @@ if (env.NODE_ENV === "development") {
 	}
 }
 
-const GOOGLE_URL_CALLBACK = PROTOCOL_URL + callbackHost + "/user/login/callback";
+const GOOGLE_URL_CALLBACK = PROTOCOL_URL + callbackHost + "/user/login/google/callback";
 
 const googleClient = new Google(
 	GOOGLE_CLIENT_ID,
