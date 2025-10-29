@@ -7,8 +7,9 @@ erDiagram
     USER {
         TEXT id PK
         INT age
+        TEXT name
         TEXT username "NOT NULL, UNIQUE"
-        TEXT password_hash "NOT NULL"
+        TEXT password_hash
     }
 
     SESSION {

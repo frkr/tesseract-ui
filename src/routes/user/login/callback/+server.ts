@@ -8,6 +8,7 @@ import { eq } from 'drizzle-orm';
 import * as auth from '$lib/auth';
 import { generateUserId } from '$lib/auth';
 
+// TODO callback generico
 export async function GET(event: RequestEvent): Promise<Response> {
 	const code = event.url.searchParams.get("code");
 	const state = event.url.searchParams.get("state");
@@ -31,11 +32,8 @@ export async function GET(event: RequestEvent): Promise<Response> {
 
 	const claims:any = decodeIdToken(tokens.idToken());
 	// TODO OAuth2 do google nao esta retornando o email do usuario
-	let googleUserId = claims?.sub;
+	const googleUserId = claims?.sub;
 	const username = claims?.name;
-	if (!googleUserId || !googleUserId.includes("@")) {
-		googleUserId = username;
-	}
 
 	// Check if user exists, create if not
 	const results = await db.select().from(table.user).where(eq(table.user.username, googleUserId));
@@ -43,7 +41,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 
 	if (!existingUser ) {
 		const userId = generateUserId();
-		await db.insert(table.user).values({ id: userId, username:googleUserId, passwordHash:"" });
+		await db.insert(table.user).values({ id: userId, username:googleUserId,name:username });
 		const sessionToken = auth.generateSessionToken();
 		const session = await auth.createSession(sessionToken, userId);
 		auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);

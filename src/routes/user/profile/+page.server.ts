@@ -2,10 +2,20 @@ import * as auth from '$lib/auth';
 import { fail, redirect } from '@sveltejs/kit';
 import { getRequestEvent } from '$app/server';
 import type { Actions, PageServerLoad } from './$types';
+import { db } from '$lib/db';
+import * as table from '$lib/db/schema';
+import { eq } from 'drizzle-orm';
+
 
 export const load: PageServerLoad = async () => {
 	const user = requireLogin();
-	return { user };
+	const results = await db.select().from(table.user).where(eq(table.user.username, user.username));
+
+	const existingUser = results.at(0);
+	if (existingUser) {
+		return {user: existingUser};
+	}
+	return {user}
 };
 
 export const actions: Actions = {
