@@ -148,7 +148,7 @@
 	import NavProjects from './nav-projects.svelte';
 	import NavUser from './nav-user.svelte';
 	import TeamSwitcher from './team-switcher.svelte';
-	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
+	import * as Sidebar from '$lib/components/ui/sidebar';
 	import type { ComponentProps } from 'svelte';
 
 	let {
