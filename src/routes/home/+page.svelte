@@ -1,8 +1,14 @@
-<div class="flex flex-1 flex-col gap-4 p-4">
-	<div class="grid auto-rows-min gap-4 md:grid-cols-3">
-		<div class="bg-muted/50 aspect-video rounded-xl"></div>
-		<div class="bg-muted/50 aspect-video rounded-xl"></div>
-		<div class="bg-muted/50 aspect-video rounded-xl"></div>
+<script lang="ts">
+	import SectionCards from '../dashboard/section-cards.svelte';
+	import ChartAreaInteractive from '../dashboard/chart-area-interactive.svelte';
+	import DataTable from '../dashboard/data-table.svelte';
+	import data from '../dashboard/data';
+</script>
+
+<div class="flex flex-col gap-4 px-2 py-4 md:gap-6 md:py-6 lg:px-2">
+	<SectionCards />
+	<div>
+		<ChartAreaInteractive />
 	</div>
-	<div class="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min"></div>
+	<DataTable {data} />
 </div>
