@@ -221,7 +221,7 @@
 	let viewLabel = $derived(views.find((v) => view === v.id)?.label ?? 'Select a view');
 </script>
 
-<Tabs.Root value="outline" class="w-full flex-col justify-start gap-6">
+<Tabs.Root value="outline" class="w-full flex-col justify-start ">
 	<div class="flex items-center justify-between">
 		<Label for="view-selector" class="sr-only">View</Label>
 		<Select.Root type="single" bind:value={view}>
@@ -278,7 +278,7 @@
 			</Button>
 		</div>
 	</div>
-	<Tabs.Content value="outline" class="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
+	<Tabs.Content value="outline" class="relative flex flex-col  overflow-auto ">
 		<div class="overflow-hidden rounded-lg border">
 			<DragDropProvider
 				modifiers={[
@@ -394,13 +394,13 @@
 			</div>
 		</div>
 	</Tabs.Content>
-	<Tabs.Content value="past-performance" class="flex flex-col px-4 lg:px-6">
+	<Tabs.Content value="past-performance" class="flex flex-col">
 		<div class="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
 	</Tabs.Content>
-	<Tabs.Content value="key-personnel" class="flex flex-col px-4 lg:px-6">
+	<Tabs.Content value="key-personnel" class="flex flex-col">
 		<div class="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
 	</Tabs.Content>
-	<Tabs.Content value="focus-documents" class="flex flex-col px-4 lg:px-6">
+	<Tabs.Content value="focus-documents" class="flex flex-col">
 		<div class="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
 	</Tabs.Content>
 </Tabs.Root>

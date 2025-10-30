@@ -20,7 +20,10 @@
 		<SiteHeader onmouseenter={() => (open = true)} />
 		<div class="flex flex-1">
 			<AppSidebar onmouseenter={() => (open = true)} />
-			<Sidebar.Inset onmouseenter={() => (open = false)} class="@container/main">
+			<Sidebar.Inset
+				onmouseenter={() => (open = false)}
+				class="@container/main  gap-2 px-2 py-4 md:gap-2 md:py-4 lg:px-2"
+			>
 				{@render children?.()}
 			</Sidebar.Inset>
 		</div>
