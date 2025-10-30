@@ -1,5 +1,5 @@
 {
-	"buildCommand": "pnpm build",
+	"buildCommand": "echo 'y' | pnpm db:push && pnpm build",
 	"devCommand": "pnpm dev",
 	"installCommand": "pnpm install",
 	"framework": "sveltekit",
