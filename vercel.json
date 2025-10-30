@@ -1,5 +1,5 @@
 {
-	"buildCommand": "if [ \"$VERCEL_ENV\" = \"preview\" ] || [ \"$VERCEL_ENV\" = \"production\" ]; then pnpm drizzle-kit push --force; fi && pnpm build",
+	"buildCommand": "echo 'y' | pnpm db:push && pnpm build",
 	"devCommand": "pnpm dev",
 	"installCommand": "pnpm install",
 	"framework": "sveltekit",
