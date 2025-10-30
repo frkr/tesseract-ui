@@ -15,9 +15,9 @@
 - Vercel api - https://vercel.com/docs/rest-api/reference/endpoints/access-groups/reads-an-access-group
 
 ```text
-sempre testar o que foi feito, perguntar antes de executar os testes, se der um erro procure na internet a solucao e teste novamente.
+sempre testar o que foi feito, se der um erro procure na internet a solucao e teste novamente.
 
-ler alguns arquivos pro projeto para tentar manter o mesmo padrao de desenvolvimento, nomenclaruras e arquitetura
+ler alguns arquivos do projeto para tentar manter o mesmo padrao de desenvolvimento, nomenclaruras e arquitetura
 
 não usar acentuação para não dar problemas de charset
 
