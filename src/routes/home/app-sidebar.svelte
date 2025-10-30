@@ -1,18 +1,20 @@
 <script lang="ts" module>
-	import AudioWaveformIcon from '@lucide/svelte/icons/audio-waveform';
-	import BookOpenIcon from '@lucide/svelte/icons/book-open';
-	import BotIcon from '@lucide/svelte/icons/bot';
-	import ChartPieIcon from '@lucide/svelte/icons/chart-pie';
-	import CommandIcon from '@lucide/svelte/icons/command';
-	import FrameIcon from '@lucide/svelte/icons/frame';
-	import GalleryVerticalEndIcon from '@lucide/svelte/icons/gallery-vertical-end';
-	import MapIcon from '@lucide/svelte/icons/map';
-	import Settings2Icon from '@lucide/svelte/icons/settings-2';
 	import SquareTerminalIcon from '@lucide/svelte/icons/square-terminal';
-
+	import BotIcon from '@lucide/svelte/icons/bot';
+	import BookOpenIcon from '@lucide/svelte/icons/book-open';
+	import Settings2Icon from '@lucide/svelte/icons/settings-2';
+	import LifeBuoyIcon from '@lucide/svelte/icons/life-buoy';
+	import SendIcon from '@lucide/svelte/icons/send';
+	import FrameIcon from '@lucide/svelte/icons/frame';
+	import PieChartIcon from '@lucide/svelte/icons/pie-chart';
+	import MapIcon from '@lucide/svelte/icons/map';
+	import CommandIcon from '@lucide/svelte/icons/command';
+	import GalleryVerticalEndIcon from '@lucide/svelte/icons/gallery-vertical-end';
+	import AudioWaveformIcon from '@lucide/svelte/icons/audio-waveform';
 	import { m } from '$lib/paraglide/messages.js';
+	import TeamSwitcher from './team-switcher.svelte';
+	import { ChartPieIcon } from '@lucide/svelte';
 
-	// This is sample data.
 	const data = {
 		user: {
 			name: 'shadcn',
@@ -144,21 +146,15 @@
 </script>
 
 <script lang="ts">
-	import NavMain from './nav-main.svelte';
-	import NavProjects from './nav-projects.svelte';
-	import NavUser from './nav-user.svelte';
-	import TeamSwitcher from './team-switcher.svelte';
-	import * as Sidebar from '$lib/components/ui/sidebar';
 	import type { ComponentProps } from 'svelte';
+	import * as Sidebar from '$lib/components/ui/sidebar';
+	import NavMain from './nav-main.svelte';
+	import NavUser from './nav-user.svelte';
 
-	let {
-		ref = $bindable(null),
-		collapsible = 'icon',
-		...restProps
-	}: ComponentProps<typeof Sidebar.Root> = $props();
+	let { ref = $bindable(null), ...restProps }: ComponentProps<typeof Sidebar.Root> = $props();
 </script>
 
-<Sidebar.Root {collapsible} {...restProps}>
+<Sidebar.Root class="top-(--header-height) h-[calc(100svh-var(--header-height))]!" {...restProps}>
 	<Sidebar.Header>
 		<TeamSwitcher teams={data.teams} />
 	</Sidebar.Header>
@@ -168,5 +164,4 @@
 	<Sidebar.Footer>
 		<NavUser user={data.user} />
 	</Sidebar.Footer>
-	<Sidebar.Rail />
 </Sidebar.Root>

@@ -1,8 +1,4 @@
 <script lang="ts">
-	import * as Avatar from '$lib/components/ui/avatar';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import * as Sidebar from '$lib/components/ui/sidebar';
-	import { useSidebar } from '$lib/components/ui/sidebar';
 	import BadgeCheckIcon from '@lucide/svelte/icons/badge-check';
 	import BellIcon from '@lucide/svelte/icons/bell';
 	import ChevronsUpDownIcon from '@lucide/svelte/icons/chevrons-up-down';
@@ -10,10 +6,21 @@
 	import LogOutIcon from '@lucide/svelte/icons/log-out';
 	import SparklesIcon from '@lucide/svelte/icons/sparkles';
 
+	import * as Avatar from '$lib/components/ui/avatar';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import * as Sidebar from '$lib/components/ui/sidebar';
+	import { IsMobile } from '$lib/hooks/is-mobile.svelte';
 	import { m } from '$lib/paraglide/messages.js';
 
-	let { user }: { user: { name: string; email: string; avatar: string } } = $props();
-	const sidebar = useSidebar();
+	let {
+		user
+	}: {
+		user: {
+			name: string;
+			email: string;
+			avatar: string;
+		};
+	} = $props();
 </script>
 
 <Sidebar.Menu>
@@ -40,7 +47,7 @@
 			</DropdownMenu.Trigger>
 			<DropdownMenu.Content
 				class="w-(--bits-dropdown-menu-anchor-width) min-w-56 rounded-lg"
-				side={sidebar.isMobile ? 'bottom' : 'right'}
+				side={IsMobile ? 'bottom' : 'right'}
 				align="end"
 				sideOffset={4}
 			>

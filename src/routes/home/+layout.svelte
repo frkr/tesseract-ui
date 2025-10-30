@@ -1,16 +1,13 @@
 <script lang="ts">
 	import '$lib/app.css';
 	import favicon from '$lib/assets/favicon.svg';
-
-	import AppSidebar from './app-sidebar.svelte';
-	import MenuBread from './menu-bread.svelte';
-	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
-	import { Separator } from '$lib/components/ui/separator/index.js';
+	import SiteHeader from './site-header.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
+	import AppSidebar from './app-sidebar.svelte';
 
 	let { children } = $props();
 
-	let open = $state(false);
+	let open = $state(true);
 </script>
 
 <svelte:head>
@@ -18,18 +15,14 @@
 	<link rel="manifest" href="/manifest.json" />
 </svelte:head>
 
-<Sidebar.Provider {open}>
-	<AppSidebar onmouseenter={() => (open = true)} onmouseleave={() => (open = false)} />
-	<Sidebar.Inset>
-		<header
-			class="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear"
-		>
-			<div class="flex items-center gap-2 px-4">
-				<MenuBread />
-			</div>
-		</header>
-		<div class="flex flex-1 flex-col gap-4 p-4 pt-0">
-			{@render children?.()}
+<div class="[--header-height:calc(--spacing(14))]">
+	<Sidebar.Provider class="flex flex-col" {open}>
+		<SiteHeader onmouseenter={() => (open = true)} />
+		<div class="flex flex-1">
+			<AppSidebar onmouseenter={() => (open = true)} />
+			<Sidebar.Inset onmouseenter={() => (open = false)}>
+				{@render children?.()}
+			</Sidebar.Inset>
 		</div>
-	</Sidebar.Inset>
-</Sidebar.Provider>
+	</Sidebar.Provider>
+</div>

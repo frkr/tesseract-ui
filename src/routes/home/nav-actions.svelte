@@ -95,10 +95,6 @@
 </script>
 
 <div class="flex items-center gap-2 text-sm">
-	<div class="text-muted-foreground hidden font-medium md:inline-block">Edit Oct 08</div>
-	<Button variant="ghost" size="icon" class="size-7">
-		<StarIcon />
-	</Button>
 	<Popover.Root bind:open>
 		<Popover.Trigger>
 			{#snippet child({ props })}

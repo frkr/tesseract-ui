@@ -1,7 +1,6 @@
 <script lang="ts">
 	import '$lib/app.css';
 	import favicon from '$lib/assets/favicon.svg';
-
 	import data from './data.js';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import AppSidebar from './app-sidebar.svelte';
@@ -9,8 +8,6 @@
 	import SectionCards from './section-cards.svelte';
 	import ChartAreaInteractive from './chart-area-interactive.svelte';
 	import DataTable from './data-table.svelte';
-
-	let open = $state(true);
 </script>
 
 <svelte:head>
@@ -19,11 +16,10 @@
 </svelte:head>
 
 <Sidebar.Provider
-	{open}
 	style="--sidebar-width: calc(var(--spacing) * 72); --header-height: calc(var(--spacing) * 12);"
 >
 	<AppSidebar variant="inset" />
-	<Sidebar.Inset onmouseenter={() => (open = false)} onmouseleave={() => (open = true)}>
+	<Sidebar.Inset>
 		<SiteHeader />
 		<div class="flex flex-1 flex-col">
 			<div class="@container/main flex flex-1 flex-col gap-2">
