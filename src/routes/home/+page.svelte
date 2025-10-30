@@ -1,8 +1,8 @@
 <script lang="ts">
-	import SectionCards from '../dashboard/section-cards.svelte';
-	import ChartAreaInteractive from '../dashboard/chart-area-interactive.svelte';
-	import DataTable from '../dashboard/data-table.svelte';
-	import data from '../dashboard/data';
+	import SectionCards from './section-cards.svelte';
+	import ChartAreaInteractive from './chart-area-interactive.svelte';
+	import DataTable from './data-table.svelte';
+	import data from './data';
 </script>
 
 <div class="flex flex-col gap-2">
