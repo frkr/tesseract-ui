@@ -34,22 +34,25 @@ check_vercel_auth() {
     fi
 }
 
-# Function to pull DEV environment variables from Vercel
-pull_dev() {
-    echo -e "${BLUE}Pulling DEV environment variables from Vercel...${NC}"
+# Function to pull environment variables from Vercel
+pull_env() {
+    local env="$1"
+    local env_display=$(echo "$env" | tr '[:lower:]' '[:upper:]')
+    
+    echo -e "${BLUE}Pulling $env_display environment variables from Vercel...${NC}"
     
     check_vercel_cli
     check_vercel_auth
     
-    # Pull environment variables for development environment
-    echo 'y' | npx vercel env pull "$ENV_FILE" --environment=development
+    # Pull environment variables for specified environment
+    echo 'y' | npx vercel env pull "$ENV_FILE" --environment="$env"
     
     if [ $? -eq 0 ]; then
-        # Remove VERCEL_OIDC_TOKEN from the pulled .env file
+        # Remove VERCEL_OIDC_TOKEN and NODE_ENV from the pulled .env file
         if [ -f "$ENV_FILE" ]; then
-            sed -i.bak '/^VERCEL_OIDC_TOKEN=/d' "$ENV_FILE"
+            sed -i.bak '/^VERCEL_OIDC_TOKEN=/d; /^NODE_ENV=/d' "$ENV_FILE"
             rm -f "$ENV_FILE.bak"
-            echo -e "${YELLOW}Note: VERCEL_OIDC_TOKEN has been filtered out and not included in .env${NC}"
+            echo -e "${YELLOW}Note: VERCEL_OIDC_TOKEN and NODE_ENV have been filtered out and not included in .env${NC}"
         fi
         
         # Clean up literal escape sequences (\n, \r, \t) from environment variable values
@@ -62,7 +65,7 @@ pull_dev() {
             echo -e "${YELLOW}Note: Literal escape sequences (n, r, t) have been cleaned from environment values${NC}"
         fi
         
-        echo -e "${GREEN}✓ Successfully pulled DEV environment variables to .env${NC}"
+        echo -e "${GREEN}✓ Successfully pulled $env_display environment variables to .env${NC}"
         echo -e "${YELLOW}Note: Review the .env file and update .env.example accordingly (with masked values)${NC}"
     else
         echo -e "${RED}✗ Failed to pull environment variables${NC}"
@@ -70,9 +73,12 @@ pull_dev() {
     fi
 }
 
-# Function to push DEV environment variables to Vercel
-push_dev() {
-    echo -e "${BLUE}Pushing DEV environment variables to Vercel...${NC}"
+# Function to push environment variables to Vercel
+push_env() {
+    local env="$1"
+    local env_display=$(echo "$env" | tr '[:lower:]' '[:upper:]')
+    
+    echo -e "${BLUE}Pushing $env_display environment variables to Vercel...${NC}"
     
     check_vercel_cli
     check_vercel_auth
@@ -82,7 +88,7 @@ push_dev() {
         exit 1
     fi
     
-    echo -e "${YELLOW}This will add/update environment variables in Vercel's development environment.${NC}"
+    echo -e "${YELLOW}This will add/update environment variables in Vercel's $env environment.${NC}"
     echo -e "${YELLOW}Reading from: $ENV_FILE${NC}"
     echo ""
     
@@ -98,8 +104,8 @@ push_dev() {
             var_name="${BASH_REMATCH[1]}"
             var_value="${BASH_REMATCH[2]}"
             
-            # Skip VERCEL_OIDC_TOKEN
-            if [[ "$var_name" == "VERCEL_OIDC_TOKEN" ]]; then
+            # Skip VERCEL_OIDC_TOKEN and NODE_ENV
+            if [[ "$var_name" == "VERCEL_OIDC_TOKEN" ]] || [[ "$var_name" == "NODE_ENV" ]]; then
                 echo -e "Skipping: ${YELLOW}$var_name${NC} (ignored)"
                 continue
             fi
@@ -108,13 +114,13 @@ push_dev() {
             var_value=$(echo "$var_value" | sed -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//")
             
             echo -e "Pushing: ${GREEN}$var_name${NC}"
-            echo -e "$var_value" | npx vercel env add "$var_name" development --force
+            echo -e "$var_value" | npx vercel env add "$var_name" "$env" --force
         fi
     done < "$ENV_FILE"
     
     if [ $? -eq 0 ]; then
         echo ""
-        echo -e "${GREEN}✓ Successfully pushed DEV environment variables to Vercel${NC}"
+        echo -e "${GREEN}✓ Successfully pushed $env_display environment variables to Vercel${NC}"
     else
         echo -e "${RED}✗ Failed to push some environment variables${NC}"
         exit 1
@@ -123,15 +129,24 @@ push_dev() {
 
 # Function to display usage
 usage() {
-    echo "Usage: $0 {pull|push}"
+    echo "Usage: $0 {pull|push} [environment]"
     echo ""
     echo "Commands:"
-    echo "  pull    Pull all DEV environment variables from Vercel to .env"
-    echo "  push    Push all DEV environment variables from .env to Vercel"
+    echo "  pull [env]    Pull environment variables from Vercel to .env"
+    echo "                Default: development"
+    echo "                Options: development, preview, production"
+    echo ""
+    echo "  push [env]    Push environment variables from .env to Vercel"
+    echo "                Default: development"
+    echo "                Options: development, preview, production"
     echo ""
     echo "Examples:"
-    echo "  $0 pull"
-    echo "  $0 push"
+    echo "  $0 pull                    # Pull from development (default)"
+    echo "  $0 pull preview            # Pull from preview"
+    echo "  $0 push                    # Push to development (default)"
+    echo "  $0 push production         # Push to production"
+    echo ""
+    echo "Note: VERCEL_OIDC_TOKEN and NODE_ENV are automatically ignored"
     echo ""
     echo "Prerequisites:"
     echo "  - Node.js and npm installed (npx comes with npm)"
@@ -140,12 +155,15 @@ usage() {
 }
 
 # Main script logic
-case "${1:-}" in
+COMMAND="${1:-}"
+ENVIRONMENT="${2:-development}"
+
+case "$COMMAND" in
     pull)
-        pull_dev
+        pull_env "$ENVIRONMENT"
         ;;
     push)
-        push_dev
+        push_env "$ENVIRONMENT"
         ;;
     *)
         usage
