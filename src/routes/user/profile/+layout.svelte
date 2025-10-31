@@ -1,16 +1,13 @@
 <script lang="ts">
 	import '$lib/app.css';
 	import favicon from '$lib/assets/favicon.svg';
-
-	import AppSidebar from '../../home/app-sidebar.svelte';
-	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
-	import { Separator } from '$lib/components/ui/separator/index.js';
+	import SiteHeader from '$lib/components/site-header.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
-	import { m } from '$lib/paraglide/messages.js';
+	import AppSidebar from '$lib/components/app-sidebar.svelte';
 
 	let { children } = $props();
 
-	let open = $state(false);
+	let open = $state(true);
 </script>
 
 <svelte:head>
@@ -18,28 +15,17 @@
 	<link rel="manifest" href="/manifest.json" />
 </svelte:head>
 
-<Sidebar.Provider {open}>
-	<AppSidebar onmouseenter={() => (open = true)} onmouseleave={() => (open = false)} />
-	<Sidebar.Inset>
-		<header
-			class="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear"
-		>
-			<div class="flex items-center gap-2 px-4">
-				<Breadcrumb.Root>
-					<Breadcrumb.List>
-						<Breadcrumb.Item class="hidden md:block">
-							<Breadcrumb.Link href="##">{m.user()}</Breadcrumb.Link>
-						</Breadcrumb.Item>
-						<Breadcrumb.Separator class="hidden md:block" />
-						<Breadcrumb.Item>
-							<Breadcrumb.Page>{m.profile()}</Breadcrumb.Page>
-						</Breadcrumb.Item>
-					</Breadcrumb.List>
-				</Breadcrumb.Root>
-			</div>
-		</header>
-		<div class="flex flex-1 flex-col gap-4 p-4 pt-0">
-			{@render children?.()}
+<div class="[--header-height:calc(--spacing(14))]">
+	<Sidebar.Provider class="flex flex-col" {open}>
+		<SiteHeader onmouseenter={() => (open = true)} />
+		<div class="flex flex-1">
+			<AppSidebar onmouseenter={() => (open = true)} />
+			<Sidebar.Inset
+				onmouseenter={() => (open = false)}
+				class="@container/main  gap-2 px-2 py-4 md:gap-2 md:py-4 lg:px-2"
+			>
+				{@render children?.()}
+			</Sidebar.Inset>
 		</div>
-	</Sidebar.Inset>
-</Sidebar.Provider>
+	</Sidebar.Provider>
+</div>

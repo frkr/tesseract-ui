@@ -9,7 +9,7 @@
 	import * as Avatar from '$lib/components/ui/avatar';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Sidebar from '$lib/components/ui/sidebar';
-	import { IsMobile } from '$lib/hooks/is-mobile.svelte';
+	import { IsMobile } from '$lib/hooks/is-mobile.svelte.js';
 	import { m } from '$lib/paraglide/messages.js';
 
 	let {
