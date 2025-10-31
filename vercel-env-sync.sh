@@ -289,7 +289,7 @@ delete_single_env() {
     echo -e "${BLUE}Fetching environment variables from $env_display...${NC}"
     
     # Get list of environment variables from Vercel
-    env_vars=$(npx vercel env ls "$env" 2>/dev/null | grep -v "^Environment Variables" | grep -v "^─" | grep -v "^name" | awk '{print $1}' | grep -v "^$")
+    env_vars=$(npx vercel env ls "$env" 2>/dev/null | grep -v "^Environment Variables" | grep -v "^─" | awk '{print $1}' | grep -v "^$" | grep -v "^name$")
     
     if [ -z "$env_vars" ]; then
         echo -e "${YELLOW}No environment variables found in $env_display environment.${NC}"
@@ -411,7 +411,7 @@ delete_env() {
     echo -e "${BLUE}Fetching environment variables from $env_display...${NC}"
     
     # Get list of environment variables
-    env_vars=$(npx vercel env ls "$env" 2>/dev/null | grep -v "^Environment Variables" | grep -v "^─" | grep -v "^name" | awk '{print $1}' | grep -v "^$")
+    env_vars=$(npx vercel env ls "$env" 2>/dev/null | grep -v "^Environment Variables" | grep -v "^─" | awk '{print $1}' | grep -v "^$" | grep -v "^name$")
     
     if [ -z "$env_vars" ]; then
         echo -e "${YELLOW}No environment variables found in $env_display environment.${NC}"
