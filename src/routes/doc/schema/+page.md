@@ -1,6 +1,6 @@
 # Database Schema (Mermaid)
 
-This document mirrors; Update this file whenever the TypeScript schema changes!
+> This document mirrors; Update this file whenever the TypeScript schema changes!
 - src/lib/db/schema.ts.
 - src/routes/doc/schema/+page.md
 
