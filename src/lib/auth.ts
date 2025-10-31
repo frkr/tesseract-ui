@@ -5,6 +5,7 @@ import { encodeBase32LowerCase, encodeBase64url, encodeHexLowerCase } from '@osl
 import { db } from '$lib/db';
 import * as table from '$lib/db/schema';
 import { SESSION_EXPIRY_HOURS, SESSION_COOKIE_NAME } from '$env/static/private';
+import { getUserGroupsAndAdmin } from '$lib/common';
 
 const HOUR_IN_MS = 1000 * 60 * 60 * Number(SESSION_EXPIRY_HOURS);
 
@@ -59,7 +60,9 @@ export async function validateSessionToken(token: string) {
 			.where(eq(table.session.id, session.id));
 	}
 
-	return { session, user };
+	const groups = await getUserGroupsAndAdmin(db, user.id);
+
+	return { session, user, groups };
 }
 
 export type SessionValidationResult = Awaited<ReturnType<typeof validateSessionToken>>;

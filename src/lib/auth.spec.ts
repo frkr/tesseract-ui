@@ -93,8 +93,8 @@ describe('createSession', () => {
 		const session = await createSession(token, userId);
 
 		const afterTime = Date.now();
-		const expectedMinExpiration = beforeTime + (1000 * 60 * 60 * 6); // 6 hours
-		const expectedMaxExpiration = afterTime + (1000 * 60 * 60 * 6); // 6 hours
+		const expectedMinExpiration = beforeTime + 1000 * 60 * 60 * 6; // 6 hours
+		const expectedMaxExpiration = afterTime + 1000 * 60 * 60 * 6; // 6 hours
 
 		expect(session.expiresAt.getTime()).toBeGreaterThanOrEqual(expectedMinExpiration);
 		expect(session.expiresAt.getTime()).toBeLessThanOrEqual(expectedMaxExpiration);
@@ -190,7 +190,7 @@ describe('validateSessionToken', () => {
 
 	it('should return valid session without renewal when not close to expiration', async () => {
 		const token = 'valid-token';
-		const futureDate = new Date(Date.now() + (1000 * 60 * 60 * 5)); // 5 hours from now
+		const futureDate = new Date(Date.now() + 1000 * 60 * 60 * 5); // 5 hours from now
 
 		const mockResult = {
 			session: {
@@ -220,7 +220,7 @@ describe('validateSessionToken', () => {
 	it('should renew session when close to expiration', async () => {
 		const token = 'renew-token';
 		// Set expiration to 2 hours from now (within renewal window of 3 hours)
-		const expiringDate = new Date(Date.now() + (1000 * 60 * 60 * 2));
+		const expiringDate = new Date(Date.now() + 1000 * 60 * 60 * 2);
 
 		const mockResult = {
 			session: {
@@ -253,7 +253,7 @@ describe('validateSessionToken', () => {
 
 	it('should return correct user data structure', async () => {
 		const token = 'data-token';
-		const futureDate = new Date(Date.now() + (1000 * 60 * 60 * 5));
+		const futureDate = new Date(Date.now() + 1000 * 60 * 60 * 5);
 
 		const mockResult = {
 			session: {
@@ -336,14 +336,10 @@ describe('setSessionTokenCookie', () => {
 
 		setSessionTokenCookie(mockEvent, token, expiresAt);
 
-		expect(mockCookiesSet).toHaveBeenCalledWith(
-			sessionCookieName,
-			token,
-			{
-				expires: expiresAt,
-				path: '/'
-			}
-		);
+		expect(mockCookiesSet).toHaveBeenCalledWith(sessionCookieName, token, {
+			expires: expiresAt,
+			path: '/'
+		});
 
 		expect.assertions(1);
 	});
@@ -399,12 +395,9 @@ describe('deleteSessionTokenCookie', () => {
 	it('should call cookies.delete with correct parameters', () => {
 		deleteSessionTokenCookie(mockEvent);
 
-		expect(mockCookiesDelete).toHaveBeenCalledWith(
-			sessionCookieName,
-			{
-				path: '/'
-			}
-		);
+		expect(mockCookiesDelete).toHaveBeenCalledWith(sessionCookieName, {
+			path: '/'
+		});
 
 		expect.assertions(1);
 	});

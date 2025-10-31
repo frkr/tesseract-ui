@@ -24,16 +24,18 @@
 				{#if data.groups && data.groups.length > 0}
 					<div class="flex flex-wrap gap-2">
 						{#each data.groups as group}
-							<span class="inline-flex items-center gap-1 rounded-md border px-2.5 py-0.5 text-xs font-semibold">
+							<span
+								class="inline-flex items-center gap-1 rounded-md border px-2.5 py-0.5 text-xs font-semibold"
+							>
 								{group.groupName || m.unknown()}
 								{#if group.isAdmin}
-									<span class="text-xs text-muted-foreground">{m.admin()}</span>
+									<span class="text-muted-foreground text-xs">{m.admin()}</span>
 								{/if}
 							</span>
 						{/each}
 					</div>
 				{:else}
-					<p class="text-sm text-muted-foreground">{m.noGroupsAssigned()}</p>
+					<p class="text-muted-foreground text-sm">{m.noGroupsAssigned()}</p>
 				{/if}
 			</div>
 			<div class="mb-4 flex gap-2">

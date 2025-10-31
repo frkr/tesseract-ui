@@ -11,6 +11,7 @@ declare global {
 		interface Locals {
 			user: import('$lib/auth').SessionValidationResult['user'];
 			session: import('$lib/auth').SessionValidationResult['session'];
+			groups: import('$lib/auth').SessionValidationResult['groups'];
 		}
 	} // interface Error {}
 	// interface Locals {}

@@ -99,9 +99,7 @@ describe('ensureDefaultAdminGroupAndRelation', () => {
 		mockWhere.mockResolvedValueOnce([{ id: '1', name: 'admin' }]);
 
 		// Mock: user-group relation exists (non-empty array)
-		mockWhere.mockResolvedValueOnce([
-			{ groupId: '1', userId: userId, adm: true }
-		]);
+		mockWhere.mockResolvedValueOnce([{ groupId: '1', userId: userId, adm: true }]);
 
 		await ensureDefaultAdminGroupAndRelation(mockDb, userId);
 
@@ -196,17 +194,13 @@ describe('getUserGroupsAndAdmin', () => {
 
 	it('should default isAdmin to false when null', async () => {
 		const userId = 'test-user-4';
-		const mockResults = [
-			{ groupName: 'test-group', isAdmin: null }
-		];
+		const mockResults = [{ groupName: 'test-group', isAdmin: null }];
 
 		mockWhere.mockResolvedValueOnce(mockResults);
 
 		const result = await getUserGroupsAndAdmin(mockDb, userId);
 
-		expect(result).toEqual([
-			{ groupName: 'test-group', isAdmin: false }
-		]);
+		expect(result).toEqual([{ groupName: 'test-group', isAdmin: false }]);
 		expect(result[0].isAdmin).toBe(false);
 
 		expect.assertions(2);

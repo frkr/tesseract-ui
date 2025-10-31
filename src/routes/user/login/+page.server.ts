@@ -69,21 +69,21 @@ export const actions: Actions = {
 		const userId = generateUniqueId();
 		const passwordHash = await hashPassword(password, username);
 
- 	try {
- 		await db.insert(table.user).values({ id: userId, username, passwordHash });
+		try {
+			await db.insert(table.user).values({ id: userId, username, passwordHash });
 
- 		// Check if this is the first user and relate to admin group
- 		const userCount = await db.select().from(table.user);
- 		if (userCount.length === 1) {
- 			await ensureDefaultAdminGroupAndRelation(db, userId);
- 		}
+			// Check if this is the first user and relate to admin group
+			const userCount = await db.select().from(table.user);
+			if (userCount.length === 1) {
+				await ensureDefaultAdminGroupAndRelation(db, userId);
+			}
 
- 		const sessionToken = auth.generateSessionToken();
- 		const session = await auth.createSession(sessionToken, userId);
- 		auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
- 	} catch {
- 		return fail(500, { message: m.errorOccurred() });
- 	}
+			const sessionToken = auth.generateSessionToken();
+			const session = await auth.createSession(sessionToken, userId);
+			auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
+		} catch {
+			return fail(500, { message: m.errorOccurred() });
+		}
 		return redirect(302, '/user/login');
 	}
 };

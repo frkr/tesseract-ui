@@ -1,4 +1,12 @@
-import { pgTable, serial, integer, text, timestamp, boolean, primaryKey } from 'drizzle-orm/pg-core';
+import {
+	pgTable,
+	serial,
+	integer,
+	text,
+	timestamp,
+	boolean,
+	primaryKey
+} from 'drizzle-orm/pg-core';
 
 export const user = pgTable('user', {
 	id: text('id').primaryKey(),
@@ -21,17 +29,21 @@ export const group = pgTable('group', {
 	name: text('name')
 });
 
-export const relGroup = pgTable('rel_group', {
-	groupId: text('group_id')
-		.notNull()
-		.references(() => group.id),
-	userId: text('user_id')
-		.notNull()
-		.references(() => user.id),
-	adm: boolean('adm').default(false)
-}, (table) => ({
-	pk: primaryKey({ columns: [table.groupId, table.userId] })
-}));
+export const relGroup = pgTable(
+	'rel_group',
+	{
+		groupId: text('group_id')
+			.notNull()
+			.references(() => group.id),
+		userId: text('user_id')
+			.notNull()
+			.references(() => user.id),
+		adm: boolean('adm').default(false)
+	},
+	(table) => ({
+		pk: primaryKey({ columns: [table.groupId, table.userId] })
+	})
+);
 
 export type Session = typeof session.$inferSelect;
 
