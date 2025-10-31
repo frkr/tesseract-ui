@@ -8,7 +8,7 @@ const mdsvexConfig = {
 		highlighter: async (code: never, lang: string = '') => {
 			// Skip Mermaid blocks - don't highlight them
 			if (lang === 'mermaid') {
-				return escapeSvelte(`<pre class="mermaid">${code}</pre>`);
+				return `<pre class="mermaid">${escapeSvelte(code)}</pre>`;
 			}
 
 			const html = escapeSvelte(await codeToHtml(code, { lang, theme: 'github-dark-default' }));
