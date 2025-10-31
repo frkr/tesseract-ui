@@ -4,14 +4,15 @@
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import type { HTMLFormAttributes } from 'svelte/elements';
 	import type { WithElementRef } from '$lib/utils.js';
+	import { m } from '$lib/paraglide/messages.js';
 
 	let { ref = $bindable(null), ...restProps }: WithElementRef<HTMLFormAttributes> = $props();
 </script>
 
 <form {...restProps} bind:this={ref}>
 	<div class="relative">
-		<Label for="search" class="sr-only">Search</Label>
-		<Sidebar.Input id="search" placeholder="Type to search..." class="h-8 pl-7" />
+		<Label for="search" class="sr-only">{m.search()}</Label>
+		<Sidebar.Input id="search" placeholder={m.searchPlaceholder()} class="h-8 pl-7" />
 		<SearchIcon
 			class="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 select-none opacity-50"
 		/>

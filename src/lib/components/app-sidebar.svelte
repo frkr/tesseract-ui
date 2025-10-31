@@ -140,7 +140,7 @@
 		<TeamSwitcher />
 	</Sidebar.Header>
 	<Sidebar.Content>
-		<NavMain items={data.navMain} />
+		<NavMain />
 	</Sidebar.Content>
 	<Sidebar.Footer>
 		<NavUser

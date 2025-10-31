@@ -12,69 +12,6 @@
 	import Settings2Icon from '@lucide/svelte/icons/settings-2';
 	import TrashIcon from '@lucide/svelte/icons/trash';
 	import Trash2Icon from '@lucide/svelte/icons/trash-2';
-
-	const data = [
-		[
-			{
-				label: 'Customize Page',
-				icon: Settings2Icon
-			},
-			{
-				label: 'Turn into wiki',
-				icon: FileTextIcon
-			}
-		],
-		[
-			{
-				label: 'Copy Link',
-				icon: LinkIcon
-			},
-			{
-				label: 'Duplicate',
-				icon: CopyIcon
-			},
-			{
-				label: 'Move to',
-				icon: CornerUpRightIcon
-			},
-			{
-				label: 'Move to Trash',
-				icon: Trash2Icon
-			}
-		],
-		[
-			{
-				label: 'Undo',
-				icon: CornerUpLeftIcon
-			},
-			{
-				label: 'View analytics',
-				icon: ChartLineIcon
-			},
-			{
-				label: 'Version History',
-				icon: GalleryVerticalEndIcon
-			},
-			{
-				label: 'Show delete pages',
-				icon: TrashIcon
-			},
-			{
-				label: 'Notifications',
-				icon: BellIcon
-			}
-		],
-		[
-			{
-				label: 'Import',
-				icon: ArrowUpIcon
-			},
-			{
-				label: 'Export',
-				icon: ArrowDownIcon
-			}
-		]
-	];
 </script>
 
 <script lang="ts">
@@ -84,6 +21,70 @@
 	import EllipsisIcon from '@lucide/svelte/icons/ellipsis';
 	import StarIcon from '@lucide/svelte/icons/star';
 	import { untrack } from 'svelte';
+	import { m } from '$lib/paraglide/messages.js';
+
+	const data = $derived([
+		[
+			{
+				label: m.customizePage(),
+				icon: Settings2Icon
+			},
+			{
+				label: m.turnIntoWiki(),
+				icon: FileTextIcon
+			}
+		],
+		[
+			{
+				label: m.copyLink(),
+				icon: LinkIcon
+			},
+			{
+				label: m.duplicate(),
+				icon: CopyIcon
+			},
+			{
+				label: m.moveTo(),
+				icon: CornerUpRightIcon
+			},
+			{
+				label: m.moveToTrash(),
+				icon: Trash2Icon
+			}
+		],
+		[
+			{
+				label: m.undo(),
+				icon: CornerUpLeftIcon
+			},
+			{
+				label: m.viewAnalytics(),
+				icon: ChartLineIcon
+			},
+			{
+				label: m.versionHistory(),
+				icon: GalleryVerticalEndIcon
+			},
+			{
+				label: m.showDeletePages(),
+				icon: TrashIcon
+			},
+			{
+				label: m.notifications(),
+				icon: BellIcon
+			}
+		],
+		[
+			{
+				label: m.importItem(),
+				icon: ArrowUpIcon
+			},
+			{
+				label: m.exportItem(),
+				icon: ArrowDownIcon
+			}
+		]
+	]);
 
 	let open = $state(false);
 

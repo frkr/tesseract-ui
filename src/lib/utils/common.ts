@@ -34,7 +34,7 @@ export async function ensureDefaultAdminGroupAndRelation(
 	userId: string
 ): Promise<void> {
 	const adminGroupId = '1';
-	const adminGroupName = 'admin';
+	const adminGroupName = 'Admin';
 
 	// Check if the admin group exists
 	const existingGroup = await db
