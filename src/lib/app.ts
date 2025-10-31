@@ -12,18 +12,27 @@ export interface SoftwareItem {
 	icon?: Icon;
 }
 
-export function getSoftwareList(): SoftwareItem[] {
-	return [
+type GroupData = { groupId: string; groupName: string | null; isAdmin: boolean }[];
+
+export function getSoftwareList(groups?: GroupData): SoftwareItem[] {
+	const items: SoftwareItem[] = [
 		{
 			title: m.home(),
 			url: '/home',
 			icon: CodeIcon
-		},
-		{
+		}
+	];
+
+	// Only show database manager if user is in group ID 1
+	if (groups && groups.some((g) => g.groupId === '1')) {
+		items.push({
 			title: m.softwareDataManager(),
-			url: '/software/data-manager',
+			url: '/doc/schema',
 			icon: DatabaseIcon
-		},
+		});
+	}
+
+	items.push(
 		{
 			title: m.softwareCloudService(),
 			url: '/software/cloud-service',
@@ -39,5 +48,7 @@ export function getSoftwareList(): SoftwareItem[] {
 			url: '/software/package-manager',
 			icon: BoxIcon
 		}
-	];
+	);
+
+	return items;
 }

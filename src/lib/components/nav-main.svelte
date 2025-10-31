@@ -2,8 +2,10 @@
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import { getSoftwareList } from '$lib/app.ts';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
-	const softwareList = getSoftwareList();
+	const groups = $derived($page.data.groups || []);
+	const softwareList = $derived(getSoftwareList(groups));
 </script>
 
 <Sidebar.Group>

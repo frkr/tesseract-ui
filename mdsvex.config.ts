@@ -4,7 +4,7 @@ import { escapeSvelte } from 'mdsvex';
 const mdsvexConfig = {
 	extensions: ['.md'],
 	// DOES NOT WORK layout: {_:'./src/lib/components/Mermaid.svelte'},
-	highlight: {
+	highlight:  {
 		highlighter: async (code: never, lang: string = '') => {
 			// Skip Mermaid blocks - don't highlight them
 			if (lang === 'mermaid') {

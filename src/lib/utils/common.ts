@@ -13,9 +13,10 @@ export function generateUniqueId() {
 export async function getUserGroupsAndAdmin(
 	db: PostgresJsDatabase<typeof schema>,
 	userId: string
-): Promise<{ groupName: string | null; isAdmin: boolean }[]> {
+): Promise<{ groupId: string; groupName: string | null; isAdmin: boolean }[]> {
 	const results = await db
 		.select({
+			groupId: schema.group.id,
 			groupName: schema.group.name,
 			isAdmin: schema.relGroup.adm
 		})
@@ -24,6 +25,7 @@ export async function getUserGroupsAndAdmin(
 		.where(eq(schema.relGroup.userId, userId));
 
 	return results.map((result) => ({
+		groupId: result.groupId,
 		groupName: result.groupName,
 		isAdmin: result.isAdmin ?? false
 	}));
