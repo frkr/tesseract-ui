@@ -6,16 +6,76 @@
 	import type { PageServerData } from './$types';
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
+	import * as Select from '$lib/components/ui/select';
+	import { Label } from '$lib/components/ui/label';
+	import { selectedGroup } from '$lib/stores/selectedGroup';
 
-	let { data }: { data: PageServerData } = $props();
+	let { data, form }: { data: PageServerData; form?: any } = $props();
+
+	let selectedUserId: string | undefined = $state();
+	
+	let selectedUserDisplay = $derived(
+		data.allUsers?.find(u => u.id === selectedUserId)
+	);
+	
+	// Get users in the selected group
+	let usersInSelectedGroup = $derived(
+		$selectedGroup && $selectedGroup.groupId && data.groupMemberships
+			? data.groupMemberships[$selectedGroup.groupId] || []
+			: []
+	);
+
+	// Filter out users that are already in the selected group
+	let availableUsers = $derived.by(() => {
+		if (!data.allUsers || !$selectedGroup?.groupId) {
+			return data.allUsers || [];
+		}
+		
+		const groupUserIds = new Set(
+			usersInSelectedGroup.map(u => u.id)
+		);
+		
+		return data.allUsers.filter(user => !groupUserIds.has(user.id));
+	});
+	
+
+	function getErrorMessage(message: string | undefined): string | undefined {
+		if (!message) return undefined;
+		switch (message) {
+			case 'USER_ADDED_SUCCESSFULLY':
+				return m.userAddedSuccessfully();
+			case 'USER_ALREADY_IN_GROUP':
+				return m.userAlreadyInGroup();
+			case 'GROUP_NOT_SELECTED':
+				return m.groupNotSelected();
+			case 'NO_ADMIN_RIGHTS_ON_GROUP':
+				return m.noAdminRightsOnGroup();
+			case 'USER_NOT_FOUND':
+				return m.userNotFound();
+			case 'GROUP_NOT_FOUND':
+				return m.groupNotFound();
+			default:
+				return message;
+		}
+	}
 </script>
 
-<div class="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min">
+<div
+	class="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card *:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-3 grid grid-cols-1 gap-2 *:data-[slot=card]:bg-gradient-to-t"
+>
 	<Card.Root>
 		<Card.Header>
-			<Card.Title>{m.hello({ name: data.user.name || data.user.username })}</Card.Title>
+			<Card.Title>
+				{#if data.user}
+					{m.hello({ name: data.user.name || data.user.username })}
+				{:else}
+					{m.hello({ name: 'Unknown' })}
+				{/if}
+			</Card.Title>
 			<Card.Description>
-				ID: {data.user.id}
+				{#if data.user}
+					ID: {data.user.id}
+				{/if}
 			</Card.Description>
 		</Card.Header>
 		<Card.Content>
@@ -50,4 +110,94 @@
 			</form>
 		</Card.Content>
 	</Card.Root>
+
+	{#if data.isAdministrator}
+		<Card.Root >
+			<Card.Header>
+				<Card.Title class="text-lg">{m.addUserToGroup()}</Card.Title>
+			</Card.Header>
+			<Card.Content>
+				{#if $selectedGroup && $selectedGroup.groupId}
+					<div class="mb-6">
+						<div class="mb-3 flex items-center justify-between">
+							<h4 class="text-sm font-semibold">{m.usersInGroup()}</h4>
+							<span class="text-xs text-muted-foreground">
+								{m.selectedGroup()}: {$selectedGroup.groupName || $selectedGroup.groupId}
+							</span>
+						</div>
+						{#if usersInSelectedGroup.length > 0}
+							<div class="space-y-2 max-h-60 overflow-y-auto">
+								{#each usersInSelectedGroup as groupUser}
+									<div class="flex items-center justify-between rounded-md border px-3 py-2 text-sm bg-muted/30">
+										<div class="flex items-center gap-2">
+											<span class="font-medium">{groupUser.name || groupUser.username}</span>
+											<span class="text-muted-foreground">({groupUser.username})</span>
+											{#if groupUser.isAdmin}
+												<span class="text-xs text-muted-foreground bg-primary/10 px-1.5 py-0.5 rounded">{m.admin()}</span>
+											{/if}
+										</div>
+									</div>
+								{/each}
+							</div>
+						{:else}
+							<p class="text-sm text-muted-foreground py-4 text-center border rounded-md">{m.noUsersInGroup()}</p>
+						{/if}
+					</div>
+					<div class="border-t pt-4">
+						<form method="post" action="?/addUserToGroup" use:enhance={() => {
+							return async ({ update, result }) => {
+								// Always update to refresh the page data and show the new user in the list
+								await update();
+								// Reset the form after successful submission
+								if (result.type === 'success' && result.data?.message === 'USER_ADDED_SUCCESSFULLY') {
+									selectedUserId = undefined;
+								}
+							};
+						}}>
+							<input type="hidden" name="groupId" value={$selectedGroup.groupId} />
+							<div class="mb-4">
+								<Label for="userId" class="text-sm font-medium">{m.selectUser()}</Label>
+								<Select.Root type="single" bind:value={selectedUserId}>
+									<Select.Trigger id="userId" class="w-full mt-2">
+										{selectedUserDisplay ? `${selectedUserDisplay.name || selectedUserDisplay.username} (${selectedUserDisplay.username})` : m.selectUser()}
+									</Select.Trigger>
+									<Select.Content>
+										{#if availableUsers.length > 0}
+											{#each availableUsers as user}
+												<Select.Item value={user.id}>
+													{user.name || user.username} ({user.username})
+												</Select.Item>
+											{/each}
+										{:else}
+											<div class="px-2 py-1.5 text-sm text-muted-foreground">
+												{m.allUsersAlreadyInGroup()}
+											</div>
+										{/if}
+									</Select.Content>
+								</Select.Root>
+								<input type="hidden" name="userId" value={selectedUserId || ''} />
+							</div>
+							{#if form && form.message}
+								<p
+									class="mb-3 text-sm {form.message === 'USER_ADDED_SUCCESSFULLY'
+										? 'text-green-600'
+										: 'text-red-600'}"
+								>
+									{getErrorMessage(form.message)}
+								</p>
+							{/if}
+							<Button type="submit" disabled={!selectedUserId || availableUsers.length === 0} class="w-full">
+								{m.addUserToGroup()}
+							</Button>
+						</form>
+					</div>
+				{:else}
+					<div class="py-6 text-center">
+						<p class="text-sm text-muted-foreground mb-2">{m.selectGroupFirst()}</p>
+						<p class="text-xs text-muted-foreground">{m.selectGroupDescription()}</p>
+					</div>
+				{/if}
+			</Card.Content>
+		</Card.Root>
+	{/if}
 </div>

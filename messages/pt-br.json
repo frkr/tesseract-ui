@@ -82,5 +82,19 @@
 	"versionHistory": "Histórico de Versões",
 	"showDeletePages": "Mostrar páginas excluídas",
 	"importItem": "Importar",
-	"exportItem": "Exportar"
+	"exportItem": "Exportar",
+	"addUserToGroup": "Adicionar Usuario ao Grupo",
+	"selectUser": "Selecionar Usuario",
+	"userAddedSuccessfully": "Usuario adicionado com sucesso",
+	"userAlreadyInGroup": "Usuario ja esta neste grupo",
+	"groupNotSelected": "Por favor, selecione um grupo primeiro",
+	"noAdminRightsOnGroup": "Voce nao tem direitos de administrador no grupo selecionado",
+	"userNotFound": "Usuario nao encontrado",
+	"groupNotFound": "Grupo nao encontrado",
+	"selectGroupFirst": "Selecione um grupo do localStorage primeiro",
+	"usersInGroup": "Usuarios no Grupo",
+	"noUsersInGroup": "Nenhum usuario neste grupo",
+	"selectedGroup": "Grupo Selecionado",
+	"selectGroupDescription": "Navegue para uma pagina onde voce pode selecionar um grupo, depois retorne aqui para gerencia-lo.",
+	"allUsersAlreadyInGroup": "Todos os usuarios ja estao neste grupo"
 }

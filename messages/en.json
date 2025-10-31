@@ -82,5 +82,19 @@
 	"versionHistory": "Version History",
 	"showDeletePages": "Show delete pages",
 	"importItem": "Import",
-	"exportItem": "Export"
+	"exportItem": "Export",
+	"addUserToGroup": "Add User to Group",
+	"selectUser": "Select User",
+	"userAddedSuccessfully": "User added successfully",
+	"userAlreadyInGroup": "User is already in this group",
+	"groupNotSelected": "Please select a group first",
+	"noAdminRightsOnGroup": "You don't have administrator rights on the selected group",
+	"userNotFound": "User not found",
+	"groupNotFound": "Group not found",
+	"selectGroupFirst": "Select a group from localStorage first",
+	"usersInGroup": "Users in Group",
+	"noUsersInGroup": "No users in this group",
+	"selectedGroup": "Selected Group",
+	"selectGroupDescription": "Navigate to a page where you can select a group, then return here to manage its members.",
+	"allUsersAlreadyInGroup": "All users are already in this group"
 }

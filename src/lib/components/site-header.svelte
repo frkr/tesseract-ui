@@ -13,8 +13,8 @@
 	let { ref = $bindable(null), ...restProps }: ComponentProps<typeof Sidebar.Root> = $props();
 
 	const groups = $derived($page.data.groups || []);
-	const isAdministrator = $derived(
-		groups.some((group: { groupName: string | null; isAdmin: boolean }) => group.isAdmin === true)
+	const isMemberOfGroup1 = $derived(
+		groups.some((group: { groupId: string; groupName: string | null; isAdmin: boolean }) => group.groupId === '1')
 	);
 </script>
 
@@ -27,7 +27,7 @@
 		<MenuBread />
 	</div>
 	<SearchForm class="w-full sm:ml-auto sm:w-auto" />
-	{#if isAdministrator}
+	{#if isMemberOfGroup1}
 		<NavActions />
 	{/if}
 </header>
