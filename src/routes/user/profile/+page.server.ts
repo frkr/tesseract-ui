@@ -16,6 +16,7 @@ function requireLogin() {
 
 	return locals;
 }
+
 export const actions: Actions = {
 	logout: async (event) => {
 		if (!event.locals.session) {
