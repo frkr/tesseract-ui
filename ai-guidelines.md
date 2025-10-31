@@ -2,6 +2,7 @@
 
 ## Project Structure
 
+- try using "nvm use", to set the correct node version. Before running any "node" app.
 - [routes](src/routes) - In that directory must reside all modules, crud, backend and frontend.
 - Each module must be in a group. Look that module as an example "src/routes/user". Everything about the User module must be in that directory, including unit tests and SSR (server side rendering) and backend functions. Everything! In the same directory. The only exception is End-to-End tests, which must be in "/e2e/".
 - Should ignore this directory: "/stash"

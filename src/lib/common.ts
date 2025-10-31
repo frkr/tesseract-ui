@@ -1,5 +1,5 @@
 import { encodeBase32LowerCase, encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '$lib/db/schema';
 
@@ -54,8 +54,7 @@ export async function ensureDefaultAdminGroupAndRelation(
 	const existingRelation = await db
 		.select()
 		.from(schema.relGroup)
-		.where(eq(schema.relGroup.userId, userId))
-		.where(eq(schema.relGroup.groupId, adminGroupId));
+		.where(and(eq(schema.relGroup.userId, userId), eq(schema.relGroup.groupId, adminGroupId)));
 
 	// Insert the relation if it doesn't exist
 	if (existingRelation.length === 0) {
