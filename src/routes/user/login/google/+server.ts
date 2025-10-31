@@ -1,6 +1,6 @@
 import { generateState, generateCodeVerifier } from 'arctic';
 import type { RequestEvent } from '@sveltejs/kit';
-import googleClient from '$lib/googleClient.server';
+import googleClient from '$lib/utils/googleClient.server';
 
 export async function GET(event: RequestEvent): Promise<Response> {
 	const state = generateState();

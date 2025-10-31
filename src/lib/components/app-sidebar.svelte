@@ -8,9 +8,6 @@
 	import FrameIcon from '@lucide/svelte/icons/frame';
 	import PieChartIcon from '@lucide/svelte/icons/pie-chart';
 	import MapIcon from '@lucide/svelte/icons/map';
-	import CommandIcon from '@lucide/svelte/icons/command';
-	import GalleryVerticalEndIcon from '@lucide/svelte/icons/gallery-vertical-end';
-	import AudioWaveformIcon from '@lucide/svelte/icons/audio-waveform';
 	import { m } from '$lib/paraglide/messages.js';
 	import TeamSwitcher from './team-switcher.svelte';
 	import { ChartPieIcon } from '@lucide/svelte';
@@ -21,23 +18,6 @@
 			email: 'm@example.com',
 			avatar: '/avatars/shadcn.jpg'
 		},
-		teams: [
-			{
-				name: 'Acme Inc',
-				logo: GalleryVerticalEndIcon,
-				plan: m.enterprise()
-			},
-			{
-				name: 'Acme Corp.',
-				logo: AudioWaveformIcon,
-				plan: m.startup()
-			},
-			{
-				name: 'Evil Corp.',
-				logo: CommandIcon,
-				plan: m.free()
-			}
-		],
 		navMain: [
 			{
 				title: m.playground(),
@@ -156,7 +136,7 @@
 
 <Sidebar.Root class="top-(--header-height) h-[calc(100svh-var(--header-height))]!" {...restProps}>
 	<Sidebar.Header>
-		<TeamSwitcher teams={data.teams} />
+		<TeamSwitcher />
 	</Sidebar.Header>
 	<Sidebar.Content>
 		<NavMain items={data.navMain} />

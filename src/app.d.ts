@@ -9,9 +9,9 @@ declare global {
 		}
 
 		interface Locals {
-			user: import('$lib/auth').SessionValidationResult['user'];
-			session: import('$lib/auth').SessionValidationResult['session'];
-			groups: import('$lib/auth').SessionValidationResult['groups'];
+			user: import('$lib/utils/auth').SessionValidationResult['user'];
+			session: import('$lib/utils/auth').SessionValidationResult['session'];
+			groups: import('$lib/utils/auth').SessionValidationResult['groups'];
 		}
 	} // interface Error {}
 	// interface Locals {}

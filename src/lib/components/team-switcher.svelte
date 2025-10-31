@@ -3,16 +3,40 @@
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import { useSidebar } from '$lib/components/ui/sidebar';
 	import ChevronsUpDownIcon from '@lucide/svelte/icons/chevrons-up-down';
-	import PlusIcon from '@lucide/svelte/icons/plus';
 
 	import { m } from '$lib/paraglide/messages.js';
+	import { page } from '$app/stores';
+	import { selectedGroup } from '$lib/stores/selectedGroup';
+	import { getGroupIcon } from '$lib/utils/groupIcon';
+	import { browser } from '$app/environment';
 
-	// This should be `Component` after @lucide/svelte updates types
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	let { teams }: { teams: { name: string; logo: any; plan: string }[] } = $props();
 	const sidebar = useSidebar();
 
-	let activeTeam = $state(teams[0]);
+	// Get groups from page data
+	const groups = $derived($page.data.groups || []);
+
+	// Initialize selected group from store or default to first group
+	$effect(() => {
+		if (!browser || groups.length === 0) return;
+
+		const currentSelected = $selectedGroup;
+		if (currentSelected === null) {
+			// No selection, default to first group
+			selectedGroup.set(groups[0]);
+		} else {
+			// Validate that the selected group still exists in user's groups
+			const groupExists = groups.some(
+				(g) => g.groupName === currentSelected.groupName
+			);
+			if (!groupExists) {
+				// Selected group no longer exists, default to first
+				selectedGroup.set(groups[0]);
+			}
+		}
+	});
+
+	const activeGroup = $derived($selectedGroup || (groups.length > 0 ? groups[0] : null));
+	const activeIcon = $derived(activeGroup ? getGroupIcon(activeGroup.groupName) : null);
 </script>
 
 <Sidebar.Menu>
@@ -25,16 +49,22 @@
 						size="lg"
 						class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
 					>
-						<div
-							class="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg"
-						>
-							<activeTeam.logo class="size-4" />
-						</div>
+						{#if activeIcon}
+							<div
+								class="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg"
+							>
+								<svelte:component this={activeIcon} class="size-4" />
+							</div>
+						{/if}
 						<div class="grid flex-1 text-left text-sm leading-tight">
 							<span class="truncate font-medium">
-								{activeTeam.name}
+								{activeGroup?.groupName || m.noGroupsAssigned()}
 							</span>
-							<span class="truncate text-xs">{activeTeam.plan}</span>
+							{#if activeGroup?.isAdmin}
+								<span class="truncate text-xs">{m.admin()}</span>
+							{:else}
+								<span class="truncate text-xs"></span>
+							{/if}
 						</div>
 						<ChevronsUpDownIcon class="ml-auto" />
 					</Sidebar.MenuButton>
@@ -46,23 +76,28 @@
 				side={sidebar.isMobile ? 'bottom' : 'right'}
 				sideOffset={4}
 			>
-				<DropdownMenu.Label class="text-muted-foreground text-xs">{m.teams()}</DropdownMenu.Label>
-				{#each teams as team, index (team.name)}
-					<DropdownMenu.Item onSelect={() => (activeTeam = team)} class="gap-2 p-2">
-						<div class="flex size-6 items-center justify-center rounded-md border">
-							<team.logo class="size-3.5 shrink-0" />
-						</div>
-						{team.name}
-						<DropdownMenu.Shortcut>⌘{index + 1}</DropdownMenu.Shortcut>
+				<DropdownMenu.Label class="text-muted-foreground text-xs">{m.groups()}</DropdownMenu.Label>
+				{#if groups.length > 0}
+					{#each groups as group, index (group.groupName || `group-${index}`)}
+						{@const groupIcon = getGroupIcon(group.groupName)}
+						<DropdownMenu.Item onSelect={() => selectedGroup.set(group)} class="gap-2 p-2">
+							<div class="flex size-6 items-center justify-center rounded-md border">
+								<svelte:component this={groupIcon} class="size-3.5 shrink-0" />
+							</div>
+							<div class="flex flex-1 items-center justify-between">
+								<span>{group.groupName || m.unknown()}</span>
+								{#if group.isAdmin}
+									<span class="text-muted-foreground ml-2 text-xs">{m.admin()}</span>
+								{/if}
+							</div>
+							<DropdownMenu.Shortcut>⌘{index + 1}</DropdownMenu.Shortcut>
+						</DropdownMenu.Item>
+					{/each}
+				{:else}
+					<DropdownMenu.Item class="gap-2 p-2" disabled>
+						<div class="text-muted-foreground text-sm">{m.noGroupsAssigned()}</div>
 					</DropdownMenu.Item>
-				{/each}
-				<DropdownMenu.Separator />
-				<DropdownMenu.Item class="gap-2 p-2">
-					<div class="flex size-6 items-center justify-center rounded-md border bg-transparent">
-						<PlusIcon class="size-4" />
-					</div>
-					<div class="text-muted-foreground font-medium">{m.addTeam()}</div>
-				</DropdownMenu.Item>
+				{/if}
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>
 	</Sidebar.MenuItem>

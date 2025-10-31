@@ -1,12 +1,12 @@
-import googleClient from '$lib/googleClient.server';
+import googleClient from '$lib/utils/googleClient.server';
 import { decodeIdToken } from 'arctic';
 import { type RequestEvent } from '@sveltejs/kit';
 import type { OAuth2Tokens } from 'arctic';
 import { db } from '$lib/db';
 import * as table from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
-import * as auth from '$lib/auth';
-import { generateUniqueId, ensureDefaultAdminGroupAndRelation } from '$lib/common';
+import * as auth from '$lib/utils/auth';
+import { generateUniqueId, ensureDefaultAdminGroupAndRelation } from '$lib/utils/common';
 
 export async function GET(event: RequestEvent): Promise<Response> {
 	const code = event.url.searchParams.get('code');

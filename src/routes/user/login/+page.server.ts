@@ -1,13 +1,13 @@
 import { encodeBase32LowerCase, encodeHexLowerCase } from '@oslojs/encoding';
 import { fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
-import * as auth from '$lib/auth';
+import * as auth from '$lib/utils/auth';
 import { db } from '$lib/db';
 import * as table from '$lib/db/schema';
 import type { Actions, PageServerLoad } from './$types';
 
 import { m } from '$lib/paraglide/messages.js';
-import { generateUniqueId, ensureDefaultAdminGroupAndRelation } from '$lib/common';
+import { generateUniqueId, ensureDefaultAdminGroupAndRelation } from '$lib/utils/common';
 
 export const load: PageServerLoad = async (event) => {
 	if (event.locals.user) {

@@ -5,7 +5,7 @@ import { encodeBase32LowerCase, encodeBase64url, encodeHexLowerCase } from '@osl
 import { db } from '$lib/db';
 import * as table from '$lib/db/schema';
 import { SESSION_EXPIRY_HOURS, SESSION_COOKIE_NAME } from '$env/static/private';
-import { getUserGroupsAndAdmin } from '$lib/common';
+import { getUserGroupsAndAdmin } from '$lib/utils/common';
 
 const HOUR_IN_MS = 1000 * 60 * 60 * Number(SESSION_EXPIRY_HOURS);
 
