@@ -23,9 +23,8 @@ if (env.NODE_ENV === 'development') {
 		// Fallback for older Vercel versions or production-only scenarios
 		callbackHost = env.VERCEL_PROJECT_PRODUCTION_URL;
 	} else {
-		throw new Error(
-			'Production deployment requires either NEXT_PUBLIC_CUSTOM_DOMAIN, APP_HOST, VERCEL_URL, or VERCEL_PROJECT_PRODUCTION_URL environment variable to be set'
-		);
+		// Assume localhost when no environment variables are set
+		callbackHost = 'localhost:5173';
 	}
 }
 

@@ -9,10 +9,13 @@ export default defineConfig({
 		tailwindcss(),
 		sveltekit(),
 		devtoolsJson(),
-		paraglideVitePlugin({
-			project: './project.inlang',
-			outdir: './src/lib/paraglide'
-		})
+		// Only compile paraglide in development or when COMPILE_PARAGLIDE=true
+		...(process.env.NODE_ENV === 'development' || process.env.COMPILE_PARAGLIDE === 'true'
+			? [paraglideVitePlugin({
+					project: './project.inlang',
+					outdir: './src/lib/paraglide'
+				})]
+			: [])
 	],
 	// TODO Retry cloudflare workers
 	// define: {
