@@ -48,10 +48,11 @@
 						class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
 					>
 						{#if activeIcon}
+							{@const IconComponent = activeIcon}
 							<div
 								class="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg"
 							>
-								<svelte:component this={activeIcon} class="size-4" />
+								<IconComponent class="size-4" />
 							</div>
 						{/if}
 						<div class="grid flex-1 text-left text-sm leading-tight">
@@ -78,9 +79,10 @@
 				{#if groups.length > 0}
 					{#each groups as group, index (group.groupName || `group-${index}`)}
 						{@const groupIcon = getGroupIcon(group.groupName)}
+						{@const IconComponent = groupIcon}
 						<DropdownMenu.Item onSelect={() => selectedGroup.set(group)} class="gap-2 p-2">
 							<div class="flex size-6 items-center justify-center rounded-md border">
-								<svelte:component this={groupIcon} class="size-3.5 shrink-0" />
+								<IconComponent class="size-3.5 shrink-0" />
 							</div>
 							<div class="flex flex-1 items-center justify-between">
 								<span>{group.groupName || m.unknown()}</span>

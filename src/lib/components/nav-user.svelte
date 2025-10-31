@@ -86,12 +86,8 @@
 				<DropdownMenu.Separator />
 				<DropdownMenu.Group>
 					<DropdownMenu.Item onSelect={handleProfileClick}>
-						<UserIcon />
-						{m.profile()}
-					</DropdownMenu.Item>
-					<DropdownMenu.Item>
 						<BadgeCheckIcon />
-						{m.account()}
+						{m.profile()}
 					</DropdownMenu.Item>
 					<DropdownMenu.Item>
 						<CreditCardIcon />

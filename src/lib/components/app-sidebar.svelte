@@ -143,6 +143,14 @@
 		<NavMain items={data.navMain} />
 	</Sidebar.Content>
 	<Sidebar.Footer>
-		<NavUser user={user ? { name: user.name || user.username, username: user.username, avatar: '/avatars/shadcn.jpg' } : { name: '', username: '', avatar: '/avatars/shadcn.jpg' }} />
+		<NavUser
+			user={user
+				? {
+						name: user.name || user.username,
+						username: user.username,
+						avatar: '/avatars/shadcn.jpg'
+					}
+				: { name: '', username: '', avatar: '/avatars/shadcn.jpg' }}
+		/>
 	</Sidebar.Footer>
 </Sidebar.Root>

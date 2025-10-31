@@ -2,9 +2,18 @@ import * as auth from '$lib/utils/auth';
 import { fail, redirect } from '@sveltejs/kit';
 import { getRequestEvent } from '$app/server';
 import type { Actions, PageServerLoad } from './$types';
+import type { MenuData } from '$lib/components/menu-bread.svelte';
 
 export const load: PageServerLoad = async () => {
-	return requireLogin();
+	const result = requireLogin();
+
+	// Empty menu data for /user/profile route
+	const menu: MenuData = [];
+
+	return {
+		...result,
+		menu
+	};
 };
 
 function requireLogin() {
