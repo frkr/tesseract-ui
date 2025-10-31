@@ -1,5 +1,11 @@
 import { pgTable, integer, text, timestamp, boolean, primaryKey } from 'drizzle-orm/pg-core';
 
+/*
+This document mirrors; Update this file whenever the TypeScript schema changes!
+- src/lib/db/schema.ts.
+- src/routes/doc/schema/+page.md
+ */
+
 export const user = pgTable('user', {
 	id: text('id').primaryKey(),
 	age: integer('age'),
