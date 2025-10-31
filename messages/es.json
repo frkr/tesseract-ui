@@ -63,6 +63,7 @@
 	"unknown": "Desconocido",
 	"admin": "(Administrador)",
 	"noGroupsAssigned": "Sin grupos asignados",
+	"home": "Inicio",
 	"softwareTesseractCore": "Tesseract Core",
 	"softwareDataManager": "Administrador de Datos",
 	"softwareCloudService": "Servicio en la Nube",

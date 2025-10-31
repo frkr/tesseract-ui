@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import { getSoftwareList } from '$lib/app.ts';
+	import { goto } from '$app/navigation';
 
 	const softwareList = getSoftwareList();
 </script>
@@ -30,7 +31,7 @@
 		<Sidebar.Menu>
 			{#each softwareList as item (item.title)}
 				<Sidebar.MenuItem>
-					<Sidebar.MenuButton tooltipContent={item.title}>
+					<Sidebar.MenuButton tooltipContent={item.title} onclick={() => goto(item.url)}>
 						{#if item.icon}
 							{@const IconComponent = item.icon}
 							<IconComponent />

@@ -15,8 +15,8 @@ export interface SoftwareItem {
 export function getSoftwareList(): SoftwareItem[] {
 	return [
 		{
-			title: m.softwareTesseractCore(),
-			url: '/software/tesseract-core',
+			title: m.home(),
+			url: '/home',
 			icon: CodeIcon
 		},
 		{

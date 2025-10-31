@@ -63,6 +63,7 @@
 	"unknown": "Unknown",
 	"admin": "(Administrator)",
 	"noGroupsAssigned": "No groups assigned",
+	"home": "Home",
 	"softwareTesseractCore": "Tesseract Core",
 	"softwareDataManager": "Data Manager",
 	"softwareCloudService": "Cloud Service",
