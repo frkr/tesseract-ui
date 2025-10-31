@@ -2,7 +2,37 @@
 
 This document mirrors src/lib/db/schema.ts. Update this file whenever the TypeScript schema changes.
 
+```mermaid  
+erDiagram
+    USER {
+        TEXT id PK
+        INT age
+        TEXT name
+        TEXT username "NOT NULL, UNIQUE"
+        TEXT password_hash
+    }
 
+    SESSION {
+        TEXT id PK
+        TEXT user_id FK "NOT NULL"
+        TIMESTAMPTZ expires_at "NOT NULL"
+    }
+
+    GROUP {
+        TEXT id PK "UNIQUE"
+        TEXT name
+    }
+
+    REL_GROUP {
+        TEXT group_id PK,FK "NOT NULL"
+        TEXT user_id PK,FK "NOT NULL"
+        BOOLEAN adm "DEFAULT false"
+    }
+
+    USER ||--o{ SESSION : "has sessions"
+    USER ||--o{ REL_GROUP : "member of"
+    GROUP ||--o{ REL_GROUP : "has members"
+```
 
 Details and constraints
 
