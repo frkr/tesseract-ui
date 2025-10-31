@@ -1,5 +1,5 @@
 {
-	"buildCommand": "if [ \"$VERCEL_GIT_COMMIT_REF\" = \"main\" ] || [ \"$VERCEL_GIT_COMMIT_REF\" = \"pre\" ]; then pnpm db:push --yes; fi && pnpm build",
+	"buildCommand": "nvm use && if [ \"$VERCEL_GIT_COMMIT_REF\" = \"main\" ] || [ \"$VERCEL_GIT_COMMIT_REF\" = \"pre\" ]; then echo yes | pnpm db:push; fi && pnpm build",
 	"devCommand": "pnpm dev",
 	"installCommand": "pnpm install",
 	"framework": "sveltekit",
