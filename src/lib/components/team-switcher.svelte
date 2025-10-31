@@ -25,9 +25,7 @@
 			selectedGroup.set(groups[0]);
 		} else {
 			// Validate that the selected group still exists in user's groups
-			const groupExists = groups.some(
-				(g) => g.groupName === currentSelected.groupName
-			);
+			const groupExists = groups.some((g) => g.groupName === currentSelected.groupName);
 			if (!groupExists) {
 				// Selected group no longer exists, default to first
 				selectedGroup.set(groups[0]);

@@ -13,11 +13,6 @@
 	import { ChartPieIcon } from '@lucide/svelte';
 
 	const data = {
-		user: {
-			name: 'shadcn',
-			email: 'm@example.com',
-			avatar: '/avatars/shadcn.jpg'
-		},
 		navMain: [
 			{
 				title: m.playground(),
@@ -131,7 +126,13 @@
 	import NavMain from './nav-main.svelte';
 	import NavUser from './nav-user.svelte';
 
-	let { ref = $bindable(null), ...restProps }: ComponentProps<typeof Sidebar.Root> = $props();
+	let {
+		ref = $bindable(null),
+		user,
+		...restProps
+	}: ComponentProps<typeof Sidebar.Root> & {
+		user?: { id: string; username: string; name: string | null } | null;
+	} = $props();
 </script>
 
 <Sidebar.Root class="top-(--header-height) h-[calc(100svh-var(--header-height))]!" {...restProps}>
@@ -142,6 +143,6 @@
 		<NavMain items={data.navMain} />
 	</Sidebar.Content>
 	<Sidebar.Footer>
-		<NavUser user={data.user} />
+		<NavUser user={user ? { name: user.name || user.username, username: user.username, avatar: '/avatars/shadcn.jpg' } : { name: '', username: '', avatar: '/avatars/shadcn.jpg' }} />
 	</Sidebar.Footer>
 </Sidebar.Root>

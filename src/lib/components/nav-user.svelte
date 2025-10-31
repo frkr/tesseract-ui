@@ -5,22 +5,35 @@
 	import CreditCardIcon from '@lucide/svelte/icons/credit-card';
 	import LogOutIcon from '@lucide/svelte/icons/log-out';
 	import SparklesIcon from '@lucide/svelte/icons/sparkles';
+	import UserIcon from '@lucide/svelte/icons/user';
 
 	import * as Avatar from '$lib/components/ui/avatar';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import { IsMobile } from '$lib/hooks/is-mobile.svelte.js';
 	import { m } from '$lib/paraglide/messages.js';
+	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
 
 	let {
 		user
 	}: {
 		user: {
 			name: string;
-			email: string;
+			username: string;
 			avatar: string;
 		};
 	} = $props();
+
+	function handleProfileClick() {
+		goto('/user/profile');
+	}
+
+	let logoutFormElement: HTMLFormElement;
+
+	function handleLogoutClick() {
+		logoutFormElement?.requestSubmit();
+	}
 </script>
 
 <Sidebar.Menu>
@@ -34,12 +47,12 @@
 						{...props}
 					>
 						<Avatar.Root class="size-8 rounded-lg">
-							<Avatar.Image src={user.avatar} alt={user.name} />
+							<Avatar.Image src={user.avatar} alt={user.name || user.username} />
 							<Avatar.Fallback class="rounded-lg">CN</Avatar.Fallback>
 						</Avatar.Root>
 						<div class="grid flex-1 text-left text-sm leading-tight">
-							<span class="truncate font-medium">{user.name}</span>
-							<span class="truncate text-xs">{user.email}</span>
+							<span class="truncate font-medium">{user.name || user.username}</span>
+							<span class="truncate text-xs">{user.username}</span>
 						</div>
 						<ChevronsUpDownIcon class="ml-auto size-4" />
 					</Sidebar.MenuButton>
@@ -54,12 +67,12 @@
 				<DropdownMenu.Label class="p-0 font-normal">
 					<div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
 						<Avatar.Root class="size-8 rounded-lg">
-							<Avatar.Image src={user.avatar} alt={user.name} />
+							<Avatar.Image src={user.avatar} alt={user.name || user.username} />
 							<Avatar.Fallback class="rounded-lg">CN</Avatar.Fallback>
 						</Avatar.Root>
 						<div class="grid flex-1 text-left text-sm leading-tight">
-							<span class="truncate font-medium">{user.name}</span>
-							<span class="truncate text-xs">{user.email}</span>
+							<span class="truncate font-medium">{user.name || user.username}</span>
+							<span class="truncate text-xs">{user.username}</span>
 						</div>
 					</div>
 				</DropdownMenu.Label>
@@ -72,6 +85,10 @@
 				</DropdownMenu.Group>
 				<DropdownMenu.Separator />
 				<DropdownMenu.Group>
+					<DropdownMenu.Item onSelect={handleProfileClick}>
+						<UserIcon />
+						{m.profile()}
+					</DropdownMenu.Item>
 					<DropdownMenu.Item>
 						<BadgeCheckIcon />
 						{m.account()}
@@ -86,7 +103,15 @@
 					</DropdownMenu.Item>
 				</DropdownMenu.Group>
 				<DropdownMenu.Separator />
-				<DropdownMenu.Item>
+				<form
+					bind:this={logoutFormElement}
+					method="post"
+					action="/user/profile?/logout"
+					use:enhance
+				>
+					<button type="submit" hidden>Submit</button>
+				</form>
+				<DropdownMenu.Item onSelect={handleLogoutClick}>
 					<LogOutIcon />
 					{m.logOut()}
 				</DropdownMenu.Item>
