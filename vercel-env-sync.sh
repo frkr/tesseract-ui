@@ -113,8 +113,15 @@ push_env() {
             # Remove surrounding quotes if present
             var_value=$(echo "$var_value" | sed -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//")
             
+            # Remove trailing whitespace and newlines
+            var_value=$(printf '%s' "$var_value" | sed -e 's/[[:space:]]*$//')
+            
+            # Remove literal \n sequences (backslash followed by n)
+            # Using bash parameter expansion to remove literal backslash-n
+            var_value="${var_value//\\n/}"
+            
             echo -e "Pushing: ${GREEN}$var_name${NC}"
-            echo -e "$var_value" | npx vercel env add "$var_name" "$env" --force
+            printf '%s' "$var_value" | npx vercel env add "$var_name" "$env" --force
         fi
     done < "$ENV_FILE"
     
@@ -127,9 +134,67 @@ push_env() {
     fi
 }
 
+# Function to delete all environment variables from Vercel
+delete_env() {
+    local env="$1"
+    local env_display=$(echo "$env" | tr '[:lower:]' '[:upper:]')
+    
+    echo -e "${BLUE}Deleting all $env_display environment variables from Vercel...${NC}"
+    
+    check_vercel_cli
+    check_vercel_auth
+    
+    echo -e "${RED}WARNING: This will delete ALL environment variables from the $env environment!${NC}"
+    echo -e "${YELLOW}This action cannot be undone.${NC}"
+    read -p "Are you sure you want to continue? (yes/no): " confirmation
+    
+    if [[ "$confirmation" != "yes" ]]; then
+        echo -e "${YELLOW}Operation cancelled.${NC}"
+        exit 0
+    fi
+    
+    echo -e "${BLUE}Fetching environment variables from $env_display...${NC}"
+    
+    # Get list of environment variables
+    env_vars=$(npx vercel env ls "$env" 2>/dev/null | grep -v "^Environment Variables" | grep -v "^─" | grep -v "^name" | awk '{print $1}' | grep -v "^$")
+    
+    if [ -z "$env_vars" ]; then
+        echo -e "${YELLOW}No environment variables found in $env_display environment.${NC}"
+        exit 0
+    fi
+    
+    echo -e "${BLUE}Found the following variables:${NC}"
+    echo "$env_vars"
+    echo ""
+    
+    # Delete each variable
+    deleted_count=0
+    failed_count=0
+    
+    while IFS= read -r var_name; do
+        if [ -n "$var_name" ]; then
+            echo -e "Deleting: ${YELLOW}$var_name${NC}"
+            if echo 'y' | npx vercel env rm "$var_name" "$env" &> /dev/null; then
+                echo -e "${GREEN}✓ Deleted: $var_name${NC}"
+                ((deleted_count++))
+            else
+                echo -e "${RED}✗ Failed to delete: $var_name${NC}"
+                ((failed_count++))
+            fi
+        fi
+    done <<< "$env_vars"
+    
+    echo ""
+    echo -e "${GREEN}Deletion complete!${NC}"
+    echo -e "Successfully deleted: ${GREEN}$deleted_count${NC}"
+    if [ $failed_count -gt 0 ]; then
+        echo -e "Failed to delete: ${RED}$failed_count${NC}"
+    fi
+}
+
 # Function to display usage
 usage() {
-    echo "Usage: $0 {pull|push} [environment]"
+    echo "Usage: $0 {pull|push|delete} [environment]"
     echo ""
     echo "Commands:"
     echo "  pull [env]    Pull environment variables from Vercel to .env"
@@ -140,13 +205,19 @@ usage() {
     echo "                Default: development"
     echo "                Options: development, preview, production"
     echo ""
+    echo "  delete [env]  Delete ALL environment variables from Vercel environment"
+    echo "                Default: development"
+    echo "                Options: development, preview, production"
+    echo "                WARNING: This action cannot be undone!"
+    echo ""
     echo "Examples:"
     echo "  $0 pull                    # Pull from development (default)"
     echo "  $0 pull preview            # Pull from preview"
     echo "  $0 push                    # Push to development (default)"
     echo "  $0 push production         # Push to production"
+    echo "  $0 delete preview          # Delete all variables from preview"
     echo ""
-    echo "Note: VERCEL_OIDC_TOKEN and NODE_ENV are automatically ignored"
+    echo "Note: VERCEL_OIDC_TOKEN and NODE_ENV are automatically ignored (for pull/push)"
     echo ""
     echo "Prerequisites:"
     echo "  - Node.js and npm installed (npx comes with npm)"
@@ -164,6 +235,9 @@ case "$COMMAND" in
         ;;
     push)
         push_env "$ENVIRONMENT"
+        ;;
+    delete)
+        delete_env "$ENVIRONMENT"
         ;;
     *)
         usage
