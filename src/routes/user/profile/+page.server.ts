@@ -5,6 +5,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/db';
 import * as table from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
+import { getUserGroupsAndAdmin } from '$lib/common';
 
 export const load: PageServerLoad = async () => {
 	const user = requireLogin();
@@ -12,9 +13,11 @@ export const load: PageServerLoad = async () => {
 
 	const existingUser = results.at(0);
 	if (existingUser) {
-		return { user: existingUser };
+		const groups = await getUserGroupsAndAdmin(db, existingUser.id);
+		return { user: existingUser, groups };
 	}
-	return { user };
+	const groups = await getUserGroupsAndAdmin(db, user.id);
+	return { user, groups };
 };
 
 export const actions: Actions = {

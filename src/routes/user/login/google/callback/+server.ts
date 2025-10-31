@@ -6,7 +6,7 @@ import { db } from '$lib/db';
 import * as table from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
 import * as auth from '$lib/auth';
-import { generateUserId } from '$lib/auth';
+import { generateUniqueId, ensureDefaultAdminGroupAndRelation } from '$lib/common';
 
 export async function GET(event: RequestEvent): Promise<Response> {
 	const code = event.url.searchParams.get('code');
@@ -39,8 +39,15 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	const existingUser = results.at(0);
 
 	if (!existingUser) {
-		const userId = generateUserId();
+		const userId = generateUniqueId();
 		await db.insert(table.user).values({ id: userId, username: googleUserId, name: username });
+
+		// Check if this is the first user and relate to admin group
+		const userCount = await db.select().from(table.user);
+		if (userCount.length === 1) {
+			await ensureDefaultAdminGroupAndRelation(db, userId);
+		}
+
 		const sessionToken = auth.generateSessionToken();
 		const session = await auth.createSession(sessionToken, userId);
 		auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);

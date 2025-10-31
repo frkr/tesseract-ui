@@ -58,5 +58,9 @@
 	"enterprise": "Empresa",
 	"startup": "Startup",
 	"free": "Gratis",
-	"settings": "Configuración"
+	"settings": "Configuración",
+	"groups": "Grupos",
+	"unknown": "Desconocido",
+	"admin": "(Administrador)",
+	"noGroupsAssigned": "Sin grupos asignados"
 }

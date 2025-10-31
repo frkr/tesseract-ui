@@ -22,11 +22,27 @@
 		<Card.Header>
 			<Card.Title>{m.hello({ name: data.user.name || data.user.username })}</Card.Title>
 			<Card.Description>
-				<!-- TODO colocar algo melhor ai no futuro -->
 				ID: {data.user.id}
 			</Card.Description>
 		</Card.Header>
 		<Card.Content>
+			<div class="mb-4">
+				<h3 class="mb-2 text-sm font-medium">{m.groups()}</h3>
+				{#if data.groups && data.groups.length > 0}
+					<div class="flex flex-wrap gap-2">
+						{#each data.groups as group}
+							<span class="inline-flex items-center gap-1 rounded-md border px-2.5 py-0.5 text-xs font-semibold">
+								{group.groupName || m.unknown()}
+								{#if group.isAdmin}
+									<span class="text-xs text-muted-foreground">{m.admin()}</span>
+								{/if}
+							</span>
+						{/each}
+					</div>
+				{:else}
+					<p class="text-sm text-muted-foreground">{m.noGroupsAssigned()}</p>
+				{/if}
+			</div>
 			<div class="mb-4 flex gap-2">
 				<Button variant="outline" onclick={() => setLocale('pt-br')} title="Português (Brasil)">
 					🇧🇷
