@@ -11,13 +11,18 @@ if (env.NODE_ENV === 'development') {
 	// Development: use localhost fallback
 	callbackHost = 'localhost:5173';
 } else {
-	if (env.VERCEL_PROJECT_PRODUCTION_URL) {
-		callbackHost = env.VERCEL_PROJECT_PRODUCTION_URL;
-	} else if (env.APP_HOST) {
+	// Production/Preview: prioritize explicit APP_HOST, then use Vercel's automatic URLs
+	if (env.APP_HOST) {
 		callbackHost = env.APP_HOST;
+	} else if (env.VERCEL_URL) {
+		// VERCEL_URL is available in both preview and production environments
+		callbackHost = env.VERCEL_URL;
+	} else if (env.VERCEL_PROJECT_PRODUCTION_URL) {
+		// Fallback for older Vercel versions or production-only scenarios
+		callbackHost = env.VERCEL_PROJECT_PRODUCTION_URL;
 	} else {
 		throw new Error(
-			'Production deployment requires either VERCEL_PROJECT_PRODUCTION_URL or APP_HOST environment variable to be set'
+			'Production deployment requires either APP_HOST, VERCEL_URL, or VERCEL_PROJECT_PRODUCTION_URL environment variable to be set'
 		);
 	}
 }
