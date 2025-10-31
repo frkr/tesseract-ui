@@ -9,13 +9,7 @@ import { getUserGroupsAndAdmin } from '$lib/common';
 
 export const load: PageServerLoad = async () => {
 	const user = requireLogin();
-	const results = await db.select().from(table.user).where(eq(table.user.username, user.username));
 
-	const existingUser = results.at(0);
-	if (existingUser) {
-		const groups = await getUserGroupsAndAdmin(db, existingUser.id);
-		return { user: existingUser, groups };
-	}
 	const groups = await getUserGroupsAndAdmin(db, user.id);
 	return { user, groups };
 };
