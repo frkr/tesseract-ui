@@ -21,7 +21,7 @@ export const load: PageServerLoad = async () => {
 	// Fetch all users from database for selection (only if administrator)
 	let allUsers: { id: string; username: string; name: string | null }[] = [];
 	// Fetch group memberships for all groups where user has admin rights
-	let groupMemberships: Record<string, { id: string; username: string; name: string | null; isAdmin: boolean }[]> = {};
+	const groupMemberships: Record<string, { id: string; username: string; name: string | null; isAdmin: boolean }[]> = {};
 	
 	if (isAdministrator && result.groups) {
 		allUsers = await db

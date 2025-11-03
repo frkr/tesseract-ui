@@ -6,10 +6,21 @@ import { db } from '$lib/db';
 import * as table from '$lib/db/schema';
 import { SESSION_EXPIRY_HOURS, SESSION_COOKIE_NAME } from '$env/static/private';
 import { getUserGroupsAndAdmin } from '$lib/utils/common';
+import { m } from '$lib/paraglide/messages.js';
 
 const HOUR_IN_MS = 1000 * 60 * 60 * Number(SESSION_EXPIRY_HOURS);
 
 export const sessionCookieName = SESSION_COOKIE_NAME;
+
+// Helper function to create UTC dates
+export function createUTCDate(timestamp: number): Date {
+	const date = new Date(timestamp);
+	// Ensure the date is valid
+	if (isNaN(date.getTime())) {
+		throw new Error(m.invalidDateValue());
+	}
+	return date;
+}
 
 export function generateSessionToken() {
 	const bytes = crypto.getRandomValues(new Uint8Array(18));
@@ -19,10 +30,13 @@ export function generateSessionToken() {
 
 export async function createSession(token: string, userId: string) {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+	// Use UTC timestamp to avoid timezone issues
+	const now = Date.now();
+	const expiresAt = createUTCDate(now + HOUR_IN_MS);
 	const session: table.Session = {
 		id: sessionId,
 		userId,
-		expiresAt: new Date(Date.now() + HOUR_IN_MS)
+		expiresAt
 	};
 	await db.insert(table.session).values(session);
 	return session;
@@ -45,15 +59,24 @@ export async function validateSessionToken(token: string) {
 	}
 	const { session, user } = result;
 
-	const sessionExpired = Date.now() >= session.expiresAt.getTime();
+	// Ensure expiresAt is a valid Date object
+	if (!session.expiresAt || isNaN(session.expiresAt.getTime())) {
+		await db.delete(table.session).where(eq(table.session.id, session.id));
+		return { session: null, user: null };
+	}
+
+	// Use UTC timestamp for comparison
+	const now = Date.now();
+	const expiresAtTime = session.expiresAt.getTime();
+	const sessionExpired = now >= expiresAtTime;
 	if (sessionExpired) {
 		await db.delete(table.session).where(eq(table.session.id, session.id));
 		return { session: null, user: null };
 	}
 
-	const renewSession = Date.now() >= session.expiresAt.getTime() - HOUR_IN_MS / 2;
+	const renewSession = now >= expiresAtTime - HOUR_IN_MS / 2;
 	if (renewSession) {
-		session.expiresAt = new Date(Date.now() + HOUR_IN_MS);
+		session.expiresAt = createUTCDate(now + HOUR_IN_MS);
 		await db
 			.update(table.session)
 			.set({ expiresAt: session.expiresAt })
@@ -72,8 +95,14 @@ export async function invalidateSession(sessionId: string) {
 }
 
 export function setSessionTokenCookie(event: RequestEvent, token: string, expiresAt: Date) {
+	// Validate date and ensure it's a valid Date object
+	if (!expiresAt || isNaN(expiresAt.getTime())) {
+		throw new Error(m.invalidExpirationDate());
+	}
+	// Ensure the date is treated as UTC for cookie expiration
+	const utcDate = new Date(expiresAt.toISOString());
 	event.cookies.set(sessionCookieName, token, {
-		expires: expiresAt,
+		expires: utcDate,
 		path: '/'
 	});
 }

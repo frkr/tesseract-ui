@@ -96,5 +96,9 @@
 	"noUsersInGroup": "No users in this group",
 	"selectedGroup": "Selected Group",
 	"selectGroupDescription": "Navigate to a page where you can select a group, then return here to manage its members.",
-	"allUsersAlreadyInGroup": "All users are already in this group"
+	"allUsersAlreadyInGroup": "All users are already in this group",
+	"invalidDateValue": "Invalid date value",
+	"invalidExpirationDate": "Invalid expiration date",
+	"errorValidatingGoogleAuth": "Error validating Google authorization code:",
+	"errorCreatingSession": "Error creating session or setting cookie:"
 }

@@ -96,5 +96,9 @@
 	"noUsersInGroup": "Nenhum usuário neste grupo",
 	"selectedGroup": "Grupo Selecionado",
 	"selectGroupDescription": "Navegue para uma página onde você pode selecionar um grupo, depois retorne aqui para gerenciá-lo.",
-	"allUsersAlreadyInGroup": "Todos os usuários já estão neste grupo"
+	"allUsersAlreadyInGroup": "Todos os usuários já estão neste grupo",
+	"invalidDateValue": "Valor de data inválido",
+	"invalidExpirationDate": "Data de expiração inválida",
+	"errorValidatingGoogleAuth": "Erro ao validar código de autorização do Google:",
+	"errorCreatingSession": "Erro ao criar sessão ou definir cookie:"
 }
