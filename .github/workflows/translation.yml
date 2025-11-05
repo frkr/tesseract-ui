@@ -45,7 +45,7 @@ jobs:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
         run: |
           export PATH="$HOME/.cursor/bin:$PATH"
-          cursor-agent -p -model auto --force --output-format text "You have full access to git, GitHub CLI, and PR operations.
+          cursor-agent -p --model auto --force --output-format text "You have full access to git, GitHub CLI, and PR operations.
           You can also run any command you want.
           First, check all translation messages on '/messages' folder.
           Then, check all languages on '/project.inlang' folder.
