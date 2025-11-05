@@ -5,6 +5,8 @@ name: Translation Files
 
 on:
   push:
+    branches:
+      - dev
     paths:
       - 'messages/**'
       - 'project.inlang/**'
