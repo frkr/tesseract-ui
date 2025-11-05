@@ -45,6 +45,8 @@ jobs:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
         run: |
           export PATH="$HOME/.cursor/bin:$PATH"
+          git config --local user.email "ai@ideias.casa"
+          git config --local user.name "AI"
           cursor-agent -p --model auto --force --output-format text "You have full access to git, GitHub CLI, and PR operations.
           You can also run any command you want.
           First, check all translation messages on '/messages' folder.
@@ -52,15 +54,15 @@ jobs:
           Also, check terminologys on '/terminology.md' file and update '/messages' accordingly.
           Validate translations using 'pnpm run paraglide:compile' and check if there are any errors and fix them.
           Finally, on README.md you will findout what language this project uses as main language and create the summary on that language.
-          Add all changes, if any, and commit them using the summary that you will create as comment."
+          Add all changes, if any, and commit them using the summary that you will create as comment, then, make a pull request"
 
 
 
-      - name: Commit and push changes
-        run: |
-          git config --local user.email "ai@ideias.casa"
-          git config --local user.name "AI"
-          git push
+#      - name: Commit and push changes
+#        run: |
+#          git config --local user.email "ai@ideias.casa"
+#          git config --local user.name "AI"
+#          git push
 
 #          git add .
 #          git commit -m "chore: update compiled translation files [skip ci]"
