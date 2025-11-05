@@ -50,37 +50,12 @@ jobs:
           export PATH="$HOME/.cursor/bin:$PATH"
           git config --local user.email "ai@ideias.casa"
           git config --local user.name "AI"
-          cursor-agent -p --model auto --force --output-format text "You have full access to git, GitHub CLI, and PR operations.
-          You can also run any command you want.
+          cursor-agent -p --model auto --force --output-format text
+          "You have full access to git, GitHub CLI, and PR operations. You can also run any command you want.
           First, check all translation messages on '/messages' folder.
           Then, check all languages on '/project.inlang' folder.
           Also, check terminologys on '/terminology.md' file and update '/messages' accordingly.
           Validate translations using 'pnpm run paraglide:compile' and check if there are any errors and fix them.
-          Finally, on README.md you will findout what language this project uses as main language and create the summary on that language.
+          Finally, on README.md you will findout what language this project uses as main language and create the 'summary' on that language.
           Add all changes, if any, to a new branch named 'feat/translation-***' (where *** its the issue title) and commit them using the summary that you will create as comment,
-          then ALSO creates an ISSUE with that summary for users to review and accepts the pull requests. Associate the pull request with the issue and issue with the pull request."
-
- 
-
-#      - name: Commit and push changes
-#        run: |
-#          git config --local user.email "ai@ideias.casa"
-#          git config --local user.name "AI"
-#          git push
-
-#          git add .
-#          git commit -m "chore: update compiled translation files [skip ci]"
-#        if: steps.check_changes.outputs.changes == 'true'
-#      - name: Validate translation files
-#        run: |
-#          echo "Validating translation files..."
-#          pnpm run paraglide:compile || true
-
-#      - name: Check for changes
-#        id: check_changes
-#        run: |
-#          if git diff --quiet; then
-#            echo "changes=false" >> $GITHUB_OUTPUT
-#          else
-#            echo "changes=true" >> $GITHUB_OUTPUT
-#          fi
+          Create a pull request to 'dev' branch and then ALSO creates an ISSUE with that summary for users to review and accepts the pull requests. Associate the pull request with the issue and issue with the pull request."
