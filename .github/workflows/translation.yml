@@ -58,4 +58,5 @@ jobs:
           Validate translations using 'pnpm run paraglide:compile' and check if there are any errors and fix them.
           Finally, on README.md you will findout what language this project uses as main language and create the 'summary' on that language.
           Add all changes, if any, to a new branch named 'feat/translation-***' (where *** its the issue title) and commit them using the summary that you will create as comment,
-          Create a pull request to 'dev' branch and then ALSO creates an ISSUE with that summary for users to review and accepts the pull requests. Associate the pull request with the issue and issue with the pull request."
+          Create a pull request to 'dev' branch and then ALSO creates an ISSUE with label 'translation' (this label you need to use the main language discovered on readme.md)
+          with that summary for users to review and accepts the pull requests. Associate the pull request with the issue and issue with the pull request."
