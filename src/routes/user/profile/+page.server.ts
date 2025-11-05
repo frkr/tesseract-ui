@@ -15,14 +15,16 @@ export const load: PageServerLoad = async () => {
 	const menu: MenuData = [];
 
 	// Check if user is administrator (has any group with isAdmin === true)
-	const isAdministrator =
-		result.groups?.some((group) => group.isAdmin === true) ?? false;
+	const isAdministrator = result.groups?.some((group) => group.isAdmin === true) ?? false;
 
 	// Fetch all users from database for selection (only if administrator)
 	let allUsers: { id: string; username: string; name: string | null }[] = [];
 	// Fetch group memberships for all groups where user has admin rights
-	const groupMemberships: Record<string, { id: string; username: string; name: string | null; isAdmin: boolean }[]> = {};
-	
+	const groupMemberships: Record<
+		string,
+		{ id: string; username: string; name: string | null; isAdmin: boolean }[]
+	> = {};
+
 	if (isAdministrator && result.groups) {
 		allUsers = await db
 			.select({
@@ -33,9 +35,7 @@ export const load: PageServerLoad = async () => {
 			.from(schema.user);
 
 		// Get all group IDs where user has admin rights
-		const adminGroupIds = result.groups
-			.filter((g) => g.isAdmin === true)
-			.map((g) => g.groupId);
+		const adminGroupIds = result.groups.filter((g) => g.isAdmin === true).map((g) => g.groupId);
 
 		// Fetch users for each admin group
 		for (const groupId of adminGroupIds) {
@@ -99,7 +99,9 @@ export const actions: Actions = {
 		}
 
 		// Verify selected group exists and user has admin rights on that specific group
-		const userGroupRelation = locals.groups.find((g) => g.groupId === groupId && g.isAdmin === true);
+		const userGroupRelation = locals.groups.find(
+			(g) => g.groupId === groupId && g.isAdmin === true
+		);
 		if (!userGroupRelation) {
 			return fail(403, { message: 'NO_ADMIN_RIGHTS_ON_GROUP' });
 		}
@@ -116,11 +118,7 @@ export const actions: Actions = {
 		}
 
 		// Verify group exists
-		const group = await db
-			.select()
-			.from(schema.group)
-			.where(eq(schema.group.id, groupId))
-			.limit(1);
+		const group = await db.select().from(schema.group).where(eq(schema.group.id, groupId)).limit(1);
 
 		if (group.length === 0) {
 			return fail(404, { message: 'GROUP_NOT_FOUND' });

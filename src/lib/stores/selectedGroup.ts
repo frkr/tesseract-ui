@@ -1,7 +1,11 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
 
-export type SelectedGroup = { groupId: string | null; groupName: string | null; isAdmin: boolean } | null;
+export type SelectedGroup = {
+	groupId: string | null;
+	groupName: string | null;
+	isAdmin: boolean;
+} | null;
 
 const STORAGE_KEY = 'selectedGroup';
 

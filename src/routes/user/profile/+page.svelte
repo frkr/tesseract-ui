@@ -13,11 +13,9 @@
 	let { data, form }: { data: PageServerData; form?: any } = $props();
 
 	let selectedUserId: string | undefined = $state();
-	
-	let selectedUserDisplay = $derived(
-		data.allUsers?.find(u => u.id === selectedUserId)
-	);
-	
+
+	let selectedUserDisplay = $derived(data.allUsers?.find((u) => u.id === selectedUserId));
+
 	// Get users in the selected group
 	let usersInSelectedGroup = $derived(
 		$selectedGroup && $selectedGroup.groupId && data.groupMemberships
@@ -30,14 +28,11 @@
 		if (!data.allUsers || !$selectedGroup?.groupId) {
 			return data.allUsers || [];
 		}
-		
-		const groupUserIds = new Set(
-			usersInSelectedGroup.map(u => u.id)
-		);
-		
-		return data.allUsers.filter(user => !groupUserIds.has(user.id));
+
+		const groupUserIds = new Set(usersInSelectedGroup.map((u) => u.id));
+
+		return data.allUsers.filter((user) => !groupUserIds.has(user.id));
 	});
-	
 
 	function getErrorMessage(message: string | undefined): string | undefined {
 		if (!message) return undefined;
@@ -112,7 +107,7 @@
 	</Card.Root>
 
 	{#if data.isAdministrator}
-		<Card.Root >
+		<Card.Root>
 			<Card.Header>
 				<Card.Title class="text-lg">{m.addUserToGroup()}</Card.Title>
 			</Card.Header>
@@ -121,45 +116,61 @@
 					<div class="mb-6">
 						<div class="mb-3 flex items-center justify-between">
 							<h4 class="text-sm font-semibold">{m.usersInGroup()}</h4>
-							<span class="text-xs text-muted-foreground">
+							<span class="text-muted-foreground text-xs">
 								{m.selectedGroup()}: {$selectedGroup.groupName || $selectedGroup.groupId}
 							</span>
 						</div>
 						{#if usersInSelectedGroup.length > 0}
-							<div class="space-y-2 max-h-60 overflow-y-auto">
+							<div class="max-h-60 space-y-2 overflow-y-auto">
 								{#each usersInSelectedGroup as groupUser}
-									<div class="flex items-center justify-between rounded-md border px-3 py-2 text-sm bg-muted/30">
+									<div
+										class="bg-muted/30 flex items-center justify-between rounded-md border px-3 py-2 text-sm"
+									>
 										<div class="flex items-center gap-2">
 											<span class="font-medium">{groupUser.name || groupUser.username}</span>
 											<span class="text-muted-foreground">({groupUser.username})</span>
 											{#if groupUser.isAdmin}
-												<span class="text-xs text-muted-foreground bg-primary/10 px-1.5 py-0.5 rounded">{m.admin()}</span>
+												<span
+													class="text-muted-foreground bg-primary/10 rounded px-1.5 py-0.5 text-xs"
+													>{m.admin()}</span
+												>
 											{/if}
 										</div>
 									</div>
 								{/each}
 							</div>
 						{:else}
-							<p class="text-sm text-muted-foreground py-4 text-center border rounded-md">{m.noUsersInGroup()}</p>
+							<p class="text-muted-foreground rounded-md border py-4 text-center text-sm">
+								{m.noUsersInGroup()}
+							</p>
 						{/if}
 					</div>
 					<div class="border-t pt-4">
-						<form method="post" action="?/addUserToGroup" use:enhance={() => {
-							return async ({ update, result }) => {
-								// Always update to refresh the page data and show the new user in the list
-								await update();
-								// Reset the form after successful submission
-								if (result.type === 'success' && result.data?.message === 'USER_ADDED_SUCCESSFULLY') {
-									selectedUserId = undefined;
-								}
-							};
-						}}>
+						<form
+							method="post"
+							action="?/addUserToGroup"
+							use:enhance={() => {
+								return async ({ update, result }) => {
+									// Always update to refresh the page data and show the new user in the list
+									await update();
+									// Reset the form after successful submission
+									if (
+										result.type === 'success' &&
+										result.data?.message === 'USER_ADDED_SUCCESSFULLY'
+									) {
+										selectedUserId = undefined;
+									}
+								};
+							}}
+						>
 							<input type="hidden" name="groupId" value={$selectedGroup.groupId} />
 							<div class="mb-4">
 								<Label for="userId" class="text-sm font-medium">{m.selectUser()}</Label>
 								<Select.Root type="single" bind:value={selectedUserId}>
-									<Select.Trigger id="userId" class="w-full mt-2">
-										{selectedUserDisplay ? `${selectedUserDisplay.name || selectedUserDisplay.username} (${selectedUserDisplay.username})` : m.selectUser()}
+									<Select.Trigger id="userId" class="mt-2 w-full">
+										{selectedUserDisplay
+											? `${selectedUserDisplay.name || selectedUserDisplay.username} (${selectedUserDisplay.username})`
+											: m.selectUser()}
 									</Select.Trigger>
 									<Select.Content>
 										{#if availableUsers.length > 0}
@@ -169,7 +180,7 @@
 												</Select.Item>
 											{/each}
 										{:else}
-											<div class="px-2 py-1.5 text-sm text-muted-foreground">
+											<div class="text-muted-foreground px-2 py-1.5 text-sm">
 												{m.allUsersAlreadyInGroup()}
 											</div>
 										{/if}
@@ -186,15 +197,19 @@
 									{getErrorMessage(form.message)}
 								</p>
 							{/if}
-							<Button type="submit" disabled={!selectedUserId || availableUsers.length === 0} class="w-full">
+							<Button
+								type="submit"
+								disabled={!selectedUserId || availableUsers.length === 0}
+								class="w-full"
+							>
 								{m.addUserToGroup()}
 							</Button>
 						</form>
 					</div>
 				{:else}
 					<div class="py-6 text-center">
-						<p class="text-sm text-muted-foreground mb-2">{m.selectGroupFirst()}</p>
-						<p class="text-xs text-muted-foreground">{m.selectGroupDescription()}</p>
+						<p class="text-muted-foreground mb-2 text-sm">{m.selectGroupFirst()}</p>
+						<p class="text-muted-foreground text-xs">{m.selectGroupDescription()}</p>
 					</div>
 				{/if}
 			</Card.Content>

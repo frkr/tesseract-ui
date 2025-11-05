@@ -57,4 +57,3 @@ export async function getUsersInGroup(
 		isAdmin: result.isAdmin ?? false
 	}));
 }
-

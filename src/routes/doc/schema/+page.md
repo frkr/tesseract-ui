@@ -1,10 +1,11 @@
 # Database Schema (Mermaid)
 
 > This document mirrors; Update this file whenever the TypeScript schema changes!
+
 - src/lib/db/schema.ts.
 - src/routes/doc/schema/+page.md
 
-```mermaid  
+```mermaid
 erDiagram
     USER {
         TEXT id PK
@@ -46,4 +47,3 @@ Details and constraints
 - rel_group.group_id → group.id (foreign key, required)
 - rel_group.user_id → user.id (foreign key, required)
 - rel_group.adm is a boolean flag indicating admin status
-

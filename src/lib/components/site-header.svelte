@@ -14,7 +14,10 @@
 
 	const groups = $derived($page.data.groups || []);
 	const isMemberOfGroup1 = $derived(
-		groups.some((group: { groupId: string; groupName: string | null; isAdmin: boolean }) => group.groupId === '1')
+		groups.some(
+			(group: { groupId: string; groupName: string | null; isAdmin: boolean }) =>
+				group.groupId === '1'
+		)
 	);
 </script>
 

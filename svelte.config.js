@@ -22,7 +22,7 @@ function getAdapter() {
 const config = {
 	// Consult https://svelte.dev/docs/kit/integrations
 	// for more information about preprocessors
-	preprocess: [mdsvex(mdsvexConfig),vitePreprocess()],
+	preprocess: [mdsvex(mdsvexConfig), vitePreprocess()],
 	kit: {
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		adapter: getAdapter()
