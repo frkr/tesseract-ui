@@ -43,6 +43,7 @@ jobs:
       - name: Run Cursor Agent
         env:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           export PATH="$HOME/.cursor/bin:$PATH"
           git config --local user.email "ai@ideias.casa"
