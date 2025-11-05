@@ -1,0 +1,83 @@
+# Copyright (c) 2025 Davi Saranszky Mesquita. All rights reserved.
+# See LICENSE for license information.
+
+name: Translation Files
+
+on:
+  push:
+    paths:
+      - 'messages/**'
+      - 'project.inlang/**'
+      - 'README.md'
+      - 'terminology.md'
+  workflow_dispatch:
+
+jobs:
+  cursor:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Cursor CLI
+        run: |
+          curl https://cursor.com/install -fsS | bash
+          echo "$HOME/.cursor/bin" >> $GITHUB_PATH
+
+      - name: Run Cursor Agent
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+        run: |
+          ENTRYPOINT ["cursor-agent","-p","--model","auto","--force","--output-format","text"]
+          cursor-agent -p -model gpt-5 --force --output-format text "You have full access to git, GitHub CLI, and PR operations.
+          You can also run any command you want.
+          First, check all translation messages on '/messages' folder.
+          Then, check all languages on '/project.inlang' folder.
+          Also, check terminologys on '/terminology.md' file and update messages accordingly.
+          Validate translations using 'pnpm run paraglide:compile' and check if there are any errors and fix them.
+          Finally, on README.md you will findout that language this project uses as main language and create the summary on that language.
+          Add all changes, if any, and commit them using the summary that you will create as comment."
+
+#      - name: Validate translation files
+#        run: |
+#          echo "Validating translation files..."
+#          pnpm run paraglide:compile || true
+
+#      - name: Check for changes
+#        id: check_changes
+#        run: |
+#          if git diff --quiet; then
+#            echo "changes=false" >> $GITHUB_OUTPUT
+#          else
+#            echo "changes=true" >> $GITHUB_OUTPUT
+#          fi
+
+      - name: Commit and push changes
+#        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+#          git add .
+#          git commit -m "chore: update compiled translation files [skip ci]"
+          git push
