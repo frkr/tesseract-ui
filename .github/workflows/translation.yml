@@ -59,6 +59,17 @@ jobs:
           Finally, on README.md you will findout that language this project uses as main language and create the summary on that language.
           Add all changes, if any, and commit them using the summary that you will create as comment."
 
+
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git push
+
+#          git add .
+#          git commit -m "chore: update compiled translation files [skip ci]"
+#        if: steps.check_changes.outputs.changes == 'true'
 #      - name: Validate translation files
 #        run: |
 #          echo "Validating translation files..."
@@ -72,12 +83,3 @@ jobs:
 #          else
 #            echo "changes=true" >> $GITHUB_OUTPUT
 #          fi
-
-      - name: Commit and push changes
-#        if: steps.check_changes.outputs.changes == 'true'
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-#          git add .
-#          git commit -m "chore: update compiled translation files [skip ci]"
-          git push
