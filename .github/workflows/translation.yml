@@ -50,8 +50,7 @@ jobs:
           export PATH="$HOME/.cursor/bin:$PATH"
           git config --local user.email "ai@ideias.casa"
           git config --local user.name "AI"
-          cursor-agent -p --model auto --force --output-format text
-          "You have full access to git, GitHub CLI, and PR operations. You can also run any command you want.
+          cursor-agent -p --model auto --force --output-format text "You have full access to git, GitHub CLI, and PR operations. You can also run any command you want.
           First, check all translation messages on '/messages' folder.
           Then, check all languages on '/project.inlang' folder.
           Also, check terminologys on '/terminology.md' file and update '/messages' accordingly.
