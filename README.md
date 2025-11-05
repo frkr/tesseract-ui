@@ -1,6 +1,6 @@
 # Tesseract UI
 
-> Application main language is English
+> Application main language is Portugues Brasil
 
 - [All Project Documentation and Specifications](./SPEC.md)
 
