@@ -26,16 +26,16 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
       - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'pnpm'
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 9
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -43,14 +43,15 @@ jobs:
       - name: Install Cursor CLI
         run: |
           curl https://cursor.com/install -fsS | bash
+          export PATH="$HOME/.cursor/bin:$PATH"
           echo "$HOME/.cursor/bin" >> $GITHUB_PATH
 
       - name: Run Cursor Agent
         env:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
         run: |
-          ENTRYPOINT ["cursor-agent","-p","--model","auto","--force","--output-format","text"]
-          cursor-agent -p -model gpt-5 --force --output-format text "You have full access to git, GitHub CLI, and PR operations.
+          export PATH="$HOME/.cursor/bin:$PATH"
+          cursor-agent -p -model auto --force --output-format text "You have full access to git, GitHub CLI, and PR operations.
           You can also run any command you want.
           First, check all translation messages on '/messages' folder.
           Then, check all languages on '/project.inlang' folder.
