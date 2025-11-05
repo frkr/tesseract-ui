@@ -1,5 +1,7 @@
 # Tesseract UI
 
+> Application main language is English
+
 - [All Project Documentation and Specifications](./SPEC.md)
 
 > Tesseract UI is a rapid template for building AI-powered applications.
