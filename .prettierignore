@@ -24,6 +24,3 @@ dist/
 /stash/
 *.min.js
 *.min.css
-
-# Documentation
-*.md
