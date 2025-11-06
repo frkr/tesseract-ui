@@ -55,6 +55,45 @@ jobs:
           Then, check all languages in the '/project.inlang' folder and check all translation messages in the '/messages' folder. Add new languages if necessary.
           The file 'src/routes/user/profile/+page.svelte' must have a way to change the language.
           Validate translations using 'pnpm run paraglide:compile' and check if there are any errors and fix them.
-          Finally, in the README.md you will find out what language this project uses as the main language and create the 'summary' in that language.
-          Do not create aditional files like "VALIDACAO_TRADUCOES.md" or "SUMMARY_TRADUCAO.md" like that.
+          Finally, in the README.md you will find what language this project uses as the main language and create the 'summary' in that language.
+          Do not create additional files like 'VALIDACAO_TRADUCOES.md' or 'SUMMARY_TRADUCAO.md'.
           If there are any changes, commit using the summary and push it."
+
+  lint:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs: translation
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run lint
+        run: pnpm lint
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit changes
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          git config --local user.email "ai@ideias.casa"
+          git config --local user.name "AI"
+          git add .
+          git commit -m "chore: lint"
+          git push

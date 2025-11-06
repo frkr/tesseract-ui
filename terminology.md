@@ -1,4 +1,4 @@
-# Terminologia para releases (PT-BR ↔ EN)
+# Terminologia para uso geral no sistema inteiro
 
 ## Sistema de pontuação
 
@@ -16,15 +16,7 @@
 - Padrão / Standard: Apropriado para normatização
 - Regra / Rule: Adequado para regulamentações
 
-## Guia prático de uso
-
-Classificação visual dos termos para releases de imprensa.
-
-- Quanto maior a pontuação, melhor o encaixe editorial e de comunicação.
-
-## Aplicações por contexto
-
-### Releases técnicos
+# Técnicos
 
 Recomendação: Formato / Format (8.79 pontos)
 
@@ -32,7 +24,7 @@ Recomendação: Formato / Format (8.79 pontos)
 - Alta clareza para equipes técnicas
 - Linguagem precisa e objetiva
 
-### Releases corporativos
+# corporativos
 
 Recomendação: Melhores práticas / Best practices (9.37 pontos)
 
@@ -40,7 +32,7 @@ Recomendação: Melhores práticas / Best practices (9.37 pontos)
 - Máxima aceitação editorial
 - Versatilidade para múltiplos públicos
 
-### Releases institucionais
+# institucionais
 
 Recomendação: Diretriz / Guideline (8.36 pontos)
 
