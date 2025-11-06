@@ -34,6 +34,29 @@
 		return data.allUsers.filter((user) => !groupUserIds.has(user.id));
 	});
 
+	const languages = [
+		{ code: 'pt-br', name: 'Português (Brasil)', flag: '🇧🇷' },
+		{ code: 'en', name: 'English', flag: '🇺🇸' },
+		{ code: 'es', name: 'Español', flag: '🇪🇸' },
+		{ code: 'fr', name: 'Français', flag: '🇫🇷' },
+		{ code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+		{ code: 'ru', name: 'Русский', flag: '🇷🇺' },
+		{ code: 'ja', name: '日本語', flag: '🇯🇵' },
+		{ code: 'pt', name: 'Português', flag: '🇵🇹' },
+		{ code: 'ar', name: 'العربية', flag: '🇸🇦' },
+		{ code: 'it', name: 'Italiano', flag: '🇮🇹' },
+		{ code: 'zh', name: '中文', flag: '🇨🇳' },
+		{ code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
+		{ code: 'zh-CN', name: '中文 (简体)', flag: '🇨🇳' },
+		{ code: 'zh-TW', name: '中文 (繁體)', flag: '🇹🇼' },
+		{ code: 'zh-HK', name: '中文 (香港)', flag: '🇭🇰' },
+		{ code: 'zh-Hans', name: '中文 (简体)', flag: '🇨🇳' },
+		{ code: 'zh-Hans-CN', name: '中文 (简体, 中国)', flag: '🇨🇳' },
+		{ code: 'zh-Hans-SG', name: '中文 (简体, 新加坡)', flag: '🇸🇬' },
+		{ code: 'zh-Hans-MO', name: '中文 (简体, 澳门)', flag: '🇲🇴' },
+		{ code: 'zh-Hans-HK', name: '中文 (简体, 香港)', flag: '🇭🇰' }
+	];
+
 	function getErrorMessage(message: string | undefined): string | undefined {
 		if (!message) return undefined;
 		switch (message) {
@@ -93,12 +116,20 @@
 					<p class="text-muted-foreground text-sm">{m.noGroupsAssigned()}</p>
 				{/if}
 			</div>
-			<div class="mb-4 flex gap-2">
-				<Button variant="outline" onclick={() => setLocale('pt-br')} title="Português (Brasil)">
-					🇧🇷
-				</Button>
-				<Button variant="outline" onclick={() => setLocale('en')} title="English">🇺🇸</Button>
-				<Button variant="outline" onclick={() => setLocale('es')} title="Español">🇪🇸</Button>
+			<div class="mb-4">
+				<h3 class="mb-2 text-sm font-medium">{m.settings()}</h3>
+				<div class="flex flex-wrap gap-2">
+					{#each languages as lang}
+						<Button
+							variant="outline"
+							onclick={() => setLocale(lang.code)}
+							title={lang.name}
+							class="text-xs"
+						>
+							{lang.flag} {lang.name}
+						</Button>
+					{/each}
+				</div>
 			</div>
 			<form method="post" action="?/logout" use:enhance>
 				<Button type="submit">{m.signOut()}</Button>
