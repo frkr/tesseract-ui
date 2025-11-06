@@ -6,7 +6,8 @@ import {
 	invalidateSession,
 	setSessionTokenCookie,
 	deleteSessionTokenCookie,
-	sessionCookieName
+	sessionCookieName,
+	createUTCDate
 } from './auth';
 import type { RequestEvent } from '@sveltejs/kit';
 import * as dbModule from '$lib/db';
@@ -21,6 +22,49 @@ vi.mock('$lib/db', () => ({
 		delete: vi.fn()
 	}
 }));
+
+// Mock messages
+vi.mock('$lib/paraglide/messages.js', () => ({
+	m: {
+		invalidDateValue: () => 'Invalid date value',
+		invalidExpirationDate: () => 'Invalid expiration date'
+	}
+}));
+
+describe('createUTCDate', () => {
+	it('should create a valid Date from timestamp', () => {
+		const timestamp = Date.now();
+		const date = createUTCDate(timestamp);
+
+		expect(date).toBeInstanceOf(Date);
+		expect(date.getTime()).toBe(timestamp);
+	});
+
+	it('should handle zero timestamp', () => {
+		const date = createUTCDate(0);
+		expect(date).toBeInstanceOf(Date);
+		expect(date.getTime()).toBe(0);
+	});
+
+	it('should handle future timestamp', () => {
+		const futureTimestamp = Date.now() + 1000000;
+		const date = createUTCDate(futureTimestamp);
+		expect(date).toBeInstanceOf(Date);
+		expect(date.getTime()).toBe(futureTimestamp);
+	});
+
+	it('should throw error for invalid timestamp', () => {
+		const invalidTimestamp = NaN;
+		expect(() => createUTCDate(invalidTimestamp)).toThrow('Invalid date value');
+	});
+
+	it('should handle negative timestamp', () => {
+		const negativeTimestamp = -1000;
+		const date = createUTCDate(negativeTimestamp);
+		expect(date).toBeInstanceOf(Date);
+		expect(date.getTime()).toBe(negativeTimestamp);
+	});
+});
 
 describe('generateSessionToken', () => {
 	it('should return a non-empty string', () => {
@@ -276,6 +320,61 @@ describe('validateSessionToken', () => {
 
 		expect.assertions(2);
 	});
+
+	it('should delete session and return null when expiresAt is invalid', async () => {
+		const token = 'invalid-date-token';
+		const invalidDate = new Date('invalid-date');
+
+		const mockResult = {
+			session: {
+				id: 'session-invalid',
+				userId: 'user-123',
+				expiresAt: invalidDate
+			},
+			user: {
+				id: 'user-123',
+				username: 'testuser'
+			}
+		};
+
+		mockWhere.mockResolvedValueOnce([mockResult]);
+		mockWhere.mockResolvedValueOnce(undefined); // for delete
+
+		const result = await validateSessionToken(token);
+
+		expect(result.session).toBeNull();
+		expect(result.user).toBeNull();
+		expect(mockDelete).toHaveBeenCalled();
+
+		expect.assertions(3);
+	});
+
+	it('should delete session and return null when expiresAt is null', async () => {
+		const token = 'null-date-token';
+
+		const mockResult = {
+			session: {
+				id: 'session-null',
+				userId: 'user-456',
+				expiresAt: null
+			},
+			user: {
+				id: 'user-456',
+				username: 'testuser'
+			}
+		};
+
+		mockWhere.mockResolvedValueOnce([mockResult]);
+		mockWhere.mockResolvedValueOnce(undefined); // for delete
+
+		const result = await validateSessionToken(token);
+
+		expect(result.session).toBeNull();
+		expect(result.user).toBeNull();
+		expect(mockDelete).toHaveBeenCalled();
+
+		expect.assertions(3);
+	});
 });
 
 describe('invalidateSession', () => {
@@ -369,6 +468,28 @@ describe('setSessionTokenCookie', () => {
 			expect.any(String),
 			expect.any(String),
 			expect.objectContaining({ path: '/' })
+		);
+
+		expect.assertions(1);
+	});
+
+	it('should throw error for invalid expiration date', () => {
+		const token = 'test-token';
+		const invalidDate = new Date('invalid-date');
+
+		expect(() => setSessionTokenCookie(mockEvent, token, invalidDate)).toThrow(
+			'Invalid expiration date'
+		);
+
+		expect.assertions(1);
+	});
+
+	it('should throw error for null expiration date', () => {
+		const token = 'test-token';
+		const nullDate = null as any;
+
+		expect(() => setSessionTokenCookie(mockEvent, token, nullDate)).toThrow(
+			'Invalid expiration date'
 		);
 
 		expect.assertions(1);

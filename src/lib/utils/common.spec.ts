@@ -1,7 +1,67 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ensureDefaultAdminGroupAndRelation, getUserGroupsAndAdmin } from './common';
+import {
+	ensureDefaultAdminGroupAndRelation,
+	getUserGroupsAndAdmin,
+	generateUniqueId
+} from './common';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '$lib/db/schema';
+
+describe('generateUniqueId', () => {
+	it('should return a non-empty string', () => {
+		const id = generateUniqueId();
+
+		expect(typeof id).toBe('string');
+		expect(id.length).toBeGreaterThan(0);
+
+		expect.assertions(2);
+	});
+
+	it('should generate unique IDs', () => {
+		const id1 = generateUniqueId();
+		const id2 = generateUniqueId();
+		const id3 = generateUniqueId();
+
+		expect(id1).not.toBe(id2);
+		expect(id2).not.toBe(id3);
+		expect(id1).not.toBe(id3);
+
+		expect.assertions(3);
+	});
+
+	it('should generate IDs with base32 format', () => {
+		const id = generateUniqueId();
+
+		// Base32 uses a-z, 2-7 (lowercase)
+		const base32Pattern = /^[a-z2-7]+$/;
+		expect(base32Pattern.test(id)).toBe(true);
+
+		expect.assertions(1);
+	});
+
+	it('should generate IDs of consistent length', () => {
+		const ids = Array.from({ length: 10 }, () => generateUniqueId());
+
+		// All IDs should have the same length (base32 encoding of 15 bytes = 24 characters)
+		const lengths = ids.map((id) => id.length);
+		const uniqueLengths = new Set(lengths);
+
+		expect(uniqueLengths.size).toBe(1);
+		expect.assertions(1);
+	});
+
+	it('should handle multiple calls without errors', () => {
+		const ids = Array.from({ length: 100 }, () => generateUniqueId());
+
+		expect(ids.length).toBe(100);
+		ids.forEach((id) => {
+			expect(typeof id).toBe('string');
+			expect(id.length).toBeGreaterThan(0);
+		});
+
+		expect.assertions(101);
+	});
+});
 
 describe('ensureDefaultAdminGroupAndRelation', () => {
 	let mockDb: any;
@@ -48,7 +108,7 @@ describe('ensureDefaultAdminGroupAndRelation', () => {
 		// Verify admin group was created
 		expect(groupInsertValues).toHaveBeenCalledWith({
 			id: '1',
-			name: 'admin'
+			name: 'Admin'
 		});
 
 		// Verify relation was created with admin privileges
@@ -65,7 +125,7 @@ describe('ensureDefaultAdminGroupAndRelation', () => {
 		const userId = 'test-user-2';
 
 		// Mock: admin group exists (non-empty array)
-		mockWhere.mockResolvedValueOnce([{ id: '1', name: 'admin' }]);
+		mockWhere.mockResolvedValueOnce([{ id: '1', name: 'Admin' }]);
 
 		// Mock: user-group relation doesn't exist (empty array)
 		mockWhere.mockResolvedValueOnce([]);
@@ -96,7 +156,7 @@ describe('ensureDefaultAdminGroupAndRelation', () => {
 		const userId = 'test-user-3';
 
 		// Mock: admin group exists (non-empty array)
-		mockWhere.mockResolvedValueOnce([{ id: '1', name: 'admin' }]);
+		mockWhere.mockResolvedValueOnce([{ id: '1', name: 'Admin' }]);
 
 		// Mock: user-group relation exists (non-empty array)
 		mockWhere.mockResolvedValueOnce([{ groupId: '1', userId: userId, adm: true }]);
@@ -135,9 +195,9 @@ describe('getUserGroupsAndAdmin', () => {
 	it('should return multiple groups with correct admin status', async () => {
 		const userId = 'test-user-1';
 		const mockResults = [
-			{ groupName: 'admin', isAdmin: true },
-			{ groupName: 'developers', isAdmin: false },
-			{ groupName: 'managers', isAdmin: true }
+			{ groupId: '1', groupName: 'admin', isAdmin: true },
+			{ groupId: '2', groupName: 'developers', isAdmin: false },
+			{ groupId: '3', groupName: 'managers', isAdmin: true }
 		];
 
 		mockWhere.mockResolvedValueOnce(mockResults);
@@ -149,9 +209,9 @@ describe('getUserGroupsAndAdmin', () => {
 		expect(mockInnerJoin).toHaveBeenCalled();
 		expect(mockWhere).toHaveBeenCalled();
 		expect(result).toEqual([
-			{ groupName: 'admin', isAdmin: true },
-			{ groupName: 'developers', isAdmin: false },
-			{ groupName: 'managers', isAdmin: true }
+			{ groupId: '1', groupName: 'admin', isAdmin: true },
+			{ groupId: '2', groupName: 'developers', isAdmin: false },
+			{ groupId: '3', groupName: 'managers', isAdmin: true }
 		]);
 
 		expect.assertions(5);
@@ -175,8 +235,8 @@ describe('getUserGroupsAndAdmin', () => {
 	it('should handle null groupName correctly', async () => {
 		const userId = 'test-user-3';
 		const mockResults = [
-			{ groupName: null, isAdmin: true },
-			{ groupName: 'valid-group', isAdmin: false }
+			{ groupId: '1', groupName: null, isAdmin: true },
+			{ groupId: '2', groupName: 'valid-group', isAdmin: false }
 		];
 
 		mockWhere.mockResolvedValueOnce(mockResults);
@@ -184,8 +244,8 @@ describe('getUserGroupsAndAdmin', () => {
 		const result = await getUserGroupsAndAdmin(mockDb, userId);
 
 		expect(result).toEqual([
-			{ groupName: null, isAdmin: true },
-			{ groupName: 'valid-group', isAdmin: false }
+			{ groupId: '1', groupName: null, isAdmin: true },
+			{ groupId: '2', groupName: 'valid-group', isAdmin: false }
 		]);
 		expect(result[0].groupName).toBeNull();
 
@@ -194,13 +254,13 @@ describe('getUserGroupsAndAdmin', () => {
 
 	it('should default isAdmin to false when null', async () => {
 		const userId = 'test-user-4';
-		const mockResults = [{ groupName: 'test-group', isAdmin: null }];
+		const mockResults = [{ groupId: '1', groupName: 'test-group', isAdmin: null }];
 
 		mockWhere.mockResolvedValueOnce(mockResults);
 
 		const result = await getUserGroupsAndAdmin(mockDb, userId);
 
-		expect(result).toEqual([{ groupName: 'test-group', isAdmin: false }]);
+		expect(result).toEqual([{ groupId: '1', groupName: 'test-group', isAdmin: false }]);
 		expect(result[0].isAdmin).toBe(false);
 
 		expect.assertions(2);
@@ -209,9 +269,9 @@ describe('getUserGroupsAndAdmin', () => {
 	it('should handle mixed null values correctly', async () => {
 		const userId = 'test-user-5';
 		const mockResults = [
-			{ groupName: null, isAdmin: null },
-			{ groupName: 'admin', isAdmin: true },
-			{ groupName: 'users', isAdmin: null }
+			{ groupId: '1', groupName: null, isAdmin: null },
+			{ groupId: '2', groupName: 'admin', isAdmin: true },
+			{ groupId: '3', groupName: 'users', isAdmin: null }
 		];
 
 		mockWhere.mockResolvedValueOnce(mockResults);
@@ -219,9 +279,9 @@ describe('getUserGroupsAndAdmin', () => {
 		const result = await getUserGroupsAndAdmin(mockDb, userId);
 
 		expect(result).toEqual([
-			{ groupName: null, isAdmin: false },
-			{ groupName: 'admin', isAdmin: true },
-			{ groupName: 'users', isAdmin: false }
+			{ groupId: '1', groupName: null, isAdmin: false },
+			{ groupId: '2', groupName: 'admin', isAdmin: true },
+			{ groupId: '3', groupName: 'users', isAdmin: false }
 		]);
 
 		expect.assertions(1);

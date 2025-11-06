@@ -34,6 +34,7 @@
 		return data.allUsers.filter((user) => !groupUserIds.has(user.id));
 	});
 
+	// Languages matching project.inlang/settings.json locales
 	const languages = [
 		{ code: 'pt-br', name: 'Português (Brasil)', flag: '🇧🇷' },
 		{ code: 'en', name: 'English', flag: '🇺🇸' },
