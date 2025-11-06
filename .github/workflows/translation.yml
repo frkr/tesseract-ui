@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  cursor:
+  translation:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -51,9 +51,10 @@ jobs:
           git config --local user.email "ai@ideias.casa"
           git config --local user.name "AI"
           cursor-agent -p --model auto --force --output-format text "You have full access to git, GitHub CLI, and PR operations. You can also run any command you want.
-          First, check terminology's on '/terminology.md' file and update '/messages' accordingly.
-          Then, Check all languages on '/project.inlang' folder and Check all translation messages on '/messages' folder.
-          This file 'src/routes/user/profile/+page.svelte' must have a way to change the language.
+          First, check the terminologies in the '/terminology.md' file and update '/messages' accordingly (Remember, the '/terminology.md' is for everything in the project, correct the '/terminology.md' file to respect that directive).
+          Then, check all languages in the '/project.inlang' folder and check all translation messages in the '/messages' folder. Add new languages if necessary.
+          The file 'src/routes/user/profile/+page.svelte' must have a way to change the language.
           Validate translations using 'pnpm run paraglide:compile' and check if there are any errors and fix them.
-          Finally, on README.md you will find out what language this project uses as main language and create the 'summary' on that language.
-          Well, if has any changes, commit using summary and PUSH it."
+          Finally, in the README.md you will find out what language this project uses as the main language and create the 'summary' in that language.
+          Do not create aditional files like "VALIDACAO_TRADUCOES.md" or "SUMMARY_TRADUCAO.md" like that.
+          If there are any changes, commit using the summary and push it."
