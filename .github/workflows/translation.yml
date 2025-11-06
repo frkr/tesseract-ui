@@ -54,7 +54,7 @@ jobs:
           First, check terminology's on '/terminology.md' file and update '/messages' accordingly.
           Then, Check all languages on '/project.inlang' folder and Check all translation messages on '/messages' folder.
           Validate translations using 'pnpm run paraglide:compile' and check if there are any errors and fix them.
-          Finally, on README.md you will findout what language this project uses as main language and create the 'summary' on that language.
+          Finally, on README.md you will find out what language this project uses as main language and create the 'summary' on that language.
           If has any changes, create an issue with the summary and label 'translation' (this label you need to use the main language discovered on readme.md)
           Add all changes, if any, to a new branch named 'feat/translation-***' (where *** its the issue title) and commit them using the summary that you will create as comment (add the issue link on body),
           Create a pull request to 'dev' branch with that summary (add the issue link on body) and Link the pull request with the issue and issue with the pull request.
