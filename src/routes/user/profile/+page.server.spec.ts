@@ -115,9 +115,7 @@ describe('/user/profile/+page.server', () => {
 
 			mockDb.select = mockSelect;
 
-			const mockGroupMembers = [
-				{ id: 'user-1', username: 'user1', name: 'User 1', isAdmin: true }
-			];
+			const mockGroupMembers = [{ id: 'user-1', username: 'user1', name: 'User 1', isAdmin: true }];
 
 			vi.mocked(utilsServer.getUsersInGroup).mockResolvedValue(mockGroupMembers);
 
@@ -142,9 +140,7 @@ describe('/user/profile/+page.server', () => {
 
 			mockDb.select = mockSelect;
 
-			vi.mocked(utilsServer.getUsersInGroup)
-				.mockResolvedValueOnce([])
-				.mockResolvedValueOnce([]);
+			vi.mocked(utilsServer.getUsersInGroup).mockResolvedValueOnce([]).mockResolvedValueOnce([]);
 
 			const result = await load();
 
