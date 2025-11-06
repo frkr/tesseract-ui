@@ -5,15 +5,15 @@
 - aplicativo principal vai preparar o ambiente, git, vercel, postgres
 - começar os outros apps - Beleza, Foto e Ticket.
 
+
 - wrangler.jsonc - Documentar aqui coisas importantes
 - static - colocar o llms.txt
 - static - manifest.json - Arrumar todos os detalhes da aplicacao.
 - static - documentar no ai-guidelines.md o que cada arquivo faz
 - package-lock - nunca confiar. Sempre gerar um novo.
 - Vercel api - https://vercel.com/docs/rest-api/reference/endpoints/access-groups/reads-an-access-group
-- Github actions for translate messages "/messages"
-- github actions exemplos - tem 2 deles no perplexity, um criado recentemente e outro antigo
-- importante procurar esses templates porque eu vou usar um para fazer traducao automatica em todas as branchs
+
+
 
 ```text
 sempre testar o que foi feito, se der um erro procure na internet a solucao e teste novamente.
