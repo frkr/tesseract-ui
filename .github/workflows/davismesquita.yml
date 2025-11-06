@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      pull-requests: write
 
     steps:
       - name: Checkout code
@@ -59,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    needs: translation
+    needs: [translation, coverage]
 
     steps:
       - name: Checkout code
