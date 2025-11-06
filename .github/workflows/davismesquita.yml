@@ -56,7 +56,7 @@ jobs:
           The file 'src/routes/user/profile/+page.svelte' must have a way to change the language (add the same amount languages as in '/project.inlang' file).
           Validate translations using 'pnpm run paraglide:compile' and check if there are any errors and fix them.
           Finally, in the README.md you will find what language this project uses as the main language and create the 'summary' in that language.
-          Do not create additional files like 'VALIDACAO_TRADUCOES.md' or 'SUMMARY_TRADUCAO.md' like that.
+          Do not create additional files like 'VALIDACAO_TRADUCOES.md' or 'SUMMARY_TRADUCAO.md'.
           If there are any changes, commit using the summary and push it."
 
   prettier:
@@ -96,5 +96,5 @@ jobs:
           git config --local user.email "suporte@ideias.casa"
           git config --local user.name "Chore"
           git add .
-          git commit -m "chore: lint"
+          git commit -m "chore: prettier"
           git push
