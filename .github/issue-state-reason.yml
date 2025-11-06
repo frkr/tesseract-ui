@@ -1,0 +1,17 @@
+#state_reason - completed, not_planned, duplicate, reopened, null
+#state
+#open - Issue está aberta
+#closed - Issue foi fechada
+
+#on:
+#  issues:
+#    types: [closed]
+#
+#jobs:
+#  check_close_reason:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Verificar razão de fechamento
+#        run: |
+#          echo "Estado: ${{ github.event.issue.state }}"
+#          echo "Razão de fechamento: ${{ github.event.issue.state_reason }}"
