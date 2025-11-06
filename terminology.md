@@ -1,41 +1,45 @@
 # Terminologia para uso geral no sistema inteiro
 
-## Sistema de pontuação
+Este documento define a terminologia padrao utilizada em todo o projeto Tesseract UI, garantindo consistencia na comunicacao e na interface do usuario.
+
+## Sistema de pontuacao
 
 ### Excelente performance (8,5+ pontos)
 
-- Melhores práticas / Best practices: Ideal para estabelecer credibilidade
-- Formato / Format: Perfeito para especificações técnicas
+- Melhores praticas / Best practices: Ideal para estabelecer credibilidade
+- Formato / Format: Perfeito para especificacoes tecnicas
 - Modelo / Template: Perfeito para marketing; soa moderno e profissional
 - Roteiro / Playbook: Excelente para guias passo a passo
 
 ### Boa performance (7,5–8,4 pontos)
 
-- Diretriz / Guideline: Versátil para múltiplos contextos
-- Instrução / Instruction: Eficaz para comandos específicos
-- Padrão / Standard: Apropriado para normatização
-- Regra / Rule: Adequado para regulamentações
+- Diretriz / Guideline: Versatil para multiplos contextos
+- Instrucao / Instruction: Eficaz para comandos especificos
+- Padrao / Standard: Apropriado para normatizacao
+- Regra / Rule: Adequado para regulamentacoes
 
-# Técnicos
+## Contextos de uso
 
-Recomendação: Formato / Format (8.79 pontos)
+### Tecnicos
 
-- Ideal para especificações de apresentação
-- Alta clareza para equipes técnicas
+Recomendacao: Formato / Format (8.79 pontos)
+
+- Ideal para especificacoes de apresentacao
+- Alta clareza para equipes tecnicas
 - Linguagem precisa e objetiva
 
-# corporativos
+### Corporativos
 
-Recomendação: Melhores práticas / Best practices (9.37 pontos)
+Recomendacao: Melhores praticas / Best practices (9.37 pontos)
 
 - Transmite expertise e confiabilidade
-- Máxima aceitação editorial
-- Versatilidade para múltiplos públicos
+- Maxima aceitacao editorial
+- Versatilidade para multiplos publicos
 
-# institucionais
+### Institucionais
 
-Recomendação: Diretriz / Guideline (8.36 pontos)
+Recomendacao: Diretriz / Guideline (8.36 pontos)
 
-- Mantém formalidade apropriada
+- Mantem formalidade apropriada
 - Reconhecimento universal
-- Equilíbrio entre clareza e autoridade
+- Equilibrio entre clareza e autoridade

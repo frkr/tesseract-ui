@@ -8,5 +8,26 @@
 		"pathPattern": "./messages/{locale}.json"
 	},
 	"baseLocale": "en",
-	"locales": ["pt-br", "en", "es","fr", "de","ru","ja","pt","ar","it","zh","hi","zh-CN","zh-TW","zh-HK","zh-Hans","zh-Hans-CN","zh-Hans-SG","zh-Hans-MO","zh-Hans-HK"]
+	"locales": [
+		"pt-br",
+		"en",
+		"es",
+		"fr",
+		"de",
+		"ru",
+		"ja",
+		"pt",
+		"ar",
+		"it",
+		"zh",
+		"hi",
+		"zh-CN",
+		"zh-TW",
+		"zh-HK",
+		"zh-Hans",
+		"zh-Hans-CN",
+		"zh-Hans-SG",
+		"zh-Hans-MO",
+		"zh-Hans-HK"
+	]
 }

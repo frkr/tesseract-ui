@@ -18,6 +18,26 @@ export default defineConfig(
 	prettier,
 	...svelte.configs.prettier,
 	{
+		ignores: [
+			'node_modules/**',
+			'.pnpm-store/**',
+			'.svelte-kit/**',
+			'build/**',
+			'.vercel/**',
+			'.netlify/**',
+			'.wrangler/**',
+			'output/**',
+			'dist/**',
+			'static/**',
+			'drizzle/**',
+			'stash/**',
+			'src/lib/paraglide/**',
+			'*.min.js',
+			'*.min.css',
+			'*.md'
+		]
+	},
+	{
 		languageOptions: {
 			globals: { ...globals.browser, ...globals.node }
 		},
@@ -38,6 +58,16 @@ export default defineConfig(
 				extraFileExtensions: ['.svelte'],
 				parser: ts.parser,
 				svelteConfig
+			}
+		}
+	},
+	{
+		files: ['**/*.ts', '**/*.tsx'],
+		ignores: ['**/*.spec.ts', '**/*.test.ts', 'vitest-setup-client.ts', '**/paraglide/**'],
+		languageOptions: {
+			parserOptions: {
+				project: './tsconfig.json',
+				tsconfigRootDir: import.meta.dirname
 			}
 		}
 	}

@@ -100,5 +100,13 @@
 	"invalidDateValue": "Valor de fecha inválido",
 	"invalidExpirationDate": "Fecha de expiración inválida",
 	"errorValidatingGoogleAuth": "Error al validar código de autorización de Google:",
-	"errorCreatingSession": "Error al crear sesión o establecer cookie:"
+	"errorCreatingSession": "Error al crear sesión o establecer cookie:",
+	"bestPractices": "Mejores prácticas",
+	"format": "Formato",
+	"template": "Plantilla",
+	"playbook": "Guía",
+	"guideline": "Directriz",
+	"instruction": "Instrucción",
+	"standard": "Estándar",
+	"rule": "Regla"
 }

@@ -5,6 +5,25 @@ yarn.lock
 bun.lock
 bun.lockb
 
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+/.svelte-kit/
+/build/
+/.vercel/
+/.netlify/
+/.wrangler/
+/output/
+dist/
+
 # Miscellaneous
 /static/
 /drizzle/
+/stash/
+*.min.js
+*.min.css
+
+# Documentation
+*.md

@@ -1,7 +1,7 @@
 # Copyright (c) 2025 Davi Saranszky Mesquita. All rights reserved.
 # See LICENSE for license information.
 
-name: Translation Files
+name: Casa Das Idéias
 
 on:
   push:
@@ -48,22 +48,23 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           export PATH="$HOME/.cursor/bin:$PATH"
-          git config --local user.email "ai@ideias.casa"
+          git config --local user.email "suporte@ideias.casa"
           git config --local user.name "AI"
           cursor-agent -p --model auto --force --output-format text "You have full access to git, GitHub CLI, and PR operations. You can also run any command you want.
-          First, check the terminologies in the '/terminology.md' file and update '/messages' accordingly (Remember, the '/terminology.md' is for everything in the project, correct the '/terminology.md' file to respect that directive).
+          First, check the terminologies in the '/terminology.md' file and update '/messages' accordingly.
           Then, check all languages in the '/project.inlang' folder and check all translation messages in the '/messages' folder. Add new languages if necessary.
-          The file 'src/routes/user/profile/+page.svelte' must have a way to change the language.
+          The file 'src/routes/user/profile/+page.svelte' must have a way to change the language (add the same amount languages as in '/project.inlang' file).
           Validate translations using 'pnpm run paraglide:compile' and check if there are any errors and fix them.
           Finally, in the README.md you will find what language this project uses as the main language and create the 'summary' in that language.
-          Do not create additional files like 'VALIDACAO_TRADUCOES.md' or 'SUMMARY_TRADUCAO.md'.
+          Do not create additional files like 'VALIDACAO_TRADUCOES.md' or 'SUMMARY_TRADUCAO.md' like that.
           If there are any changes, commit using the summary and push it."
 
-  lint:
+  prettier:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     needs: translation
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -79,8 +80,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run lint
-        run: pnpm lint
+      - name: Run prettier
+        run: pnpm prettier
 
       - name: Check for changes
         id: git-check
@@ -92,8 +93,8 @@ jobs:
       - name: Commit changes
         if: steps.git-check.outputs.changes == 'true'
         run: |
-          git config --local user.email "ai@ideias.casa"
-          git config --local user.name "AI"
+          git config --local user.email "suporte@ideias.casa"
+          git config --local user.name "Chore"
           git add .
           git commit -m "chore: lint"
           git push

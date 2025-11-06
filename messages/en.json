@@ -100,5 +100,13 @@
 	"invalidDateValue": "Invalid date value",
 	"invalidExpirationDate": "Invalid expiration date",
 	"errorValidatingGoogleAuth": "Error validating Google authorization code:",
-	"errorCreatingSession": "Error creating session or setting cookie:"
+	"errorCreatingSession": "Error creating session or setting cookie:",
+	"bestPractices": "Best practices",
+	"format": "Format",
+	"template": "Template",
+	"playbook": "Playbook",
+	"guideline": "Guideline",
+	"instruction": "Instruction",
+	"standard": "Standard",
+	"rule": "Rule"
 }
