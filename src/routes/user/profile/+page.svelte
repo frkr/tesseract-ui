@@ -126,7 +126,8 @@
 							title={lang.name}
 							class="text-xs"
 						>
-							{lang.flag} {lang.name}
+							{lang.flag}
+							{lang.name}
 						</Button>
 					{/each}
 				</div>
