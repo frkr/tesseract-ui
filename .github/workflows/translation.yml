@@ -55,4 +55,4 @@ jobs:
           Then, Check all languages on '/project.inlang' folder and Check all translation messages on '/messages' folder.
           Validate translations using 'pnpm run paraglide:compile' and check if there are any errors and fix them.
           Finally, on README.md you will find out what language this project uses as main language and create the 'summary' on that language.
-          Well, if has any changes, commit and PUSH it."
+          Well, if has any changes, commit using summary and PUSH it."
