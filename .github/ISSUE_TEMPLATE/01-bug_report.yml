@@ -1,7 +1,7 @@
 name: 🐛 Bug Report
 description: Report a bug to help us improve the project
-title: "[BUG] "
-labels: ["bug", "triage"]
+title: '[BUG] '
+labels: ['bug', 'triage']
 assignees: []
 
 body:
@@ -9,7 +9,7 @@ body:
     attributes:
       value: |
         Thank you for taking the time to report this bug! 🙏
-        
+
         Please provide as much detail as possible to help us understand and reproduce the issue.
 
   - type: textarea
@@ -17,7 +17,7 @@ body:
     attributes:
       label: Description
       description: Clearly describe the bug you encountered
-      placeholder: "When I tried to [action], [unexpected behavior] happened instead of [expected behavior]"
+      placeholder: 'When I tried to [action], [unexpected behavior] happened instead of [expected behavior]'
     validations:
       required: true
 
@@ -39,7 +39,7 @@ body:
     attributes:
       label: Expected Behavior
       description: What should happen instead?
-      placeholder: "The system should..."
+      placeholder: 'The system should...'
     validations:
       required: true
 
@@ -48,7 +48,7 @@ body:
     attributes:
       label: Actual Behavior
       description: What actually happens?
-      placeholder: "Instead, the system..."
+      placeholder: 'Instead, the system...'
     validations:
       required: true
 
@@ -58,10 +58,10 @@ body:
       label: Severity
       description: How critical is this bug?
       options:
-        - "🟢 Low (cosmetic issue, workaround available)"
-        - "🟡 Medium (affects functionality, no easy workaround)"
-        - "🔴 High (major functionality broken)"
-        - "🔴🔴 Critical (system unusable or data loss)"
+        - '🟢 Low (cosmetic issue, workaround available)'
+        - '🟡 Medium (affects functionality, no easy workaround)'
+        - '🔴 High (major functionality broken)'
+        - '🔴🔴 Critical (system unusable or data loss)'
     validations:
       required: true
 
@@ -83,14 +83,14 @@ body:
     attributes:
       label: Error Logs / Screenshots
       description: Include error messages, stack traces, or screenshots
-      placeholder: "Paste error output here or attach screenshots"
+      placeholder: 'Paste error output here or attach screenshots'
 
   - type: textarea
     id: additional
     attributes:
       label: Additional Context
       description: Any other context that might be helpful?
-      placeholder: "I noticed this started happening after version X..."
+      placeholder: 'I noticed this started happening after version X...'
 
   - type: checkboxes
     id: verification

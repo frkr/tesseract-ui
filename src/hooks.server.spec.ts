@@ -26,7 +26,10 @@ vi.mock('$lib/utils/auth', () => ({
 
 vi.mock('$lib/paraglide/server', () => ({
 	paraglideMiddleware: vi.fn((request, callback) => {
-		return callback({ request, locale: 'pt-BR' }, vi.fn((e) => e));
+		return callback(
+			{ request, locale: 'pt-BR' },
+			vi.fn((e) => e)
+		);
 	})
 }));
 

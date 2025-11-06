@@ -13,6 +13,13 @@ vi.mock('$env/static/private', () => ({
 	GOOGLE_CLIENT_SECRET: 'test-client-secret'
 }));
 
+// Mock dynamic env
+vi.mock('$env/dynamic/private', () => ({
+	env: {
+		NODE_ENV: 'development'
+	}
+}));
+
 describe('googleClient.server', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -38,6 +45,22 @@ describe('googleClient.server', () => {
 		if (calls.length > 0) {
 			const callbackUrl = calls[calls.length - 1][2];
 			expect(callbackUrl).toContain('/user/login/google/callback');
+		}
+	});
+
+	it('should include protocol in callback URL', () => {
+		const calls = (Google as any).mock.calls;
+		if (calls.length > 0) {
+			const callbackUrl = calls[calls.length - 1][2];
+			expect(callbackUrl).toMatch(/^https?:\/\//);
+		}
+	});
+
+	it('should have valid URL format', () => {
+		const calls = (Google as any).mock.calls;
+		if (calls.length > 0) {
+			const callbackUrl = calls[calls.length - 1][2];
+			expect(() => new URL(callbackUrl)).not.toThrow();
 		}
 	});
 });

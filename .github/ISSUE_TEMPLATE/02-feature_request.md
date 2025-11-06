@@ -1,8 +1,8 @@
 ---
 name: ✨ Feature Request
 about: Suggest a new feature or enhancement
-title: "[FEATURE] "
-labels: ["enhancement", "triage"]
+title: '[FEATURE] '
+labels: ['enhancement', 'triage']
 assignees: []
 ---
 
@@ -21,6 +21,7 @@ assignees: []
 ## Alternatives Considered
 
 <!-- What other approaches have you considered? -->
+
 - Alternative 1: ...
 - Alternative 2: ...
 

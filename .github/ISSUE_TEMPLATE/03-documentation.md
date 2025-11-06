@@ -1,8 +1,8 @@
 ---
 name: 📚 Documentation Issue
 about: Suggest documentation improvements
-title: "[DOCS] "
-labels: ["documentation", "triage"]
+title: '[DOCS] '
+labels: ['documentation', 'triage']
 assignees: []
 ---
 
