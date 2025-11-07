@@ -7,9 +7,9 @@ name: Internal Translations
 
 on:
   push:
-    paths:
-      - '.github/ISSUE_TEMPLATE/**'
-      - 'README.md'
+#    paths:
+#      - '.github/ISSUE_TEMPLATE/**'
+#      - 'README.md'
   workflow_dispatch:
 
 jobs:
