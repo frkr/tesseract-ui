@@ -7,11 +7,11 @@ name: Internal Translations
 
 on:
   push:
-    paths:
-      - '.github/ISSUE_TEMPLATE/**'
-      - 'README.md'
-    branches:
-      - main
+#    paths:
+#      - '.github/ISSUE_TEMPLATE/**'
+#      - 'README.md'
+#    branches:
+#      - main
   workflow_dispatch: 
 
 jobs:
