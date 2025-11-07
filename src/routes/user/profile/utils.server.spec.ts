@@ -1,138 +1,121 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { addUserToGroup, getUsersInGroup } from './utils.server';
-import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '$lib/db/schema';
 
-describe('utils.server', () => {
-	let mockDb: any;
-	let mockSelect: any;
-	let mockFrom: any;
-	let mockWhere: any;
-	let mockInsert: any;
-	let mockValues: any;
-	let mockInnerJoin: any;
+vi.mock('$lib/db/schema', async () => {
+	const actual = await vi.importActual<typeof import('$lib/db/schema')>('$lib/db/schema');
+	return actual;
+});
 
-	beforeEach(() => {
-		vi.clearAllMocks();
+describe('addUserToGroup', () => {
+	it('inserts relation when none exists', async () => {
+		const whereMock = vi.fn().mockResolvedValue([]);
+		const valuesMock = vi.fn().mockResolvedValue(undefined);
+		const db = {
+			select: vi.fn(() => ({
+				from: vi.fn(() => ({
+					where: whereMock
+				}))
+			})),
+			insert: vi.fn(() => ({
+				values: valuesMock
+			}))
+		} as any;
 
-		mockWhere = vi.fn();
-		mockInnerJoin = vi.fn(() => ({ where: mockWhere }));
-		mockFrom = vi.fn(() => ({ innerJoin: mockInnerJoin }));
-		mockSelect = vi.fn(() => ({ from: mockFrom }));
-		mockValues = vi.fn().mockResolvedValue(undefined);
-		mockInsert = vi.fn(() => ({ values: mockValues }));
+		const result = await addUserToGroup(db, 'group-1', 'user-1');
 
-		mockDb = {
-			select: mockSelect,
-			insert: mockInsert
-		} as unknown as PostgresJsDatabase<typeof schema>;
+		expect(whereMock).toHaveBeenCalled();
+		expect(valuesMock).toHaveBeenCalledWith({
+			groupId: 'group-1',
+			userId: 'user-1',
+			adm: false
+		});
+		expect(result).toEqual({ success: true });
 	});
 
-	describe('addUserToGroup', () => {
-		it('should return success when adding user to group', async () => {
-			mockWhere.mockResolvedValueOnce([]); // No existing relation
+	it('returns error when relation already exists', async () => {
+		const db = {
+			select: vi.fn(() => ({
+				from: vi.fn(() => ({
+					where: vi.fn().mockResolvedValue([{}])
+				}))
+			})),
+			insert: vi.fn()
+		} as any;
 
-			const result = await addUserToGroup(mockDb, 'group-1', 'user-1');
+		const result = await addUserToGroup(db, 'group-1', 'user-1');
 
-			expect(result.success).toBe(true);
-			expect(mockInsert).toHaveBeenCalled();
-			expect(mockValues).toHaveBeenCalledWith({
-				groupId: 'group-1',
-				userId: 'user-1',
-				adm: false
-			});
-		});
-
-		it('should return error when user is already in group', async () => {
-			mockWhere.mockResolvedValueOnce([{ groupId: 'group-1', userId: 'user-1' }]);
-
-			const result = await addUserToGroup(mockDb, 'group-1', 'user-1');
-
-			expect(result.success).toBe(false);
-			expect(result.error).toBe('USER_ALREADY_IN_GROUP');
-			expect(mockInsert).not.toHaveBeenCalled();
-		});
-
-		it('should handle database errors', async () => {
-			mockWhere.mockResolvedValueOnce([]);
-			mockValues.mockRejectedValueOnce({ code: '23505' }); // Duplicate key error
-
-			const result = await addUserToGroup(mockDb, 'group-1', 'user-1');
-
-			expect(result.success).toBe(false);
-			expect(result.error).toBe('USER_ALREADY_IN_GROUP');
-		});
-
-		it('should handle generic database errors', async () => {
-			mockWhere.mockResolvedValueOnce([]);
-			mockValues.mockRejectedValueOnce(new Error('Database error'));
-
-			const result = await addUserToGroup(mockDb, 'group-1', 'user-1');
-
-			expect(result.success).toBe(false);
-			expect(result.error).toBe('DATABASE_ERROR');
-		});
+		expect(result).toEqual({ success: false, error: 'USER_ALREADY_IN_GROUP' });
 	});
 
-	describe('getUsersInGroup', () => {
-		it('should return users in group', async () => {
-			const mockResults = [
-				{
-					id: 'user-1',
-					username: 'user1',
-					name: 'User 1',
-					isAdmin: true
-				},
-				{
-					id: 'user-2',
-					username: 'user2',
-					name: 'User 2',
-					isAdmin: false
-				}
-			];
+	it('returns specific error for duplicate key violation', async () => {
+		const db = {
+			select: vi.fn(() => ({
+				from: vi.fn(() => ({
+					where: vi.fn().mockResolvedValue([])
+				}))
+			})),
+			insert: vi.fn(() => ({
+				values: vi.fn(async () => {
+					const err = new Error('duplicate') as Error & { code?: string };
+					err.code = '23505';
+					throw err;
+				})
+			}))
+		} as any;
 
-			mockWhere.mockResolvedValueOnce(mockResults);
+		const result = await addUserToGroup(db, 'group-1', 'user-1');
 
-			const result = await getUsersInGroup(mockDb, 'group-1');
+		expect(result).toEqual({ success: false, error: 'USER_ALREADY_IN_GROUP' });
+	});
 
-			expect(result).toHaveLength(2);
-			expect(result[0]).toEqual({
-				id: 'user-1',
-				username: 'user1',
-				name: 'User 1',
-				isAdmin: true
-			});
-			expect(result[1]).toEqual({
-				id: 'user-2',
-				username: 'user2',
-				name: 'User 2',
-				isAdmin: false
-			});
-		});
+	it('returns database error for other exceptions', async () => {
+		const db = {
+			select: vi.fn(() => ({
+				from: vi.fn(() => ({
+					where: vi.fn().mockResolvedValue([])
+				}))
+			})),
+			insert: vi.fn(() => ({
+				values: vi.fn(async () => {
+					throw new Error('unexpected');
+				})
+			}))
+		} as any;
 
-		it('should return empty array when group has no users', async () => {
-			mockWhere.mockResolvedValueOnce([]);
+		const result = await addUserToGroup(db, 'group-1', 'user-1');
 
-			const result = await getUsersInGroup(mockDb, 'group-1');
+		expect(result).toEqual({ success: false, error: 'DATABASE_ERROR' });
+	});
+});
 
-			expect(result).toEqual([]);
-		});
+describe('getUsersInGroup', () => {
+	it('maps database results to expected shape', async () => {
+		const records = [
+			{ id: '1', username: 'user1', name: 'User 1', isAdmin: true },
+			{ id: '2', username: 'user2', name: null, isAdmin: null }
+		];
 
-		it('should default isAdmin to false when null', async () => {
-			const mockResults = [
-				{
-					id: 'user-1',
-					username: 'user1',
-					name: 'User 1',
-					isAdmin: null
-				}
-			];
+		const whereMock = vi.fn().mockResolvedValue(records);
+		const innerJoinMock = vi.fn(() => ({
+			where: whereMock
+		}));
 
-			mockWhere.mockResolvedValueOnce(mockResults);
+		const db = {
+			select: vi.fn(() => ({
+				from: vi.fn(() => ({
+					innerJoin: innerJoinMock
+				}))
+			}))
+		} as any;
 
-			const result = await getUsersInGroup(mockDb, 'group-1');
+		const result = await getUsersInGroup(db, 'group-1');
 
-			expect(result[0].isAdmin).toBe(false);
-		});
+		expect(innerJoinMock).toHaveBeenCalledWith(schema.user, expect.anything());
+		expect(whereMock).toHaveBeenCalled();
+		expect(result).toEqual([
+			{ id: '1', username: 'user1', name: 'User 1', isAdmin: true },
+			{ id: '2', username: 'user2', name: null, isAdmin: false }
+		]);
 	});
 });

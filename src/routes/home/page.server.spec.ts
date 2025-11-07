@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { describe, expect, it, beforeEach, vi } from 'vitest';
 
 const mockGetRequestEvent = vi.hoisted(() => vi.fn());
@@ -20,32 +19,33 @@ vi.mock('@sveltejs/kit', () => ({
 	redirect: redirectMock
 }));
 
-import { load } from './+layout.server';
+import { load } from './+page.server';
 
-describe('doc layout load', () => {
+describe('home page load', () => {
 	beforeEach(() => {
 		mockGetRequestEvent.mockReset();
 		redirectMock.mockClear();
 	});
 
-	it('should redirect to login when user missing', async () => {
+	it('should redirect to login when no user present', async () => {
 		mockGetRequestEvent.mockReturnValue({ locals: { user: null } });
 
 		await expect(load()).rejects.toMatchObject({ location: '/user/login', status: 302 });
 		expect(redirectMock).toHaveBeenCalledWith(302, '/user/login');
 	});
 
-	it('should return locals and empty menu when user present', async () => {
-		const locals = { user: { id: '1' }, session: {}, groups: [] };
+	it('should return locals data and menu for authenticated user', async () => {
+		const locals = { user: { id: 'u1' }, groups: [], session: {} };
 		mockGetRequestEvent.mockReturnValue({ locals });
 
 		const result = await load();
 
-		expect(result).toEqual({
-			user: locals.user,
-			session: locals.session,
-			groups: locals.groups,
-			menu: []
-		});
+		expect(result.menu).toBeDefined();
+		expect(Array.isArray(result.menu)).toBe(true);
+		expect(result.menu.length).toBeGreaterThan(0);
+		expect(result.user).toBe(locals.user);
+		expect(result.session).toBe(locals.session);
+		expect(result.groups).toBe(locals.groups);
+		expect(redirectMock).not.toHaveBeenCalled();
 	});
 });

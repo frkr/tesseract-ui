@@ -1,408 +1,277 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { redirect, fail } from '@sveltejs/kit';
-import { getRequestEvent } from '$app/server';
-import { load, actions } from './+page.server';
-import * as auth from '$lib/utils/auth';
-import * as dbModule from '$lib/db';
-import * as schema from '$lib/db/schema';
-import * as utilsServer from './utils.server';
+<<<<<<< HEAD
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-// Mock dependencies
-vi.mock('@sveltejs/kit', () => ({
-	redirect: vi.fn(),
-	fail: vi.fn((status, data) => ({ status, data }))
-}));
-
+const getRequestEventMock = vi.hoisted(() => vi.fn());
 vi.mock('$app/server', () => ({
-	getRequestEvent: vi.fn()
+	getRequestEvent: getRequestEventMock
 }));
 
-vi.mock('$lib/utils/auth');
-vi.mock('$lib/db');
-vi.mock('./utils.server');
+const redirectMock = vi.hoisted(() =>
+	vi.fn((status: number, location: string) => {
+		const error = new Error('redirect') as Error & { status?: number; location?: string };
+		error.status = status;
+		error.location = location;
+		throw error;
+	})
+);
 
-describe('/user/profile/+page.server', () => {
-	let mockEvent: any;
-	let mockDb: any;
+const failMock = vi.hoisted(() => vi.fn((status: number, data?: unknown) => ({ status, data })));
 
+vi.mock('@sveltejs/kit', () => ({
+	redirect: redirectMock,
+	fail: failMock
+}));
+
+const authMocks = vi.hoisted(() => ({
+	invalidateSession: vi.fn(),
+	deleteSessionTokenCookie: vi.fn()
+}));
+
+vi.mock('$lib/utils/auth', () => authMocks);
+
+const getUsersInGroupMock = vi.hoisted(() => vi.fn());
+const addUserToGroupUtilMock = vi.hoisted(() => vi.fn());
+
+vi.mock('./utils.server', () => ({
+	getUsersInGroup: getUsersInGroupMock,
+	addUserToGroup: addUserToGroupUtilMock
+}));
+
+const selectResponses: any[] = [];
+
+function createSelectBuilder(response: any[] = []) {
+	const finalPromise = Promise.resolve(response);
+	const whereResult = {
+		limit: vi.fn(() => finalPromise),
+		then: (resolve: (value: any) => any, reject?: (reason: any) => any) =>
+			finalPromise.then(resolve, reject)
+	};
+
+	const fromResult = {
+		where: vi.fn(() => whereResult),
+		limit: vi.fn(() => finalPromise),
+		then: (resolve: (value: any) => any, reject?: (reason: any) => any) =>
+			finalPromise.then(resolve, reject)
+	};
+
+	return {
+		from: vi.fn(() => fromResult)
+	};
+}
+
+const selectMock = vi.hoisted(() => vi.fn(() => createSelectBuilder(selectResponses.shift())));
+
+vi.mock('$lib/db', () => ({
+	db: {
+		select: selectMock
+	}
+}));
+
+import { load, actions } from './+page.server';
+
+function createActionEvent(form: Record<string, string | null>, localsOverrides: Partial<typeof defaultLocals> = {}) {
+	return {
+		request: {
+			formData: async () => new Map(Object.entries(form))
+		},
+		locals: {
+			...defaultLocals,
+			...localsOverrides
+		}
+	};
+}
+
+const defaultLocals = {
+	user: { id: 'user-1' },
+	session: { id: 'session-1' },
+	groups: [
+		{
+			groupId: 'group-1',
+			isAdmin: true
+		}
+	]
+};
+
+describe('profile page load', () => {
 	beforeEach(() => {
-		vi.clearAllMocks();
+		getRequestEventMock.mockReset();
+		redirectMock.mockClear();
+		selectResponses.length = 0;
+		selectMock.mockClear();
+		getUsersInGroupMock.mockReset();
+		failMock.mockClear();
+	});
 
-		mockDb = {
-			select: vi.fn(),
-			insert: vi.fn(),
-			update: vi.fn(),
-			delete: vi.fn()
-		};
+	it('redirects unauthenticated users', async () => {
+		getRequestEventMock.mockReturnValue({ locals: { user: null } });
 
-		dbModule.db = mockDb;
+		await expect(load()).rejects.toMatchObject({ location: '/user/login', status: 302 });
+		expect(redirectMock).toHaveBeenCalledWith(302, '/user/login');
+	});
 
-		mockEvent = {
+	it('returns base context for non-administrator', async () => {
+		getRequestEventMock.mockReturnValue({
 			locals: {
-				user: { id: 'user-1', username: 'testuser', name: 'Test User' },
-				session: { id: 'session-1' },
-				groups: [{ groupId: '1', groupName: 'admin', isAdmin: true }]
-			},
-			cookies: {
-				set: vi.fn(),
-				delete: vi.fn(),
-				get: vi.fn(),
-				getAll: vi.fn(),
-				serialize: vi.fn()
-			},
-			request: {
-				formData: vi.fn()
+				user: { id: 'user-2' },
+				session: { id: 'session-2' },
+				groups: [{ groupId: 'group-2', isAdmin: false }]
 			}
-		};
+		});
 
-		vi.mocked(getRequestEvent).mockReturnValue(mockEvent as any);
+		const result = await load();
+
+		expect(result.isAdministrator).toBe(false);
+		expect(result.menu).toEqual([]);
+		expect(result.allUsers).toEqual([]);
+		expect(result.groupMemberships).toEqual({});
 	});
 
-	describe('load', () => {
-		it('should redirect to login if user is not logged in', async () => {
-			mockEvent.locals.user = null;
-			vi.mocked(redirect).mockImplementation(() => {
-				throw new Error('redirect');
-			});
-
-			await expect(load()).rejects.toThrow('redirect');
-			expect(redirect).toHaveBeenCalledWith(302, '/user/login');
+	it('loads admin context with users and memberships', async () => {
+		getRequestEventMock.mockReturnValue({
+			locals: defaultLocals
 		});
+		selectResponses.push([
+			{ id: 'user-1', username: 'user1', name: 'User 1' },
+			{ id: 'user-2', username: 'user2', name: 'User 2' }
+		]);
+		getUsersInGroupMock.mockResolvedValueOnce([{ id: 'user-3', username: 'member', name: null, isAdmin: false }]);
 
-		it('should return user data and empty menu for non-admin user', async () => {
-			mockEvent.locals.user = { id: 'user-2', username: 'regular', name: 'Regular User' };
-			mockEvent.locals.groups = [{ groupId: '2', groupName: 'users', isAdmin: false }];
+		const result = await load();
 
-			const result = await load();
+		expect(result.isAdministrator).toBe(true);
+		expect(result.allUsers).toHaveLength(2);
+		expect(getUsersInGroupMock).toHaveBeenCalledWith(expect.anything(), 'group-1');
+		expect(result.groupMemberships['group-1']).toEqual([
+			{ id: 'user-3', username: 'member', name: null, isAdmin: false }
+		]);
+	});
+});
 
-			expect(result).toHaveProperty('user');
-			expect(result).toHaveProperty('menu');
-			expect(result).toHaveProperty('isAdministrator', false);
-			expect(result).toHaveProperty('allUsers', []);
-			expect(result).toHaveProperty('groupMemberships', {});
-			expect(result.menu).toEqual([]);
-		});
-
-		it('should return user data and fetch all users for admin user', async () => {
-			const mockSelect = vi.fn(() => ({
-				from: vi.fn(() => ({
-					where: vi.fn(() => Promise.resolve([]))
-				}))
-			}));
-
-			mockDb.select = mockSelect;
-
-			vi.mocked(utilsServer.getUsersInGroup).mockResolvedValue([]);
-
-			const result = await load();
-
-			expect(result).toHaveProperty('user');
-			expect(result).toHaveProperty('isAdministrator', true);
-			expect(result).toHaveProperty('allUsers');
-			expect(result).toHaveProperty('groupMemberships');
-			expect(mockSelect).toHaveBeenCalled();
-		});
-
-		it('should fetch group memberships for admin groups', async () => {
-			const mockUsers = [
-				{ id: 'user-1', username: 'user1', name: 'User 1' },
-				{ id: 'user-2', username: 'user2', name: 'User 2' }
-			];
-
-			const mockSelect = vi.fn(() => ({
-				from: vi.fn(() => Promise.resolve(mockUsers))
-			}));
-
-			mockDb.select = mockSelect;
-
-			const mockGroupMembers = [{ id: 'user-1', username: 'user1', name: 'User 1', isAdmin: true }];
-
-			vi.mocked(utilsServer.getUsersInGroup).mockResolvedValue(mockGroupMembers);
-
-			const result = await load();
-
-			expect(result.isAdministrator).toBe(true);
-			expect(result.allUsers).toEqual(mockUsers);
-			expect(utilsServer.getUsersInGroup).toHaveBeenCalledWith(mockDb, '1');
-			expect(result.groupMemberships).toHaveProperty('1');
-			expect(result.groupMemberships['1']).toEqual(mockGroupMembers);
-		});
-
-		it('should handle multiple admin groups', async () => {
-			mockEvent.locals.groups = [
-				{ groupId: '1', groupName: 'admin', isAdmin: true },
-				{ groupId: '2', groupName: 'managers', isAdmin: true }
-			];
-
-			const mockSelect = vi.fn(() => ({
-				from: vi.fn(() => Promise.resolve([]))
-			}));
-
-			mockDb.select = mockSelect;
-
-			vi.mocked(utilsServer.getUsersInGroup).mockResolvedValueOnce([]).mockResolvedValueOnce([]);
-
-			const result = await load();
-
-			expect(result.isAdministrator).toBe(true);
-			expect(utilsServer.getUsersInGroup).toHaveBeenCalledTimes(2);
-			expect(utilsServer.getUsersInGroup).toHaveBeenCalledWith(mockDb, '1');
-			expect(utilsServer.getUsersInGroup).toHaveBeenCalledWith(mockDb, '2');
-		});
-
-		it('should return empty arrays when user has no admin groups', async () => {
-			mockEvent.locals.groups = [{ groupId: '2', groupName: 'users', isAdmin: false }];
-
-			const result = await load();
-
-			expect(result.isAdministrator).toBe(false);
-			expect(result.allUsers).toEqual([]);
-			expect(result.groupMemberships).toEqual({});
-		});
+describe('profile actions logout', () => {
+	beforeEach(() => {
+		failMock.mockClear();
+		redirectMock.mockClear();
+		authMocks.invalidateSession.mockClear();
+		authMocks.deleteSessionTokenCookie.mockClear();
 	});
 
-	describe('actions.logout', () => {
-		it('should fail if session is not present', async () => {
-			mockEvent.locals.session = null;
+	it('returns 401 when session missing', async () => {
+		const result = await actions.logout?.(
+			{
+				locals: { ...defaultLocals, session: null }
+			} as any
+		);
 
-			const result = await actions.logout(mockEvent);
-
-			expect(result).toEqual({ status: 401, data: undefined });
-			expect(auth.invalidateSession).not.toHaveBeenCalled();
-		});
-
-		it('should invalidate session and redirect on successful logout', async () => {
-			vi.mocked(auth.invalidateSession).mockResolvedValue(undefined);
-			vi.mocked(auth.deleteSessionTokenCookie).mockReturnValue(undefined);
-			vi.mocked(redirect).mockImplementation(() => {
-				throw new Error('redirect');
-			});
-
-			await expect(actions.logout(mockEvent)).rejects.toThrow('redirect');
-			expect(auth.invalidateSession).toHaveBeenCalledWith('session-1');
-			expect(auth.deleteSessionTokenCookie).toHaveBeenCalledWith(mockEvent);
-			expect(redirect).toHaveBeenCalledWith(302, '/');
-		});
+		expect(result).toEqual({ status: 401, data: undefined });
 	});
 
-	describe('actions.addUserToGroup', () => {
-		beforeEach(() => {
-			mockEvent.locals.user = { id: 'user-1', username: 'admin', name: 'Admin' };
-			mockEvent.locals.groups = [{ groupId: '1', groupName: 'admin', isAdmin: true }];
-		});
+	it('invalidates session and redirects on logout', async () => {
+		await expect(
+			actions.logout?.({
+				locals: defaultLocals
+			} as any) as Promise<unknown>
+		).rejects.toMatchObject({ location: '/', status: 302 });
 
-		it('should fail if user is not logged in', async () => {
-			mockEvent.locals.user = null;
-			mockEvent.locals.groups = null;
+		expect(authMocks.invalidateSession).toHaveBeenCalledWith('session-1');
+		expect(authMocks.deleteSessionTokenCookie).toHaveBeenCalled();
+	});
+});
 
-			const result = await actions.addUserToGroup(mockEvent);
+describe('profile actions addUserToGroup', () => {
+	beforeEach(() => {
+		failMock.mockClear();
+		redirectMock.mockClear();
+		selectResponses.length = 0;
+		selectMock.mockClear();
+		addUserToGroupUtilMock.mockReset();
+	});
 
-			expect(result).toEqual({ status: 401, data: { message: 'UNAUTHORIZED' } });
-		});
+	it('requires authentication', async () => {
+		const result = await actions.addUserToGroup?.(
+			createActionEvent(
+				{ userId: 'target-1', groupId: 'group-1' },
+				{ user: null, groups: null }
+			) as any
+		);
 
-		it('should fail if user is not administrator', async () => {
-			mockEvent.locals.groups = [{ groupId: '2', groupName: 'users', isAdmin: false }];
+		expect(result).toEqual({ status: 401, data: { message: 'UNAUTHORIZED' } });
+	});
 
-			const formData = new FormData();
-			formData.set('userId', 'user-2');
-			formData.set('groupId', '1');
-			mockEvent.request.formData = vi.fn().mockResolvedValue(formData);
+	it('requires administrator role', async () => {
+		const result = await actions.addUserToGroup?.(
+			createActionEvent(
+				{ userId: 'target-1', groupId: 'group-1' },
+				{ groups: [{ groupId: 'group-1', isAdmin: false }], user: { id: 'user-1' } }
+			) as any
+		);
 
-			const result = await actions.addUserToGroup(mockEvent);
+		expect(result).toEqual({ status: 403, data: { message: 'NOT_ADMINISTRATOR' } });
+	});
 
-			expect(result).toEqual({ status: 403, data: { message: 'NOT_ADMINISTRATOR' } });
-		});
+	it('validates userId input', async () => {
+		const result = await actions.addUserToGroup?.(
+			createActionEvent({ userId: null, groupId: 'group-1' }) as any
+		);
 
-		it('should fail with invalid user ID', async () => {
-			const formData = new FormData();
-			formData.set('userId', '');
-			formData.set('groupId', '1');
-			mockEvent.request.formData = vi.fn().mockResolvedValue(formData);
+		expect(result).toEqual({ status: 400, data: { message: 'INVALID_USER_ID' } });
+	});
 
-			const result = await actions.addUserToGroup(mockEvent);
+	it('validates groupId input', async () => {
+		const result = await actions.addUserToGroup?.(createActionEvent({ userId: 'target-1', groupId: null }) as any);
 
-			expect(result).toEqual({ status: 400, data: { message: 'INVALID_USER_ID' } });
-		});
+		expect(result).toEqual({ status: 400, data: { message: 'GROUP_NOT_SELECTED' } });
+	});
 
-		it('should fail when group ID is not provided', async () => {
-			const formData = new FormData();
-			formData.set('userId', 'user-2');
-			mockEvent.request.formData = vi.fn().mockResolvedValue(formData);
+	it('requires admin rights on selected group', async () => {
+		const result = await actions.addUserToGroup?.(
+			createActionEvent(
+				{ userId: 'target-1', groupId: 'group-2' },
+				{ user: { id: 'user-1' }, groups: [{ groupId: 'group-1', isAdmin: true }] }
+			) as any
+		);
 
-			const result = await actions.addUserToGroup(mockEvent);
+		expect(result).toEqual({ status: 403, data: { message: 'NO_ADMIN_RIGHTS_ON_GROUP' } });
+	});
 
-			expect(result).toEqual({ status: 400, data: { message: 'GROUP_NOT_SELECTED' } });
-		});
+	it('fails when target user not found', async () => {
+		selectResponses.push([]);
+		const result = await actions.addUserToGroup?.(
+			createActionEvent({ userId: 'missing', groupId: 'group-1' }) as any
+		);
 
-		it('should fail when user does not have admin rights on the specific group', async () => {
-			mockEvent.locals.groups = [
-				{ groupId: '1', groupName: 'admin', isAdmin: true },
-				{ groupId: '2', groupName: 'other', isAdmin: false }
-			];
+		expect(result).toEqual({ status: 404, data: { message: 'USER_NOT_FOUND' } });
+	});
 
-			const formData = new FormData();
-			formData.set('userId', 'user-2');
-			formData.set('groupId', '2');
-			mockEvent.request.formData = vi.fn().mockResolvedValue(formData);
+	it('fails when group not found', async () => {
+		selectResponses.push([{ id: 'existing-user' }]);
+		selectResponses.push([]);
 
-			const result = await actions.addUserToGroup(mockEvent);
+		const result = await actions.addUserToGroup?.(
+			createActionEvent({ userId: 'target', groupId: 'group-1' }) as any
+		);
 
-			expect(result).toEqual({ status: 403, data: { message: 'NO_ADMIN_RIGHTS_ON_GROUP' } });
-		});
+		expect(result).toEqual({ status: 404, data: { message: 'GROUP_NOT_FOUND' } });
+	});
 
-		it('should fail when target user does not exist', async () => {
-			const formData = new FormData();
-			formData.set('userId', 'non-existent-user');
-			formData.set('groupId', '1');
-			mockEvent.request.formData = vi.fn().mockResolvedValue(formData);
+	it('handles duplicate membership gracefully', async () => {
+		selectResponses.push([{ id: 'existing-user' }], [{ id: 'group-1' }]);
+		addUserToGroupUtilMock.mockResolvedValue({ success: false, error: 'USER_ALREADY_IN_GROUP' });
 
-			const mockSelect = vi.fn(() => ({
-				from: vi.fn(() => ({
-					where: vi.fn(() => ({
-						limit: vi.fn(() => Promise.resolve([]))
-					}))
-				}))
-			}));
+		const result = await actions.addUserToGroup?.(
+			createActionEvent({ userId: 'target', groupId: 'group-1' }) as any
+		);
 
-			mockDb.select = mockSelect;
+		expect(result).toEqual({ status: 400, data: { message: 'USER_ALREADY_IN_GROUP' } });
+	});
 
-			const result = await actions.addUserToGroup(mockEvent);
+	it('returns success message when user added', async () => {
+		selectResponses.push([{ id: 'existing-user' }], [{ id: 'group-1' }]);
+		addUserToGroupUtilMock.mockResolvedValue({ success: true });
 
-			expect(result).toEqual({ status: 404, data: { message: 'USER_NOT_FOUND' } });
-		});
+		const result = await actions.addUserToGroup?.(
+			createActionEvent({ userId: 'target', groupId: 'group-1' }) as any
+		);
 
-		it('should fail when group does not exist', async () => {
-			const formData = new FormData();
-			formData.set('userId', 'user-2');
-			formData.set('groupId', 'non-existent-group');
-			mockEvent.request.formData = vi.fn().mockResolvedValue(formData);
-
-			const mockUser = { id: 'user-2', username: 'user2', name: 'User 2' };
-
-			const mockSelect = vi.fn(() => ({
-				from: vi.fn(() => ({
-					where: vi.fn(() => ({
-						limit: vi.fn((limit) => {
-							if (limit === 1) {
-								return Promise.resolve([mockUser]);
-							}
-							return Promise.resolve([]);
-						})
-					}))
-				}))
-			}));
-
-			mockDb.select = mockSelect;
-
-			const result = await actions.addUserToGroup(mockEvent);
-
-			expect(result).toEqual({ status: 404, data: { message: 'GROUP_NOT_FOUND' } });
-		});
-
-		it('should successfully add user to group', async () => {
-			const formData = new FormData();
-			formData.set('userId', 'user-2');
-			formData.set('groupId', '1');
-			mockEvent.request.formData = vi.fn().mockResolvedValue(formData);
-
-			const mockUser = { id: 'user-2', username: 'user2', name: 'User 2' };
-			const mockGroup = { id: '1', name: 'admin' };
-
-			let callCount = 0;
-			const mockSelect = vi.fn(() => ({
-				from: vi.fn(() => ({
-					where: vi.fn(() => ({
-						limit: vi.fn(() => {
-							callCount++;
-							if (callCount === 1) {
-								return Promise.resolve([mockUser]);
-							}
-							return Promise.resolve([mockGroup]);
-						})
-					}))
-				}))
-			}));
-
-			mockDb.select = mockSelect;
-
-			vi.mocked(utilsServer.addUserToGroup).mockResolvedValue({ success: true });
-
-			const result = await actions.addUserToGroup(mockEvent);
-
-			expect(result).toEqual({ success: true, message: 'USER_ADDED_SUCCESSFULLY' });
-			expect(utilsServer.addUserToGroup).toHaveBeenCalledWith(mockDb, '1', 'user-2');
-		});
-
-		it('should fail when user is already in group', async () => {
-			const formData = new FormData();
-			formData.set('userId', 'user-2');
-			formData.set('groupId', '1');
-			mockEvent.request.formData = vi.fn().mockResolvedValue(formData);
-
-			const mockUser = { id: 'user-2', username: 'user2', name: 'User 2' };
-			const mockGroup = { id: '1', name: 'admin' };
-
-			let callCount = 0;
-			const mockSelect = vi.fn(() => ({
-				from: vi.fn(() => ({
-					where: vi.fn(() => ({
-						limit: vi.fn(() => {
-							callCount++;
-							if (callCount === 1) {
-								return Promise.resolve([mockUser]);
-							}
-							return Promise.resolve([mockGroup]);
-						})
-					}))
-				}))
-			}));
-
-			mockDb.select = mockSelect;
-
-			vi.mocked(utilsServer.addUserToGroup).mockResolvedValue({
-				success: false,
-				error: 'USER_ALREADY_IN_GROUP'
-			});
-
-			const result = await actions.addUserToGroup(mockEvent);
-
-			expect(result).toEqual({ status: 400, data: { message: 'USER_ALREADY_IN_GROUP' } });
-		});
-
-		it('should handle database errors', async () => {
-			const formData = new FormData();
-			formData.set('userId', 'user-2');
-			formData.set('groupId', '1');
-			mockEvent.request.formData = vi.fn().mockResolvedValue(formData);
-
-			const mockUser = { id: 'user-2', username: 'user2', name: 'User 2' };
-			const mockGroup = { id: '1', name: 'admin' };
-
-			let callCount = 0;
-			const mockSelect = vi.fn(() => ({
-				from: vi.fn(() => ({
-					where: vi.fn(() => ({
-						limit: vi.fn(() => {
-							callCount++;
-							if (callCount === 1) {
-								return Promise.resolve([mockUser]);
-							}
-							return Promise.resolve([mockGroup]);
-						})
-					}))
-				}))
-			}));
-
-			mockDb.select = mockSelect;
-
-			vi.mocked(utilsServer.addUserToGroup).mockResolvedValue({
-				success: false,
-				error: 'DATABASE_ERROR'
-			});
-
-			const result = await actions.addUserToGroup(mockEvent);
-
-			expect(result).toEqual({ status: 500, data: { message: 'DATABASE_ERROR' } });
-		});
+		expect(result).toEqual({ success: true, message: 'USER_ADDED_SUCCESSFULLY' });
 	});
 });

@@ -1,125 +1,149 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { sequence } from '@sveltejs/kit/hooks';
-import { handle } from './hooks.server';
-import * as auth from '$lib/utils/auth';
-import { paraglideMiddleware } from '$lib/paraglide/server';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Handle, ResolveOptions } from '@sveltejs/kit';
 
-// Mock dependencies
-vi.mock('@sveltejs/kit/hooks', () => ({
-	sequence: vi.fn((...handlers) => {
-		return async (event: any) => {
-			let result = event;
-			for (const handler of handlers) {
-				result = await handler({ event: result, resolve: vi.fn((e) => e) });
-			}
-			return result;
+const handlerContainer = vi.hoisted(() => ({ value: [] as Handle[] }));
+
+const sequenceMock = vi.hoisted(() =>
+	vi.fn((...handlers: Handle[]) => {
+		handlerContainer.value.splice(0, handlerContainer.value.length, ...handlers);
+		return async (event: Parameters<Handle>[0]['event'], resolve: Parameters<Handle>[0]['resolve']) => {
+			const dispatch = async (
+				index: number,
+				currentEvent: Parameters<Handle>[0]['event'],
+				options?: ResolveOptions
+			): Promise<any> => {
+				if (index >= handlers.length) {
+					return resolve(currentEvent, options);
+				}
+				const handler = handlers[index];
+				return handler({
+					event: currentEvent,
+					resolve: (nextEvent, nextOptions) =>
+						dispatch(index + 1, nextEvent ?? currentEvent, nextOptions ?? options)
+				});
+			};
+			return dispatch(0, event);
 		};
 	})
+);
+
+vi.mock('@sveltejs/kit/hooks', () => ({
+	sequence: sequenceMock
 }));
 
-vi.mock('$lib/utils/auth', () => ({
-	sessionCookieName: 'auth-session',
+const paraglideMiddlewareMock = vi.hoisted(() =>
+	vi.fn(
+		(request: Request, callback: (params: { request: Request; locale: string }) => Promise<any>) => {
+			const newRequest = new Request(request, { headers: { 'x-locale': 'pt' } });
+			return callback({ request: newRequest, locale: 'pt-BR' });
+		}
+	)
+);
+
+vi.mock('$lib/paraglide/server', () => ({
+	paraglideMiddleware: paraglideMiddlewareMock
+}));
+
+const authMocks = vi.hoisted(() => ({
 	validateSessionToken: vi.fn(),
 	setSessionTokenCookie: vi.fn(),
 	deleteSessionTokenCookie: vi.fn()
 }));
 
-vi.mock('$lib/paraglide/server', () => ({
-	paraglideMiddleware: vi.fn((request, callback) => {
-		return callback(
-			{ request, locale: 'pt-BR' },
-			vi.fn((e) => e)
-		);
-	})
+vi.mock('$lib/utils/auth', () => ({
+	sessionCookieName: 'session',
+	validateSessionToken: authMocks.validateSessionToken,
+	setSessionTokenCookie: authMocks.setSessionTokenCookie,
+	deleteSessionTokenCookie: authMocks.deleteSessionTokenCookie
 }));
 
-describe('hooks.server', () => {
-	let mockEvent: any;
-	let mockResolve: any;
+import { handle } from './hooks.server';
 
+function createEvent(cookieValue?: string) {
+	const cookiesGet = vi.fn(() => cookieValue);
+	return {
+		request: new Request('https://example.com'),
+		locals: {} as Record<string, unknown>,
+		cookies: {
+			get: cookiesGet
+		}
+	};
+}
+
+describe('hooks.server handle', () => {
 	beforeEach(() => {
-		vi.clearAllMocks();
-
-		mockResolve = vi.fn((event) => event);
-		mockEvent = {
-			request: new Request('http://localhost'),
-			cookies: {
-				get: vi.fn(),
-				set: vi.fn(),
-				delete: vi.fn()
-			},
-			locals: {}
-		};
+		handlerContainer.value.length = 0;
+		paraglideMiddlewareMock.mockClear();
+		authMocks.validateSessionToken.mockReset();
+		authMocks.setSessionTokenCookie.mockReset();
+		authMocks.deleteSessionTokenCookie.mockReset();
 	});
 
-	it('should export handle function', () => {
-		expect(handle).toBeDefined();
-		expect(typeof handle).toBe('function');
-	});
+	it('applies paraglide middleware and resolves without session', async () => {
+		const event = createEvent();
+		const resolve = vi.fn(async (_event, opts?: ResolveOptions) => {
+			if (opts?.transformPageChunk) {
+				return opts.transformPageChunk({ html: '<html>%paraglide.lang%</html>' });
+			}
+			return 'resolved';
+		});
 
-	it('should set user to null when no session token', async () => {
-		mockEvent.cookies.get.mockReturnValue(null);
-		vi.mocked(auth.validateSessionToken).mockResolvedValue({
-			session: null,
+		const result = await handle(event as any, resolve as any);
+
+		expect(paraglideMiddlewareMock).toHaveBeenCalled();
+		expect(resolve).toHaveBeenCalled();
+		expect(result).toBe('<html>pt-BR</html>');
+		expect(event.locals).toEqual({
 			user: null,
+			session: null,
 			groups: null
 		});
-
-		const result = await handle({ event: mockEvent, resolve: mockResolve });
-
-		expect(result.locals.user).toBeNull();
-		expect(result.locals.session).toBeNull();
-		expect(result.locals.groups).toBeNull();
-		expect(auth.validateSessionToken).not.toHaveBeenCalled();
+		expect(authMocks.validateSessionToken).not.toHaveBeenCalled();
 	});
 
-	it('should validate session token when cookie exists', async () => {
-		mockEvent.cookies.get.mockReturnValue('session-token');
-		vi.mocked(auth.validateSessionToken).mockResolvedValue({
-			session: { id: 'session-1', userId: 'user-1', expiresAt: new Date() },
-			user: { id: 'user-1', username: 'testuser' },
-			groups: []
+	it('validates session token and refreshes cookie when session valid', async () => {
+		const event = createEvent('token-123');
+		const resolve = vi.fn(async () => 'resolved');
+
+		authMocks.validateSessionToken.mockResolvedValueOnce({
+			session: { id: 'session-id', expiresAt: new Date('2024-01-01T00:00:00Z') },
+			user: { id: 'user-1' },
+			groups: [{ groupId: 'g1' }]
 		});
 
-		const result = await handle({ event: mockEvent, resolve: mockResolve });
+		await handle(event as any, resolve as any);
 
-		expect(auth.validateSessionToken).toHaveBeenCalledWith('session-token');
-		expect(result.locals.user).toBeDefined();
-		expect(result.locals.session).toBeDefined();
-	});
-
-	it('should set session cookie when session is valid', async () => {
-		mockEvent.cookies.get.mockReturnValue('session-token');
-		const mockSession = {
-			id: 'session-1',
-			userId: 'user-1',
-			expiresAt: new Date(Date.now() + 3600000)
-		};
-		vi.mocked(auth.validateSessionToken).mockResolvedValue({
-			session: mockSession,
-			user: { id: 'user-1', username: 'testuser' },
-			groups: []
-		});
-
-		await handle({ event: mockEvent, resolve: mockResolve });
-
-		expect(auth.setSessionTokenCookie).toHaveBeenCalledWith(
-			mockEvent,
-			'session-token',
-			mockSession.expiresAt
+		expect(authMocks.validateSessionToken).toHaveBeenCalledWith('token-123');
+		expect(authMocks.setSessionTokenCookie).toHaveBeenCalledWith(
+			event,
+			'token-123',
+			new Date('2024-01-01T00:00:00Z')
 		);
+		expect(event.locals).toEqual({
+			user: { id: 'user-1' },
+			session: { id: 'session-id', expiresAt: new Date('2024-01-01T00:00:00Z') },
+			groups: [{ groupId: 'g1' }]
+		});
+		expect(authMocks.deleteSessionTokenCookie).not.toHaveBeenCalled();
 	});
 
-	it('should delete session cookie when session is invalid', async () => {
-		mockEvent.cookies.get.mockReturnValue('invalid-token');
-		vi.mocked(auth.validateSessionToken).mockResolvedValue({
+	it('clears cookie when session invalid', async () => {
+		const event = createEvent('token-456');
+		const resolve = vi.fn(async () => 'resolved');
+
+		authMocks.validateSessionToken.mockResolvedValueOnce({
 			session: null,
 			user: null,
 			groups: null
 		});
 
-		await handle({ event: mockEvent, resolve: mockResolve });
+		await handle(event as any, resolve as any);
 
-		expect(auth.deleteSessionTokenCookie).toHaveBeenCalledWith(mockEvent);
+		expect(authMocks.deleteSessionTokenCookie).toHaveBeenCalledWith(event);
+		expect(event.locals).toEqual({
+			user: null,
+			session: null,
+			groups: null
+		});
 	});
 });

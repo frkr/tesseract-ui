@@ -21,10 +21,6 @@ vi.mock('$env/dynamic/private', () => ({
 }));
 
 describe('googleClient.server', () => {
-	beforeEach(() => {
-		vi.clearAllMocks();
-	});
-
 	it('should export a Google client instance', () => {
 		expect(googleClient).toBeDefined();
 		expect(Google).toHaveBeenCalled();

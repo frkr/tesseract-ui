@@ -13,6 +13,17 @@ import type { RequestEvent } from '@sveltejs/kit';
 import * as dbModule from '$lib/db';
 import * as table from '$lib/db/schema';
 
+vi.mock('$env/static/private', () => ({
+	SESSION_EXPIRY_HOURS: '6',
+	SESSION_COOKIE_NAME: 'auth_session'
+}));
+
+const getUserGroupsAndAdminMock = vi.hoisted(() => vi.fn());
+
+vi.mock('$lib/utils/common', () => ({
+	getUserGroupsAndAdmin: getUserGroupsAndAdminMock
+}));
+
 // Mock the db module
 vi.mock('$lib/db', () => ({
 	db: {
@@ -187,6 +198,8 @@ describe('validateSessionToken', () => {
 		mockDb.select = mockSelect;
 		mockDb.update = mockUpdate;
 		mockDb.delete = mockDelete;
+		getUserGroupsAndAdminMock.mockReset();
+		getUserGroupsAndAdminMock.mockResolvedValue([]);
 	});
 
 	it('should return null for non-existent session', async () => {

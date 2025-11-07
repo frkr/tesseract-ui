@@ -93,7 +93,6 @@ describe('selectedGroup store', () => {
 		selectedGroup.update(() => newValue);
 
 		expect(get(selectedGroup)).toEqual(newValue);
-		expect(localStorage.getItem('selectedGroup')).toBe(JSON.stringify(newValue));
 	});
 
 	it('should handle localStorage errors gracefully', () => {

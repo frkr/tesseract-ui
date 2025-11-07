@@ -59,7 +59,7 @@ describe('generateUniqueId', () => {
 			expect(id.length).toBeGreaterThan(0);
 		});
 
-		expect.assertions(101);
+		expect.assertions(201);
 	});
 });
 
