@@ -11,11 +11,10 @@ if (env.NODE_ENV === 'development') {
 	// Development: use localhost fallback
 	callbackHost = 'localhost:5173';
 } else {
-	// Production/Preview: prioritize custom domain, then explicit host, then Vercel's automatic URLs
-	if (env.NEXT_PUBLIC_CUSTOM_DOMAIN) {
-		callbackHost = env.NEXT_PUBLIC_CUSTOM_DOMAIN;
-	} else if (env.APP_HOST) {
+	if (env.APP_HOST) {
 		callbackHost = env.APP_HOST;
+	} else if (env.NEXT_PUBLIC_CUSTOM_DOMAIN) {
+		callbackHost = env.NEXT_PUBLIC_CUSTOM_DOMAIN;
 	} else if (env.VERCEL_URL) {
 		// VERCEL_URL is available in both preview and production environments
 		callbackHost = env.VERCEL_URL;

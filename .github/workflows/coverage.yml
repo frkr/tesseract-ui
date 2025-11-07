@@ -54,6 +54,6 @@ jobs:
           
           All those files must have 80% coverage. DO NOT CHANGE ANYTHING, just add the coverage adding '.spec.ts' files understanding what those files do (if you are not sure, do not try to coverage that)
           Finally, in the README.md you will find what language this project uses as the main language and create the 'summary' in that language.
-          Do not create additional files like 'VALIDACAO_COVERAGE.md' or 'SUMMARY_COVERAGE.md'.
-          Do not create and verify if exists to rename it files beginning with '+' and ending with '.spec.ts' (files beginning with '+' are exclusive to another framework, just do not put + on beginning).
+          Do not create additional files like 'VALIDACAO_COVERAGE.md' or 'SUMMARY_COVERAGE.md' or change the 'README.md'.
+          Do not use and verify if exists to rename it files beginning with '+' and ending with '.spec.ts' for example '+app.spec.ts'; DO NOT USE '+' in the name of the file.
           If there are any changes, commit using the summary and push it."
