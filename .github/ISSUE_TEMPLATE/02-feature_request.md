@@ -6,6 +6,8 @@ labels: ['enhancement', 'triage']
 assignees: []
 ---
 
+Notice: You can write this issue in any language, our system will translate.
+
 ## Description
 
 <!-- Clearly describe the feature you would like to see -->

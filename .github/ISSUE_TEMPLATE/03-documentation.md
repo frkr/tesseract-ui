@@ -6,6 +6,8 @@ labels: ['documentation', 'triage']
 assignees: []
 ---
 
+Notice: You can write this issue in any language, our system will translate.
+
 ## What needs documentation?
 
 <!-- Describe what topic or feature needs documentation or clarification -->

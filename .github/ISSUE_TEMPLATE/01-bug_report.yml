@@ -8,6 +8,8 @@ body:
   - type: markdown
     attributes:
       value: |
+        Notice: You can write this issue in any language, our system will translate.
+        
         Thank you for taking the time to report this bug! 🙏
 
         Please provide as much detail as possible to help us understand and reproduce the issue.
