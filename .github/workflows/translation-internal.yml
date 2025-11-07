@@ -7,10 +7,11 @@ name: Internal Translations
 
 on:
   push:
-#    paths:
-#      - '.github/ISSUE_TEMPLATE/**'
-#      - 'README.md'
-  workflow_dispatch:
+    paths:
+      - '.github/ISSUE_TEMPLATE/**'
+      - 'README.md'
+    branches:
+      - main
 
 jobs:
   internal-translation:
@@ -23,6 +24,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: main
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Cursor CLI
@@ -43,4 +45,5 @@ jobs:
           First, check the terminologies in the '/terminology.md'.
           In the README.md you will find what language this project uses as the main language and create the 'summary' in that language.
           Finally, on folder '.github/ISSUE_TEMPLATE/' translate all files to the main language and DO NOT CHANGE ANYTHING OUTSIDE.
+          Remember to maintain those files working for github issues templates.
           If there are any changes, commit using the summary and push it."
