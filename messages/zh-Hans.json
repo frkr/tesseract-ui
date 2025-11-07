@@ -1,7 +1,7 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
 	"hello": "你好，{name}",
-	"product": "Casa Das Idéias",
+	"product": "艾峰八",
 	"emailInvalid": "请输入您的电子邮件，例如：davi@gmail.com",
 	"passwordInvalid": "密码无效（最少6个字符，最多255个字符）",
 	"user": "用户",

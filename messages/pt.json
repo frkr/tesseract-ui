@@ -1,7 +1,7 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
 	"hello": "Olá, {name}",
-	"product": "Casa Das Idéias",
+	"product": "Apex Eight",
 	"emailInvalid": "Digite seu email como este exemplo: davi@gmail.com",
 	"passwordInvalid": "Senha Inválida (min 6, max 255 caracteres)",
 	"user": "Utilizador",

@@ -1,7 +1,7 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
 	"hello": "こんにちは、{name}",
-	"product": "Casa Das Idéias",
+	"product": "Apex Eight",
 	"emailInvalid": "メールアドレスを入力してください（例：davi@gmail.com）",
 	"passwordInvalid": "無効なパスワード（最小6文字、最大255文字）",
 	"user": "ユーザー",

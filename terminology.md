@@ -2,6 +2,10 @@
 
 Este documento define a terminologia padrao utilizada em todo o projeto Tesseract UI, garantindo consistencia na comunicacao e na interface do usuario.
 
+# Produto
+- Chines: 艾峰八
+- Mundo: Apex Eight
+
 ## Sistema de pontuacao
 
 ### Excelente performance (8,5+ pontos)

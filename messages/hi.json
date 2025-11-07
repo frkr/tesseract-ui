@@ -1,7 +1,7 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
 	"hello": "नमस्ते, {name}",
-	"product": "Casa Das Idéias",
+	"product": "Apex Eight",
 	"emailInvalid": "अपना ईमेल इस उदाहरण की तरह दर्ज करें: davi@gmail.com",
 	"passwordInvalid": "अमान्य पासवर्ड (न्यूनतम 6, अधिकतम 255 वर्ण)",
 	"user": "उपयोगकर्ता",
