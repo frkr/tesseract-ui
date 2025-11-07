@@ -1,44 +1,44 @@
 ---
-name: ✨ Feature Request
-about: Suggest a new feature or enhancement
-title: '[FEATURE] '
+name: ✨ Requisicao de Funcionalidade
+about: Sugira uma nova funcionalidade ou melhoria
+title: '[FUNCIONALIDADE] '
 labels: ['enhancement', 'triage']
 assignees: []
 ---
 
 Notice: You can write this issue in any language, our system will translate.
 
-## Description
+## Descricao
 
-<!-- Clearly describe the feature you would like to see -->
+<!-- Descreva claramente a funcionalidade que voce deseja -->
 
-## Use Case
+## Caso de Uso
 
-<!-- Explain the problem this feature would solve or the benefit it would provide -->
+<!-- Explique o problema que esta funcionalidade resolve ou o beneficio que entrega -->
 
-## Proposed Solution
+## Solucao Proposta
 
-<!-- Describe how you envision this feature working -->
+<!-- Descreva como voce imagina esta funcionalidade funcionando -->
 
-## Alternatives Considered
+## Alternativas Consideradas
 
-<!-- What other approaches have you considered? -->
+<!-- Quais outras abordagens voce considerou? -->
 
-- Alternative 1: ...
-- Alternative 2: ...
+- Alternativa 1: ...
+- Alternativa 2: ...
 
-## Additional Context
+## Contexto Adicional
 
-<!-- Add any other relevant context, mockups, or examples -->
+<!-- Adicione qualquer outro contexto relevante, mockups ou exemplos -->
 
-## Screenshots / Mockups
+## Capturas de Tela / Mockups
 
-<!-- If applicable, add visual examples -->
+<!-- Se aplicavel, adicione exemplos visuais -->
 
 ---
 
-### Before Submitting
+### Antes de Enviar
 
-- [ ] I have searched for existing feature requests and this is not a duplicate
-- [ ] This feature aligns with the project's goals and scope
-- [ ] I have provided a clear use case and value proposition
+- [ ] Eu procurei requisicoes de funcionalidade existentes e isto nao eh duplicado
+- [ ] Esta funcionalidade esta alinhada com os objetivos e escopo do projeto
+- [ ] Eu forneci um caso de uso claro e a proposta de valor

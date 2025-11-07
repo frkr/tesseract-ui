@@ -1,5 +1,5 @@
-name: 🐛 Bug Report
-description: Report a bug to help us improve the project
+name: 🐛 Relatorio de Bug
+description: Reporte um bug para ajudar a melhorar o projeto
 title: '[BUG] '
 labels: ['bug', 'triage']
 assignees: []
@@ -10,99 +10,99 @@ body:
       value: |
         Notice: You can write this issue in any language, our system will translate.
         
-        Thank you for taking the time to report this bug! 🙏
+        Obrigado por dedicar seu tempo para relatar este bug! 🙏
 
-        Please provide as much detail as possible to help us understand and reproduce the issue.
+        Forneca o maximo de detalhes possivel para nos ajudar a entender e reproduzir o problema.
 
   - type: textarea
     id: description
     attributes:
-      label: Description
-      description: Clearly describe the bug you encountered
-      placeholder: 'When I tried to [action], [unexpected behavior] happened instead of [expected behavior]'
+      label: Descricao
+      description: Descreva com clareza o bug encontrado
+      placeholder: 'Quando tentei [acao], [comportamento inesperado] ocorreu em vez de [comportamento esperado]'
     validations:
       required: true
 
   - type: textarea
     id: reproduction
     attributes:
-      label: Steps to Reproduce
-      description: Provide exact steps to reproduce the bug
+      label: Passos para Reproduzir
+      description: Informe os passos exatos para reproduzir o bug
       placeholder: |
-        1. Go to [location]
-        2. Click on [element]
-        3. Enter [data]
-        4. Observe [behavior]
+        1. Ir para [local]
+        2. Clicar em [elemento]
+        3. Inserir [dados]
+        4. Observar [comportamento]
     validations:
       required: true
 
   - type: textarea
     id: expected
     attributes:
-      label: Expected Behavior
-      description: What should happen instead?
-      placeholder: 'The system should...'
+      label: Comportamento Esperado
+      description: O que deveria acontecer?
+      placeholder: 'O sistema deveria...'
     validations:
       required: true
 
   - type: textarea
     id: actual
     attributes:
-      label: Actual Behavior
-      description: What actually happens?
-      placeholder: 'Instead, the system...'
+      label: Comportamento Atual
+      description: O que acontece de fato?
+      placeholder: 'Em vez disso, o sistema...'
     validations:
       required: true
 
   - type: dropdown
     id: severity
     attributes:
-      label: Severity
-      description: How critical is this bug?
+      label: Severidade
+      description: Qual a gravidade deste bug?
       options:
-        - '🟢 Low (cosmetic issue, workaround available)'
-        - '🟡 Medium (affects functionality, no easy workaround)'
-        - '🔴 High (major functionality broken)'
-        - '🔴🔴 Critical (system unusable or data loss)'
+        - '🟢 Baixa (problema cosmetico, ha alternativa)'
+        - '🟡 Media (afeta funcionalidade, sem alternativa simples)'
+        - '🔴 Alta (funcionalidade principal quebrada)'
+        - '🔴🔴 Critica (sistema inutilizavel ou perda de dados)'
     validations:
       required: true
 
   - type: textarea
     id: environment
     attributes:
-      label: Environment
-      description: Provide relevant system information
+      label: Ambiente
+      description: Forneca informacoes relevantes do sistema
       placeholder: |
-        - OS: [e.g., macOS 14.1, Windows 11, Ubuntu 23.10]
-        - Browser: [e.g., Chrome 119, Firefox 121]
-        - Node.js/Runtime: [version]
-        - Project Version: [version]
+        - SO: [ex., macOS 14.1, Windows 11, Ubuntu 23.10]
+        - Navegador: [ex., Chrome 119, Firefox 121]
+        - Node.js/Runtime: [versao]
+        - Versao do Projeto: [versao]
     validations:
       required: true
 
   - type: textarea
     id: logs
     attributes:
-      label: Error Logs / Screenshots
-      description: Include error messages, stack traces, or screenshots
-      placeholder: 'Paste error output here or attach screenshots'
+      label: Logs de Erro / Capturas de Tela
+      description: Inclua mensagens de erro, rastros de pilha ou capturas de tela
+      placeholder: 'Cole o erro aqui ou anexe capturas de tela'
 
   - type: textarea
     id: additional
     attributes:
-      label: Additional Context
-      description: Any other context that might be helpful?
-      placeholder: 'I noticed this started happening after version X...'
+      label: Contexto Adicional
+      description: Ha algum outro contexto que possa ajudar?
+      placeholder: 'Percebi que isto comecou a acontecer apos a versao X...'
 
   - type: checkboxes
     id: verification
     attributes:
-      label: Verification
-      description: Please verify before submitting
+      label: Verificacao
+      description: Verifique antes de enviar
       options:
-        - label: I have searched existing issues and this is not a duplicate
+        - label: Eu busquei issues existentes e isto nao eh duplicado
           required: true
-        - label: I can reproduce this bug consistently
+        - label: Consigo reproduzir este bug de forma consistente
           required: true
-        - label: I have provided all relevant information
+        - label: Forneci todas as informacoes relevantes
           required: true

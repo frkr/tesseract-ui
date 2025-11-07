@@ -1,6 +1,6 @@
 ---
-name: 📚 Documentation Issue
-about: Suggest documentation improvements
+name: 📚 Problema de Documentacao
+about: Sugira melhorias na documentacao
 title: '[DOCS] '
 labels: ['documentation', 'triage']
 assignees: []
@@ -8,32 +8,32 @@ assignees: []
 
 Notice: You can write this issue in any language, our system will translate.
 
-## What needs documentation?
+## O que precisa de documentacao?
 
-<!-- Describe what topic or feature needs documentation or clarification -->
+<!-- Descreva qual topico ou funcionalidade precisa de documentacao ou esclarecimento -->
 
-## Current State
+## Estado Atual
 
-<!-- What documentation exists currently (if any)? Is it incomplete, unclear, or outdated? -->
+<!-- Qual documentacao existe atualmente (se houver)? Ela esta incompleta, confusa ou desatualizada? -->
 
-## Suggested Improvement
+## Melhoria Sugerida
 
-<!-- How should this be documented? -->
+<!-- Como isto deveria ser documentado? -->
 
-## Additional Resources
+## Recursos Adicionais
 
-<!-- Link to related code, issues, or external references -->
+<!-- Link para codigo relacionado, issues ou referencias externas -->
 
 ## Severity
 
-- [ ] Critical (documentation is missing for released feature)
-- [ ] High (documentation is unclear or outdated)
-- [ ] Medium (documentation could be enhanced)
-- [ ] Low (minor improvements or nice-to-have)
+- [ ] Critico (documentacao ausente para funcionalidade liberada)
+- [ ] Alto (documentacao confusa ou desatualizada)
+- [ ] Medio (documentacao pode ser aprimorada)
+- [ ] Baixo (melhorias menores ou opcional)
 
 ---
 
-### Before Submitting
+### Antes de Enviar
 
-- [ ] I have checked if documentation for this already exists
-- [ ] I have provided specific examples of what needs improvement
+- [ ] Eu verifiquei se ja existe documentacao para isto
+- [ ] Eu forneci exemplos especificos do que precisa de melhoria
