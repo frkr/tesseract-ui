@@ -4,7 +4,7 @@
 - começar a criar o aplicativo principal.
 - aplicativo principal vai preparar o ambiente, git, vercel, postgres
 - começar os outros apps - Beleza, Foto e Ticket.
-
+- testes errados +layout.server.spec.ts
 
 - wrangler.jsonc - Documentar aqui coisas importantes
 - static - colocar o llms.txt
@@ -13,7 +13,7 @@
 - package-lock - nunca confiar. Sempre gerar um novo.
 - Vercel api - https://vercel.com/docs/rest-api/reference/endpoints/access-groups/reads-an-access-group
 
-
+- https://docs.github.com/en/rest?apiVersion=2022-11-28
 
 ```text
 sempre testar o que foi feito, se der um erro procure na internet a solucao e teste novamente.
