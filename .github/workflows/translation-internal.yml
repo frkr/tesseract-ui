@@ -12,6 +12,7 @@ on:
       - 'README.md'
     branches:
       - main
+  workflow_dispatch: 
 
 jobs:
   internal-translation:
@@ -44,6 +45,7 @@ jobs:
           cursor-agent -p --model auto --force --output-format text "You have full access to git, GitHub CLI, and PR operations. You can also run any command you want.
           First, check the terminologies in the '/terminology.md'.
           In the README.md you will find what language this project uses as the main language and create the 'summary' in that language.
-          Finally, on folder '.github/ISSUE_TEMPLATE/' translate all files to the main language and DO NOT CHANGE ANYTHING OUTSIDE.
-          Remember to maintain those files working for github issues templates.
+          Finally, in the folder '.github/ISSUE_TEMPLATE/' translate all files to the main language and DO NOT CHANGE ANYTHING ELSE OUTSIDE.
+          Remember to keep these files working as GitHub issue templates.
+          Add and maintain on the first line this 'Notice' in English 'Notice: You can write this issue in any language, our system will translate.'.
           If there are any changes, commit using the summary and push it."
