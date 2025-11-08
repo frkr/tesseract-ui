@@ -7,7 +7,7 @@ name: Issue Debugger
 
 on:
   issues:
-    types: [opened, closed, assigned, unassigned, labeled, unlabeled]
+    types: [opened, closed, reopened, assigned, unassigned, labeled, unlabeled]
 
 jobs:
   debug_issue:
