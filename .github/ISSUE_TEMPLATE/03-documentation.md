@@ -6,7 +6,7 @@ labels: ['documentation', 'triage']
 assignees: []
 ---
 
-Notice: You can write this issue in any language, our system will translate.
+Notice: You can write this issue in any language, our system will translate it.
 
 ## O que precisa de documentacao?
 

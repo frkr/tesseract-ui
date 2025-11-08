@@ -1,0 +1,50 @@
+# Copyright (c) 2025 Davi Saranszky Mesquita. All rights reserved.
+# See LICENSE for license information.
+
+# Do not use 'workflow_dispatch'
+
+name: Issue Debugger
+
+on:
+  issues:
+    types: [opened, closed, assigned, unassigned, labeled, unlabeled]
+
+jobs:
+  debug_issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug issue via github-script
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          script: |
+            const issue = context.payload.issue;
+            if (!issue) {
+              core.warning('No issue found in payload.');
+            } else {
+              core.info(`Issue Number: ${issue.number}`);
+              core.info(`Title: ${issue.title}`);
+              core.info(`Body: ${issue.body}`);
+              core.info(`Created by: ${issue.user?.login}`);
+
+              const labels = (issue.labels || []).map(l => typeof l === 'string' ? l : l.name);
+              core.info(`Labels: ${JSON.stringify(labels)}`);
+
+              const assignee = context.payload.assignee || issue.assignee || null;
+              let assigneeStr = 'null';
+              if (assignee) {
+                assigneeStr = typeof assignee === 'string' ? assignee : assignee.login;
+              }
+              core.info(`Assignee: ${assigneeStr}`);
+
+              const assignees = (issue.assignees || []).map(a => a?.login).filter(Boolean);
+              core.info(`Assignees: ${JSON.stringify(assignees)}`);
+
+              core.info(`State: ${issue.state}`);
+              core.info(`State Reason: ${issue.state_reason || 'none'}`);
+              core.info(`Created at: ${issue.created_at}`);
+            }
+
+            core.startGroup('Raw event payload');
+            core.info(JSON.stringify(context.payload, null, 2));
+            core.endGroup();

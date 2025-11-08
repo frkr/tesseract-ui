@@ -8,7 +8,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Notice: You can write this issue in any language, our system will translate.
+        Notice: You can write this issue in any language, our system will translate it.
         
         Obrigado por dedicar seu tempo para relatar este bug! 🙏
 

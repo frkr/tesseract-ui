@@ -46,5 +46,5 @@ jobs:
           In the README.md you will find what language this project uses as the main language and create the 'summary' in that language.
           Finally, in the folder '.github/ISSUE_TEMPLATE/' translate all files to the main language and DO NOT CHANGE ANYTHING ELSE OUTSIDE.
           Remember to keep these files working as GitHub issue templates.
-          Translate everything except that phrase 'Notice: You can write this issue in any language, our system will translate.'.
+          Translate everything except that phrase 'Notice: You can write this issue in any language, our system will translate it.'.
           If there are any changes, commit using the summary and push it."
