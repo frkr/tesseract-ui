@@ -33,7 +33,9 @@ jobs:
         run: git pull --rebase origin pre
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: |
+          rm pnpm-lock.yaml
+          pnpm install
 
       - name: Run prettier
         run: pnpm prettier
