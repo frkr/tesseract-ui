@@ -1,39 +1,27 @@
 ---
-name: 📚 Problema de Documentacao
-about: Sugira melhorias na documentacao
+name: 🧩 Solicite ações
+about: Solicite ações
 title: '[DOCS] '
-labels: ['documentation', 'triage']
+labels: ['run']
 assignees: []
 ---
 
 Notice: You can write this issue in any language, our system will translate it.
 
-## O que precisa de documentacao?
+## Comandos simples
 
-<!-- Descreva qual topico ou funcionalidade precisa de documentacao ou esclarecimento -->
+É possível também pedir ao sistema para executar tarefas rotineiras. Descreva abaixo, de forma objetiva e no imperativo, o que deseja que seja feito.
 
-## Estado Atual
+### Exemplos de comandos
 
-<!-- Qual documentacao existe atualmente (se houver)? Ela esta incompleta, confusa ou desatualizada? -->
+- Alterar o idioma padrão somente no arquivo `README.md` (isso também atualizará os templates de abertura de chamados como este).
+- Atualizar os arquivos `SPEC.md` e `src/routes/doc/spec/+page.md`.
+- Ler todas as especificações e, ao final do `README.md`, criar uma lista de bullet points com as principais macrofeatures do sistema.
 
-## Melhoria Sugerida
+## O que deseja que o sistema faça?
 
-<!-- Como isto deveria ser documentado? -->
+<!-- Descreva claramente o comando/tarefa. Ex.: "Atualizar SPEC.md e src/routes/doc/spec/+page.md" -->
 
-## Recursos Adicionais
+## Detalhes adicionais (opcional)
 
-<!-- Link para codigo relacionado, issues ou referencias externas -->
-
-## Severity
-
-- [ ] Critico (documentacao ausente para funcionalidade liberada)
-- [ ] Alto (documentacao confusa ou desatualizada)
-- [ ] Medio (documentacao pode ser aprimorada)
-- [ ] Baixo (melhorias menores ou opcional)
-
----
-
-### Antes de Enviar
-
-- [ ] Eu verifiquei se ja existe documentacao para isto
-- [ ] Eu forneci exemplos especificos do que precisa de melhoria
+<!-- Forneça contexto, links e referências úteis, se necessário. -->
