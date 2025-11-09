@@ -1,7 +1,7 @@
 ---
 name: 🧩 Solicite ações
 about: Solicite ações
-title: '[DOCS] '
+title: '[COMMAND] '
 labels: ['run']
 assignees: []
 ---

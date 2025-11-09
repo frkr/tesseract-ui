@@ -1,0 +1,172 @@
+# Copyright (c) 2025 Davi Saranszky Mesquita. All rights reserved.
+# See LICENSE for license information.
+
+# Do not use 'workflow_dispatch'
+
+name: Coverage Review
+
+on:
+  push:
+    branches:
+      - pre
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  review_business_rules:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: pre
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run coverage suite
+        run: >
+          pnpm vitest run
+          --coverage.enabled true
+          --coverage.reportsDirectory=coverage
+          --coverage.reporter=json-summary
+          --coverage.reporter=text
+
+      - name: Avaliar impacto em regras de negocio
+        id: coverage_check
+        run: |
+          set -euo pipefail
+          node <<'EOF'
+          const fs = require('fs');
+          const path = require('path');
+
+          const coverageDir = path.join(process.cwd(), 'coverage');
+          fs.mkdirSync(coverageDir, { recursive: true });
+
+          const summaryPath = path.join(coverageDir, 'coverage-summary.json');
+          if (!fs.existsSync(summaryPath)) {
+            console.log('Arquivo coverage-summary.json nao encontrado. Considerar revisao do pipeline.');
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, 'po_review=true\n');
+            fs.writeFileSync(path.join(coverageDir, 'po-review-summary.md'), '# Revisao necessaria\n\nArquivo coverage-summary.json nao foi gerado.');
+            process.exit(0);
+          }
+
+          const raw = fs.readFileSync(summaryPath, 'utf8');
+          const report = JSON.parse(raw);
+          const total = report.total || {};
+
+          const metrics = ['statements', 'branches', 'functions', 'lines'];
+          const threshold = 80;
+          const warnings = [];
+
+          metrics.forEach(metric => {
+            const info = total[metric];
+            if (!info) return;
+            const pct = typeof info.pct === 'number' ? info.pct : null;
+            if (pct === null) return;
+            if (pct < threshold) {
+              warnings.push(`- Cobertura de ${metric} em ${pct.toFixed(2)}% (limite ${threshold}%).`);
+            }
+          });
+
+          let needsReview = warnings.length > 0;
+
+          const criticalFiles = [
+            'src/lib/app.ts',
+            'src/lib/index.ts'
+          ];
+          const criticalPrefixes = [
+            'src/lib/stores/',
+            'src/lib/utils/',
+            '.server.ts'
+          ];
+
+          Object.entries(report).forEach(([key, data]) => {
+            if (key === 'total') return;
+            if (typeof data !== 'object') return;
+
+            const isCriticalFile = criticalFiles.includes(key);
+            const isCriticalPrefix = criticalPrefixes.some(prefix => {
+              if (prefix === '.server.ts') {
+                return key.endsWith(prefix);
+              }
+              return key.startsWith(prefix);
+            });
+
+            if (!isCriticalFile && !isCriticalPrefix) {
+              return;
+            }
+
+            metrics.forEach(metric => {
+              const info = data[metric];
+              if (!info || typeof info.pct !== 'number') return;
+              if (info.pct < threshold) {
+                needsReview = true;
+                warnings.push(`- Cobertura de ${metric} em ${info.pct.toFixed(2)}% para ${key} (limite ${threshold}%).`);
+              }
+            });
+          });
+
+          const summaryLines = [];
+          summaryLines.push('# Revisao de regras de negocio');
+          summaryLines.push('');
+          if (!needsReview) {
+            summaryLines.push('Cobertura acima do limite definido. Sem acao para produto.');
+          } else {
+            summaryLines.push('Cobertura abaixo do limite definido. Produto deve revisar regras de negocio.');
+            summaryLines.push('');
+            summaryLines.push('## Alertas');
+            summaryLines.push(...warnings);
+          }
+          fs.writeFileSync(path.join(coverageDir, 'po-review-summary.md'), summaryLines.join('\n'));
+
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `po_review=${needsReview ? 'true' : 'false'}\n`);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `summary_path=${path.join('coverage', 'po-review-summary.md')}\n`);
+          EOF
+
+      - name: Registrar pedido de revisao para produto
+        if: steps.coverage_check.outputs.po_review == 'true'
+        uses: actions/github-script@v7
+        env:
+          SUMMARY_PATH: ${{ steps.coverage_check.outputs.summary_path }}
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const { owner, repo } = context.repo;
+            const summaryPath = process.env.SUMMARY_PATH || 'coverage/po-review-summary.md';
+            const body = fs.readFileSync(summaryPath, 'utf8');
+            const title = 'PO review necessario sobre regras de negocio';
+
+            const search = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${owner}/${repo} is:issue is:open "${title}"`
+            });
+
+            if (search.data.total_count > 0) {
+              const issueNumber = search.data.items[0].number;
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: issueNumber,
+                body
+              });
+            } else {
+              await github.rest.issues.create({
+                owner,
+                repo,
+                title,
+                body,
+                labels: ['product-owner', 'coverage']
+              });
+            }
+

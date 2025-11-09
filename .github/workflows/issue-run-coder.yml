@@ -3,26 +3,25 @@
 
 # Do not use 'workflow_dispatch'
 
-name: Issue Run Executor
+name: Issue Run Coder
 
 on:
   issues:
     types: [labeled]
 
 permissions:
-  contents: read
+  pull-requests: write
+  contents: write
   issues: write
 
 jobs:
   triage_and_review:
-    name: Run Cursor review when label 'run' is added
+    name: Run Cursor review when label 'code' is added
     runs-on: ubuntu-latest
     if: |
       github.event.issue.pull_request == null &&
-      contains(github.event.issue.labels.*.name, 'run') &&
-      !contains(github.event.issue.labels.*.name, 'stop') &&
-      !contains(github.event.issue.labels.*.name, 'code') &&
-      !contains(github.event.issue.labels.*.name, 'review')
+      contains(github.event.issue.labels.*.name, 'code') &&
+      !contains(github.event.issue.labels.*.name, 'stop')
 
     steps:
       - name: Add 'stop' label to the issue
@@ -52,7 +51,7 @@ jobs:
           export PATH="$HOME/.cursor/bin:$PATH"
           echo "$HOME/.cursor/bin" >> $GITHUB_PATH
 
-      - name: Run Cursor Agent (issue triage and review)
+      - name: Run Cursor Agent
         env:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -60,18 +59,16 @@ jobs:
         run: |
           set -euo pipefail
           export PATH="$HOME/.cursor/bin:$PATH"
-          cursor-agent -p --model auto --force --output-format text "You have full access to git, GitHub CLI, and PR operations. You can also run any command you want.
-          Make a comment on this issue $ISSUE_URL and a review.
-          Read the subject has a tag inside bracktes and discover if it's a bug, feature, documentation or command.'
-          Comment with grammar corrections and/or improvements.
-          If it's a Feature:
-          - observe the project guidelines on '/ai-guidelines.md'.
-          - Propose in detail all the functionalities to be implemented, which pages will be created and how they will be created. Create numerous flows made in mermaidjs using sequence diagrams and also propose modifications to the database schema. The objective, if it's a feature, is for the proposal to be very clear for the business at the beginning of the comment and to be very detailed for the developer to know how to proceed and which files they will create.
+          git config --local user.email "suporte@ideias.casa"
+          git config --local user.name "AI"
           
-          Your summary will contain the same issue but with those corrections and improvements.
-          Write a summary in the language discovered on /readme.md
-          Treat that language as the main language. DO NOT CHANGE ANY FILES, this is only an issue review.
-          IMPORTANT: Do NOT post the comment yourself. Output ONLY the final review in Markdown to stdout." > review.txt
+          cursor-agent -p --model auto --force --output-format text "You have full access to git, GitHub CLI, and PR operations. You can also run any command you want.
+          Work on the issue, read the issue and all issue comments.
+          Issue: $ISSUE_URL
+          Discover if it's an issue for a new feature, new documentation, a command or a bug.
+          If its an feature, document it on '/SPEC.md' AND create a new branch from 'main' to 'feat/feature-***' where *** its the name of the feature; Code the feature and create a PR to 'pre' AND merge with 'dev' branch.
+          Remember to link the PR to the issue.
+          IMPORTANT: Discover the main language on '/README.md' TO OUTPUT ONLY THE FINAL REVIEW IN Markdown to stdout." > review.txt
 
       - name: Comment on the issue with the review
         uses: actions/github-script@v7
@@ -88,6 +85,26 @@ jobs:
               body,
             });
 
+      - name: Add 'review' label to the issue
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            try {
+              await github.rest.issues.addLabels({
+                owner,
+                repo,
+                issue_number: context.issue.number,
+                labels: ['review']
+              });
+              core.info('Added label "review".');
+            } catch (error) {
+              core.warning('Could not add label "review".');
+            }
+
+
+
       - name: Remove label (cleanup)
         uses: actions/github-script@v7
         with:
@@ -99,30 +116,22 @@ jobs:
                 owner,
                 repo,
                 issue_number: context.issue.number,
-                name: 'stop'
+                name: 'run'
               });
-              core.info('Removed label "stop".');
-            } catch (error) {
-              core.warning('Could not remove label "stop" (it may have been removed already).');
-            }
-
-      - name: Add 'code' label to the issue
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GH_TOKEN }}
-          script: |
-            const { owner, repo } = context.repo;
+            } catch (error) {}
             try {
-              await github.rest.issues.addLabels({
+            await github.rest.issues.removeLabel({
                 owner,
                 repo,
                 issue_number: context.issue.number,
-                labels: ['code']
+                name: 'code'
               });
-              core.info('Added label "code".');
-            } catch (error) {
-              core.warning('Could not add label "code".');
-            }
-
-
-
+            } catch (error) {}
+            try {
+            await github.rest.issues.removeLabel({
+                owner,
+                repo,
+                issue_number: context.issue.number,
+                name: 'stop'
+              });
+            } catch (error) {}
