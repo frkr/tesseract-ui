@@ -3,11 +3,11 @@
 
 # Do not use 'workflow_dispatch'
 
-name: Issue Run Coder
+name: Issue Run Acceptor
 
 on:
   issues:
-    types: [labeled]
+    types: [closed]
 
 permissions:
   pull-requests: write
@@ -15,36 +15,14 @@ permissions:
   issues: write
 
 jobs:
-  coder:
-    name: Run Cursor review when label 'code' is added
+  acceptor:
+    name: Running Acceptor
     runs-on: ubuntu-latest
     if: |
       github.event.issue.pull_request == null &&
-      contains(github.event.issue.labels.*.name, 'code') &&
-      !contains(github.event.issue.labels.*.name, 'working')
+      contains(github.event.issue.labels.*.name, 'review')
 
     steps:
-      - name: Add 'working' label to the issue
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GH_TOKEN }}
-          script: |
-            const { owner, repo } = context.repo;
-            await github.rest.issues.addLabels({
-              owner,
-              repo,
-              issue_number: context.issue.number,
-              labels: ['working']
-            });
-            core.info('Added label "working" to prevent duplicate processing.');
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          token: ${{ secrets.GH_TOKEN }}
-          fetch-depth: 0
-
       - name: Install Cursor CLI
         run: |
           curl https://cursor.com/install -fsS | bash
@@ -63,18 +41,10 @@ jobs:
           git config --local user.name "AI"
           
           cursor-agent -p --model auto --force --output-format text "You have full access to git, GitHub CLI, and PR operations. You can also run any command you want.
-          Work on the issue, read the issue and all issue comments.
-          Open that issue and read all comments for refining the work.
-          Issue: $ISSUE_URL
+          Work on the issue: $ISSUE_URL
           Read the subject has a tag inside brackets and discover if it's a bug, feature, documentation or command.
-          If it's a Feature:
-          - Document it on '/SPEC.md'
-          - Create a new branch from 'main' to 'feat/feature-***' where *** its the name of the feature; Code the feature and create a PR to 'pre' AND merge with 'dev' branch.
-          - Remember to link the PR to the issue.
-          
-          If it's a Bug:
-          - Create a new branch from 'main' to 'fix/***' where *** its the name of the feature; Code the feature and create a PR to 'pre' AND merge with 'dev' branch.
-          - Remember to link the PR to the issue.
+          If it's a Feature or Bug: Get pull request associated with the issue and merge it.
+          If it's a Command: Do nothing.
           
           IMPORTANT: Discover the main language on '/README.md' TO OUTPUT ONLY THE FINAL REVIEW IN Markdown to stdout." > review.txt
 

@@ -68,6 +68,7 @@ jobs:
           - observe the project guidelines on '/ai-guidelines.md'.
           - Propose in detail all the functionalities to be implemented, which pages will be created and how they will be created. Create numerous flows made in mermaidjs using sequence diagrams and also propose modifications to the database schema. The objective, if it's a feature, is for the proposal to be very clear for the business at the beginning of the comment and to be very detailed for the developer to know how to proceed and which files they will create.
           
+          Search at internet for best practices and examples
           Comment with grammar corrections and/or improvements.
           Your summary will contain the same issue but with those corrections and improvements.
           Write a summary in the language discovered on /readme.md
