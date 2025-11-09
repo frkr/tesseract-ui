@@ -7,6 +7,7 @@ vi.mock('$lib/paraglide/messages.js', () => ({
 	m: {
 		home: () => 'Home',
 		softwareDataManager: () => 'Data Manager',
+		softwareEquipmentManager: () => 'Equipment Manager',
 		softwareCloudService: () => 'Cloud Service',
 		softwareServerPlatform: () => 'Server Platform',
 		softwarePackageManager: () => 'Package Manager'
@@ -21,27 +22,30 @@ describe('getSoftwareList', () => {
 	it('should return home item by default', () => {
 		const result = getSoftwareList();
 
-		expect(result).toHaveLength(4);
+		expect(result).toHaveLength(5);
 		expect(result[0]).toHaveProperty('title', 'Home');
 		expect(result[0]).toHaveProperty('url', '/home');
 		expect(result[0]).toHaveProperty('icon');
+		expect(result[1]).toHaveProperty('title', 'Equipment Manager');
+		expect(result[1]).toHaveProperty('url', '/equipment');
 	});
 
 	it('should include database manager when user is in group ID 1', () => {
 		const groups: GroupData = [{ groupId: '1', groupName: 'admin', isAdmin: true }];
 		const result = getSoftwareList(groups);
 
-		expect(result).toHaveLength(5);
+		expect(result).toHaveLength(6);
 		expect(result[1]).toHaveProperty('title', 'Data Manager');
 		expect(result[1]).toHaveProperty('url', '/doc/schema');
 		expect(result[1]).toHaveProperty('icon');
+		expect(result[2]).toHaveProperty('title', 'Equipment Manager');
 	});
 
 	it('should not include database manager when user is not in group ID 1', () => {
 		const groups: GroupData = [{ groupId: '2', groupName: 'user', isAdmin: false }];
 		const result = getSoftwareList(groups);
 
-		expect(result).toHaveLength(4);
+		expect(result).toHaveLength(5);
 		expect(result.find((item) => item.url === '/doc/schema')).toBeUndefined();
 	});
 
@@ -52,7 +56,7 @@ describe('getSoftwareList', () => {
 		];
 		const result = getSoftwareList(groups);
 
-		expect(result).toHaveLength(5);
+		expect(result).toHaveLength(6);
 		expect(result.find((item) => item.url === '/doc/schema')).toBeDefined();
 	});
 
@@ -88,14 +92,14 @@ describe('getSoftwareList', () => {
 	it('should handle empty groups array', () => {
 		const result = getSoftwareList([]);
 
-		expect(result).toHaveLength(4);
+		expect(result).toHaveLength(5);
 		expect(result.find((item) => item.url === '/doc/schema')).toBeUndefined();
 	});
 
 	it('should handle undefined groups', () => {
 		const result = getSoftwareList(undefined);
 
-		expect(result).toHaveLength(4);
+		expect(result).toHaveLength(5);
 		expect(result.find((item) => item.url === '/doc/schema')).toBeUndefined();
 	});
 });
