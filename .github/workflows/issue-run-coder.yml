@@ -60,16 +60,13 @@ jobs:
         run: |
           set -euo pipefail
           export PATH="$HOME/.cursor/bin:$PATH"
-          echo skip > review.txt
-#          cursor-agent -p --model auto --force --output-format text "You have full access to git, GitHub CLI, and PR operations. You can also run any command you want.
-#          Make a comment on this issue $ISSUE_URL and a review.
-#          Discover if it's an issue for a new feature, new documentation, a command or a bug.
-#          Comment with grammar corrections and/or improvements. If it's a Feature, observe the project guidelines on '/ai-guidelines.md'.
-#          Propose in detail all the functionalities to be implemented, which pages will be created and how they will be created. Create numerous flows made in mermaidjs using sequence diagrams and also propose modifications to the database schema. The objective, if it's a feature, is for the proposal to be very clear for the business at the beginning of the comment and to be very detailed for the developer to know how to proceed and which files they will create.
-#          Your summary will contain the same issue but with those corrections and improvements.
-#          Write a summary in the language discovered on /readme.md
-#          Treat that language as the main language. DO NOT CHANGE ANY FILES, this is only an issue review.
-#          IMPORTANT: Do NOT post the comment yourself. Output ONLY the final review in Markdown to stdout." > review.txt
+          cursor-agent -p --model auto --force --output-format text "You have full access to git, GitHub CLI, and PR operations. You can also run any command you want.
+          Work on the issue, read the issue and all issue comments.
+          Issue: ${ISSUE_URL}
+          Discover if it's an issue for a new feature, new documentation, a command or a bug.
+          If its an feature, create a new branch from 'main' to 'feat/feature-***' where *** its the name of the feature; Code the feature and create a PR to 'pre' AND merge with 'dev' branch.
+          Remember to link the PR to the issue.
+          IMPORTANT: Discover the main language on '/README.md' TO OUTPUT ONLY THE FINAL REVIEW IN Markdown to stdout." > review.txt
 
       - name: Comment on the issue with the review
         uses: actions/github-script@v7
@@ -106,7 +103,7 @@ jobs:
 
 
 
-      - name: Remove 'stop' label (cleanup)
+      - name: Remove label (cleanup)
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GH_TOKEN }}
