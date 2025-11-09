@@ -63,7 +63,7 @@ jobs:
           cursor-agent -p --model auto --force --output-format text "You have full access to git, GitHub CLI, and PR operations. You can also run any command you want.
           Make a comment on this issue ${issue.number} and an review.
           Discover if its an issue for new feature, new documentation, an command or an bug.
-          Comment with grammar corrections and/or improvements. If its an Feature, observes the project guidelines on "/ai-guidelines.md".
+          Comment with grammar corrections and/or improvements. If its an Feature, observes the project guidelines on '/ai-guidelines.md'.
           Your summary will contain the same issue but with that corrections and improvements.
           Write a summary in an language discovered on /readme.md
           Treat that language as main language. Update the issue with the review. DO NOT CHANGE ANY FILES, this is only an issue review
