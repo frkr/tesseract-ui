@@ -48,6 +48,7 @@ jobs:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
+          set -euo pipefail
           export PATH="$HOME/.cursor/bin:$PATH"
           git config --local user.email "suporte@ideias.casa"
           git config --local user.name "AI"
