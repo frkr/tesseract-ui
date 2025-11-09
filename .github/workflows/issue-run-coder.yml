@@ -65,9 +65,12 @@ jobs:
           cursor-agent -p --model auto --force --output-format text "You have full access to git, GitHub CLI, and PR operations. You can also run any command you want.
           Work on the issue, read the issue and all issue comments.
           Issue: $ISSUE_URL
-          Discover if it's an issue for a new feature, new documentation, a command or a bug.
-          If its an feature, document it on '/SPEC.md' AND create a new branch from 'main' to 'feat/feature-***' where *** its the name of the feature; Code the feature and create a PR to 'pre' AND merge with 'dev' branch.
-          Remember to link the PR to the issue.
+          Read the subject has a tag inside brackets and discover if it's a bug, feature, documentation or command.
+          If it's a Feature:
+          - Document it on '/SPEC.md'
+          - Create a new branch from 'main' to 'feat/feature-***' where *** its the name of the feature; Code the feature and create a PR to 'pre' AND merge with 'dev' branch.
+          - Remember to link the PR to the issue.
+          
           IMPORTANT: Discover the main language on '/README.md' TO OUTPUT ONLY THE FINAL REVIEW IN Markdown to stdout." > review.txt
 
       - name: Comment on the issue with the review
