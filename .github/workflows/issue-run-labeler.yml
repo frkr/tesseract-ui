@@ -36,7 +36,7 @@ jobs:
 
             for (const issue of candidates) {
               const existing = (issue.labels || []).map(l => typeof l === 'string' ? l : l.name);
-              if (!existing.includes('run') && !existing.includes('stop') && !existing.includes('code') && !existing.includes('review')) {
+              if (!existing.includes('run') && !existing.includes('working') && !existing.includes('code') && !existing.includes('review')) {
                 await github.rest.issues.addLabels({
                   owner,
                   repo,

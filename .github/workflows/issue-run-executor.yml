@@ -20,12 +20,12 @@ jobs:
     if: |
       github.event.issue.pull_request == null &&
       contains(github.event.issue.labels.*.name, 'run') &&
-      !contains(github.event.issue.labels.*.name, 'stop') &&
       !contains(github.event.issue.labels.*.name, 'code') &&
+      !contains(github.event.issue.labels.*.name, 'working') &&
       !contains(github.event.issue.labels.*.name, 'review')
 
     steps:
-      - name: Add 'stop' label to the issue
+      - name: Add 'working' label to the issue
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GH_TOKEN }}
@@ -35,9 +35,9 @@ jobs:
               owner,
               repo,
               issue_number: context.issue.number,
-              labels: ['stop']
+              labels: ['working']
             });
-            core.info('Added label "stop" to prevent duplicate processing.');
+            core.info('Added label "working" to prevent duplicate processing.');
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -100,11 +100,11 @@ jobs:
                 owner,
                 repo,
                 issue_number: context.issue.number,
-                name: 'stop'
+                name: 'working'
               });
-              core.info('Removed label "stop".');
+              core.info('Removed label "working".');
             } catch (error) {
-              core.warning('Could not remove label "stop" (it may have been removed already).');
+              core.warning('Could not remove label "working" (it may have been removed already).');
             }
 
       - name: Add 'code' label to the issue

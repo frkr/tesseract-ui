@@ -15,16 +15,16 @@ permissions:
   issues: write
 
 jobs:
-  triage_and_review:
+  coder:
     name: Run Cursor review when label 'code' is added
     runs-on: ubuntu-latest
     if: |
       github.event.issue.pull_request == null &&
       contains(github.event.issue.labels.*.name, 'code') &&
-      !contains(github.event.issue.labels.*.name, 'stop')
+      !contains(github.event.issue.labels.*.name, 'working')
 
     steps:
-      - name: Add 'stop' label to the issue
+      - name: Add 'working' label to the issue
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GH_TOKEN }}
@@ -34,9 +34,9 @@ jobs:
               owner,
               repo,
               issue_number: context.issue.number,
-              labels: ['stop']
+              labels: ['working']
             });
-            core.info('Added label "stop" to prevent duplicate processing.');
+            core.info('Added label "working" to prevent duplicate processing.');
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -67,6 +67,7 @@ jobs:
           Issue: $ISSUE_URL
           Read the subject has a tag inside brackets and discover if it's a bug, feature, documentation or command.
           If it's a Feature:
+          - Open that issue and read all comments for refining the feature.
           - Document it on '/SPEC.md'
           - Create a new branch from 'main' to 'feat/feature-***' where *** its the name of the feature; Code the feature and create a PR to 'pre' AND merge with 'dev' branch.
           - Remember to link the PR to the issue.
@@ -135,6 +136,6 @@ jobs:
                 owner,
                 repo,
                 issue_number: context.issue.number,
-                name: 'stop'
+                name: 'working'
               });
             } catch (error) {}
