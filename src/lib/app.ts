@@ -4,6 +4,7 @@ import DatabaseIcon from '@tabler/icons-svelte/icons/database';
 import CloudIcon from '@tabler/icons-svelte/icons/cloud';
 import ServerIcon from '@tabler/icons-svelte/icons/server';
 import BoxIcon from '@tabler/icons-svelte/icons/box';
+import ClipboardListIcon from '@tabler/icons-svelte/icons/clipboard-list';
 import { m } from '$lib/paraglide/messages.js';
 
 export interface SoftwareItem {
@@ -33,6 +34,11 @@ export function getSoftwareList(groups?: GroupData): SoftwareItem[] {
 	}
 
 	items.push(
+		{
+			title: 'Gestao Equipamentos',
+			url: '/equipamentos',
+			icon: ClipboardListIcon
+		},
 		{
 			title: m.softwareCloudService(),
 			url: '/software/cloud-service',
