@@ -2,6 +2,7 @@ import { eq, and, isNull, count } from 'drizzle-orm';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '$lib/db/schema';
 import { validateGroupInput, toGroupSummary, type GroupSummary } from '$lib/utils/groups';
+import { createAuditLog } from '$lib/utils/audit';
 
 export async function addUserToGroup(
 	db: PostgresJsDatabase<typeof schema>,
@@ -27,6 +28,14 @@ export async function addUserToGroup(
 			adm: false,
 			createdById: createdById
 		});
+
+		// Audit log
+		if (createdById) {
+			await createAuditLog(db, 'group.add_user', createdById, {
+				groupId,
+				userId
+			});
+		}
 
 		return { success: true };
 	} catch (error) {
@@ -109,12 +118,11 @@ export async function createSystemGroup(
 				createdAt: schema.group.createdAt
 			});
 
-		await db.insert(schema.groupAuditLog).values({
-			id: crypto.randomUUID(),
+		// Audit log
+		await createAuditLog(db, 'group.create', actorId, {
 			groupId,
-			action: 'create',
-			performedById: actorId,
-			payload: { name: validated.data.name }
+			name: validated.data.name,
+			description: validated.data.description
 		});
 
 		return {
@@ -167,12 +175,10 @@ export async function deleteSystemGroup(
 			})
 			.where(eq(schema.group.id, groupId));
 
-		await tx.insert(schema.groupAuditLog).values({
-			id: crypto.randomUUID(),
+		// Audit log
+		await createAuditLog(tx, 'group.delete', actorId, {
 			groupId,
-			action: 'delete',
-			performedById: actorId,
-			payload: { previousName: groupRecord.name }
+			previousName: groupRecord.name
 		});
 
 		return { success: true };

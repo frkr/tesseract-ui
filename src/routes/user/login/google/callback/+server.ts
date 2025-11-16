@@ -8,6 +8,7 @@ import { eq } from 'drizzle-orm';
 import * as auth from '$lib/utils/auth';
 import { generateUniqueId, ensureDefaultAdminGroupAndRelation } from '$lib/utils/common';
 import { m } from '$lib/paraglide/messages.js';
+import { createAuditLog } from '$lib/utils/audit';
 
 export async function GET(event: RequestEvent): Promise<Response> {
 	const code = event.url.searchParams.get('code');
@@ -48,6 +49,15 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			const userId = isFirstUser ? '1' : generateUniqueId();
 			await db.insert(table.user).values({ id: userId, username: googleUserId, name: username });
 
+			// Audit log for user creation via OAuth
+			await createAuditLog(db, 'user.create', userId, {
+				userId,
+				username: googleUserId,
+				name: username,
+				isFirstUser,
+				authMethod: 'oauth_google'
+			});
+
 			// If this is the first user, relate them to the default admin group
 			if (isFirstUser) {
 				await ensureDefaultAdminGroupAndRelation(db, userId);
@@ -60,6 +70,13 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			const sessionToken = auth.generateSessionToken();
 			const session = await auth.createSession(sessionToken, existingUser.id);
 			auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
+
+			// Audit log for login via OAuth
+			await createAuditLog(db, 'user.login', existingUser.id, {
+				userId: existingUser.id,
+				username: existingUser.username,
+				authMethod: 'oauth_google'
+			});
 		}
 	} catch (e) {
 		console.error(m.errorCreatingSession(), e);

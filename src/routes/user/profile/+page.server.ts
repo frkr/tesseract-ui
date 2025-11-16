@@ -13,6 +13,7 @@ import {
 	deleteSystemGroup
 } from './utils.server';
 import { eq, and } from 'drizzle-orm';
+import { createAuditLog } from '$lib/utils/audit';
 
 const SYSTEM_USER_ID = '1';
 
@@ -79,8 +80,17 @@ export const actions: Actions = {
 		if (!event.locals.session) {
 			return fail(401, { action: 'logout' });
 		}
+		const userId = event.locals.user?.id;
 		await auth.invalidateSession(event.locals.session.id);
 		auth.deleteSessionTokenCookie(event);
+
+		// Audit log for logout
+		if (userId) {
+			await createAuditLog(db, 'user.logout', userId, {
+				userId,
+				sessionId: event.locals.session.id
+			});
+		}
 
 		return redirect(302, '/');
 	},

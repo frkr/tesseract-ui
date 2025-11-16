@@ -7,6 +7,7 @@ import * as table from '$lib/db/schema';
 import { SESSION_EXPIRY_HOURS, SESSION_COOKIE_NAME } from '$env/static/private';
 import { getUserGroupsAndAdmin } from '$lib/utils/common';
 import { m } from '$lib/paraglide/messages.js';
+import { createAuditLog } from '$lib/utils/audit';
 
 const HOUR_IN_MS = 1000 * 60 * 60 * Number(SESSION_EXPIRY_HOURS);
 
@@ -39,6 +40,14 @@ export async function createSession(token: string, userId: string) {
 		expiresAt
 	};
 	await db.insert(table.session).values(session);
+
+	// Audit log
+	await createAuditLog(db, 'session.create', userId, {
+		sessionId,
+		userId,
+		expiresAt: expiresAt.toISOString()
+	});
+
 	return session;
 }
 
@@ -62,6 +71,12 @@ export async function validateSessionToken(token: string) {
 	// Ensure expiresAt is a valid Date object
 	if (!session.expiresAt || isNaN(session.expiresAt.getTime())) {
 		await db.delete(table.session).where(eq(table.session.id, session.id));
+		// Audit log for invalid session deletion
+		await createAuditLog(db, 'session.delete', user.id, {
+			sessionId: session.id,
+			userId: user.id,
+			reason: 'invalid_expires_at'
+		});
 		return { session: null, user: null };
 	}
 
@@ -71,16 +86,31 @@ export async function validateSessionToken(token: string) {
 	const sessionExpired = now >= expiresAtTime;
 	if (sessionExpired) {
 		await db.delete(table.session).where(eq(table.session.id, session.id));
+		// Audit log for expired session deletion
+		await createAuditLog(db, 'session.delete', user.id, {
+			sessionId: session.id,
+			userId: user.id,
+			reason: 'expired'
+		});
 		return { session: null, user: null };
 	}
 
 	const renewSession = now >= expiresAtTime - HOUR_IN_MS / 2;
 	if (renewSession) {
+		const oldExpiresAt = session.expiresAt;
 		session.expiresAt = createUTCDate(now + HOUR_IN_MS);
 		await db
 			.update(table.session)
 			.set({ expiresAt: session.expiresAt })
 			.where(eq(table.session.id, session.id));
+		// Audit log for session renewal
+		await createAuditLog(db, 'session.update', user.id, {
+			sessionId: session.id,
+			userId: user.id,
+			oldExpiresAt: oldExpiresAt.toISOString(),
+			newExpiresAt: session.expiresAt.toISOString(),
+			reason: 'renewal'
+		});
 	}
 
 	const groups = await getUserGroupsAndAdmin(db, user.id);
@@ -91,7 +121,23 @@ export async function validateSessionToken(token: string) {
 export type SessionValidationResult = Awaited<ReturnType<typeof validateSessionToken>>;
 
 export async function invalidateSession(sessionId: string) {
+	// Get session info before deletion for audit log
+	const [session] = await db
+		.select()
+		.from(table.session)
+		.where(eq(table.session.id, sessionId))
+		.limit(1);
+
 	await db.delete(table.session).where(eq(table.session.id, sessionId));
+
+	// Audit log
+	if (session) {
+		await createAuditLog(db, 'session.delete', session.userId, {
+			sessionId,
+			userId: session.userId,
+			reason: 'manual_invalidation'
+		});
+	}
 }
 
 export function setSessionTokenCookie(event: RequestEvent, token: string, expiresAt: Date) {

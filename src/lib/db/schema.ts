@@ -2,8 +2,10 @@ import { pgTable, integer, text, timestamp, boolean, primaryKey, jsonb } from 'd
 
 /*
 > This document mirrors; Update this file whenever the TypeScript schema changes!
-- src/lib/db/schema.ts.
-- src/routes/doc/schema/+page.md
+
+- src/lib/db/schema.ts (original)
+- src/lib/db/schema.md (mirror)
+- src/routes/doc/schema/+page.md (mirror)
  */
 
 export const user = pgTable('user', {
@@ -26,10 +28,6 @@ export const group = pgTable('group', {
 	id: text('id').primaryKey().unique(),
 	name: text('name'),
 	description: text('description'),
-	createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' }).defaultNow().notNull(),
-	createdById: text('created_by_id').references(() => user.id),
-	deletedAt: timestamp('deleted_at', { withTimezone: true, mode: 'date' }),
-	deletedById: text('deleted_by_id').references(() => user.id)
 });
 
 export const relGroup = pgTable(
@@ -42,20 +40,14 @@ export const relGroup = pgTable(
 			.notNull()
 			.references(() => user.id),
 		adm: boolean('adm').default(false),
-		role: text('role').default('member'),
-		joinedAt: timestamp('joined_at', { withTimezone: true, mode: 'date' }).defaultNow().notNull(),
-		createdById: text('created_by_id').references(() => user.id)
 	},
 	(table) => ({
 		pk: primaryKey({ columns: [table.groupId, table.userId] })
 	})
 );
 
-export const groupAuditLog = pgTable('group_audit_log', {
+export const auditLog = pgTable('audit_log', {
 	id: text('id').primaryKey(),
-	groupId: text('group_id')
-		.notNull()
-		.references(() => group.id),
 	action: text('action').notNull(),
 	performedById: text('performed_by_id').references(() => user.id),
 	payload: jsonb('payload'),
@@ -70,4 +62,4 @@ export type Group = typeof group.$inferSelect;
 
 export type RelGroup = typeof relGroup.$inferSelect;
 
-export type GroupAuditLog = typeof groupAuditLog.$inferSelect;
+export type AuditLog = typeof auditLog.$inferSelect;

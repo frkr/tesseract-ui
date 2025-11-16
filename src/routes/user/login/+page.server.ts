@@ -8,6 +8,7 @@ import type { Actions, PageServerLoad } from './$types';
 
 import { m } from '$lib/paraglide/messages.js';
 import { generateUniqueId, ensureDefaultAdminGroupAndRelation } from '$lib/utils/common';
+import { createAuditLog } from '$lib/utils/audit';
 
 export const load: PageServerLoad = async (event) => {
 	if (event.locals.user) {
@@ -52,6 +53,12 @@ export const actions: Actions = {
 		const session = await auth.createSession(sessionToken, existingUser.id);
 		auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 
+		// Audit log
+		await createAuditLog(db, 'user.login', existingUser.id, {
+			userId: existingUser.id,
+			username: existingUser.username
+		});
+
 		return redirect(302, '/home');
 	},
 	register: async (event) => {
@@ -74,6 +81,13 @@ export const actions: Actions = {
 
 		try {
 			await db.insert(table.user).values({ id: userId, username, passwordHash });
+
+			// Audit log for user creation
+			await createAuditLog(db, 'user.create', userId, {
+				userId,
+				username,
+				isFirstUser
+			});
 
 			// If this is the first user, relate them to the default admin group
 			if (isFirstUser) {
